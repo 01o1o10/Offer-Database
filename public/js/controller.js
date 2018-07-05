@@ -98,23 +98,28 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#steel-price-submit', function(){
-        var price = ui.readSteelPriceAlert()
+        var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
     })
 
     $(document).on('click', '#cuprum-price-submit', function(){
-        var price = ui.readSteelPriceAlert()
+        var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'scuprumprices', cols: ['cp_date', 'cp_price']})
     })
 
     $(document).on('click', '#lead-price-submit', function(){
-        var price = ui.readSteelPriceAlert()
+        var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'leadprices', cols: ['lp_date', 'lp_price']})
     })
 
     $(document).on('click', '#zinc-price-submit', function(){
-        var price = ui.readSteelPriceAlert()
+        var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'zincprices', cols: ['zp_date', 'zp_price']})
+    })
+
+    $(document).on('click', '#mw-amount-submit', function(){
+        var price = ui.readPriceAlert()
+        insert.addPrice(price, {tableName: 'minwage', cols: ['mw_date', 'mw_amount']})
     })
 
 
@@ -135,5 +140,6 @@ $(document).ready(function(){
         od.setCuprumCurrentPrice()
         od.setLeadCurrentPrice()
         od.setZincCurrentPrice()
+        od.setMwCurrentAmount()
     }
 })

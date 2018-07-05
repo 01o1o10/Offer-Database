@@ -173,7 +173,7 @@ module.exports = {
         for(var i = 0; i < data.length; i++){
             var tr = document.createElement('DIV')
             tr.setAttribute('class', 'row tr')
-            for(var j in keys){
+            for(var j = 0; j < keys.length && j < 8; j++){
                 var td = document.createElement('DIV')
                 td.setAttribute('class', 'col td')
                 if(j == 0){
@@ -245,10 +245,15 @@ module.exports = {
         }
     },
 
-    readPriceInfo: function(row){
+    readResultsRow: function(row){
         var priceInfo = {}
+        priceInfo.product = row.children().eq(1).text()
+        priceInfo.category = row.children().eq(2).text()
+        priceInfo.project = row.children().eq(3).text()
+        priceInfo.supplier = row.children().eq(4).text()
         priceInfo.price = row.children().eq(5).text()
         priceInfo.type = row.children().eq(6).text()
+        priceInfo.date = row.children().eq(7).text()
         priceInfo.usd = row.children().eq(8).text()
         priceInfo.eur = row.children().eq(9).text()
         priceInfo.inf = row.children().eq(10).text()
