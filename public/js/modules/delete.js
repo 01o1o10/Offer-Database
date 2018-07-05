@@ -18,7 +18,7 @@ module.exports = {
                 for(var i = 0; i < checkedCheckboxes.length; i++){
                     checkedCheckboxes[i].parentNode.parentNode.remove()
                 }
-                ui.setAlertModal('<strong>Succes!</strong> Deleted selected rows!', true)
+                ui.setAlertModal('Deleted selected rows!', true)
             })
         }
     }

@@ -120,5 +120,20 @@ module.exports = {
                 })
             }
         }
+    },
+
+    addPrice: function(price, tableInfo){
+        if(!price){
+            ui.alert('alert-modal-failed', 'Price can not be empty!')
+        }
+        else if(!$.isNumeric(price)){
+            ui.alert('alert-modal-failed', 'Price must be numeric!')
+        }
+        else {
+            var sqlStatement = "insert into " + tableInfo.tableName + "(" + tableInfo.cols[0] + ", " + tableInfo.cols[1] + ") values('" + od.getDateNow() + "', " + price + ");"
+            sql.query(sqlStatement, function(check){
+                ui.alert('alert-modal-succes', 'Price insert process is ok!')
+            })
+        }
     }
 }

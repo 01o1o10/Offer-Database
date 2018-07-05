@@ -141,7 +141,7 @@ module.exports = {
 
     alert: function(id, message){
         var alrt = $('#' + id)
-        alrt.html(message)
+        alrt.html(alrt.html() + message)
         alrt.slideToggle('slow');
         setTimeout(function(){
             alrt.slideToggle('slow');
@@ -257,17 +257,22 @@ module.exports = {
 
     setAlertModal: function(message, succes){
         if(succes){
-            $('#alert-modal-succes').html(message)
+            $('#alert-modal-suc').html('<strong>Succes!</strong> ' + message)
             $('#alert-modal-close').attr('class', 'btn btn-success')
-            $('#alert-modal-succes').show()
-            $('#alert-modal-failed').hide()
+            $('#alert-modal-suc').show()
+            $('#alert-modal-fail').hide()
         }
         else{
-            $('#alert-modal-failed').html(message)
+            $('#alert-modal-fail').html('<strong>Failed!</strong> ' + message)
             $('#alert-modal-close').attr('class', 'btn btn-danger')
-            $('#alert-modal-failed').show()
-            $('#alert-modal-succes').hide()
+            $('#alert-modal-fail').show()
+            $('#alert-modal-suc').hide()
         }
         document.getElementById('alert-modal-submit').click()
+    },
+
+    readPriceAlert: function(){
+        var price = $('#alert-price-input').val()
+        return price
     }
 }

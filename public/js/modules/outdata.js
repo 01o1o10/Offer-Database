@@ -18,25 +18,11 @@ module.exports = {
         });
     },
 
-    getDollarRate: function(date){
+    getDollarRate: function(){
         return exchangeRate[0].selling.toString()
-        /*request('http://paracevirici.com/doviz-arsiv/merkez-bankasi/gecmis-tarihli-doviz/' + date.substr(0, 4) + '/amerikan-dolari', function (error, response, body) {
-            if(error){
-                ui.alert('add-offer-failed', '<strong>Success!</strong> Exchange rate cant get for dollar!')
-                throw error
-            }
-            else{
-                var html = document.createElement('DIV')
-                html.innerHTML = body
-                var data = html.getElementsByClassName('row')
-                for(var i = 0; i < data.length; i++){
-                    console.log(data[i])
-                }
-            }
-        });*/
     },
 
-    getEuroRate: function(date){
+    getEuroRate: function(){
         return exchangeRate[1].selling.toString()
     },
 
@@ -58,5 +44,85 @@ module.exports = {
 
     reverseDate: function(date){
         console.log(date.substr(8, 10) + '-' + date.substr(5, 7).substr(0, 2) + '-' + date.substr(0, 4))
+    }, 
+
+    setSteelCurrentPrice: function(){
+        sql.query("select * from steelprices where sp_date='" + this.getDateNow() + "';", function(data){
+            if(data.length == 0){
+                request('https://www.lme.com/Metals/Ferrous/Steel-Rebar#tabIndex=0', function (error, response, body) {
+                    if(error){
+                        var html = 'Steel price can not get from the page!</br><form><div class="form-group"><input type="text" class="form-control" id="steel-price-input" placeholder="Type steel today price..."></div><div class="form-group"><button type="button" class="form-control btn btn-primary" id="steel-price-submit">Set</button></div></form>'
+                        ui.setAlertModal(html , false)
+                        throw error
+                    }
+                    else{
+                        var html = document.createElement('DIV')
+                        html.innerHTML = body
+                        var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
+                        insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
+                    }
+                });
+            }
+        })
+    },
+
+    setCuprumCurrentPrice: function(){
+        sql.query("select * from cuprumprices where cp_date='" + this.getDateNow() + "';", function(data){
+            if(data.length == 0){
+                request('https://www.lme.com/Metals/Non-ferrous/Copper#tabIndex=0', function (error, response, body) {
+                    if(error){
+                        var html = 'Cuprum price can not get from the page!</br><form><div class="form-group"><input type="text" class="form-control" id="cuprum-price-input" placeholder="Type cuprum today price..."></div><div class="form-group"><button type="button" class="form-control btn btn-primary" id="cuprum-price-submit">Set</button></div></form>'
+                        ui.setAlertModal(html , false)
+                        throw error
+                    }
+                    else{
+                        var html = document.createElement('DIV')
+                        html.innerHTML = body
+                        var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
+                        insert.addPrice(price, {tableName: 'cuprumprices', cols: ['cp_date', 'cp_price']})
+                    }
+                });
+            }
+        })
+    },
+
+    setLeadCurrentPrice: function(){
+        sql.query("select * from leadprices where lp_date='" + this.getDateNow() + "';", function(data){
+            if(data.length == 0){
+                request('https://www.lme.com/Metals/Non-ferrous/Lead#tabIndex=0', function (error, response, body) {
+                    if(error){
+                        var html = 'Lead price can not get from the page!</br><form><div class="form-group"><input type="text" class="form-control" id="lead-price-input" placeholder="Type lead today price..."></div><div class="form-group"><button type="button" class="form-control btn btn-primary" id="lead-price-submit">Set</button></div></form>'
+                        ui.setAlertModal(html , false)
+                        throw error
+                    }
+                    else{
+                        var html = document.createElement('DIV')
+                        html.innerHTML = body
+                        var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
+                        insert.addPrice(price, {tableName: 'leadprices', cols: ['lp_date', 'lp_price']})
+                    }
+                });
+            }
+        })
+    },
+
+    setZincCurrentPrice: function(){
+        sql.query("select * from zincprices where zp_date='" + this.getDateNow() + "';", function(data){
+            if(data.length == 0){
+                request('https://www.lme.com/Metals/Non-ferrous/Zinc#tabIndex=0', function (error, response, body) {
+                    if(error){
+                        var html = 'Zinc price can not get from the page!</br><form><div class="form-group"><input type="text" class="form-control" id="zinc-price-input" placeholder="Type steel today price..."></div><div class="form-group"><button type="button" class="form-control btn btn-primary" id="zinc-price-submit">Set</button></div></form>'
+                        ui.setAlertModal(html , false)
+                        throw error
+                    }
+                    else{
+                        var html = document.createElement('DIV')
+                        html.innerHTML = body
+                        var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
+                        insert.addPrice(price, {tableName: 'zincprices', cols: ['zp_date', 'zp_price']})
+                    }
+                });
+            }
+        })
     }
 }

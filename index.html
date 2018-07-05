@@ -10,13 +10,13 @@
     <!-- Header -->
     <header>
         <div class="row">
-                <div class="col-sm-6"><h1>Offer Database</h1></div>
-                <div class="col-sm-6 doviz">
-                    <div class="row">
-                        <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-dollar"></i><p id="dolar"></p></div>
-                        <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-euro"></i><p id="euro"></p></div>
-                    </div>
+            <div class="col-sm-6"><h1>Offer Database</h1></div>
+            <div class="col-sm-6 doviz">
+                <div class="row">
+                    <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-dollar"></i><p id="dolar"></p></div>
+                    <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-euro"></i><p id="euro"></p></div>
                 </div>
+            </div>
         </div>
     </header>
     
@@ -80,11 +80,9 @@
 
 
     
-  <button style="display: none" id="alert-modal-submit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#alert-modal">
-    Open modal
-  </button>
 
   <!-- Alert Modal -->
+  <button style="display: none" id="alert-modal-submit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#alert-modal"></button>
   <div class="modal fade" id="alert-modal">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -97,8 +95,11 @@
         
         <!-- Modal body -->
         <div class="modal-body">
-                <div id="alert-modal-succes" class="alert alert-success" style="display: none;"></div>
-                <div id="alert-modal-failed" class="alert alert-danger" style="display: none;"></div>
+                <div id="alert-modal-suc" class="alert alert-success" style="display: none;"></div>
+                <div id="alert-modal-fail" class="alert alert-danger" style="display: none;"></div>
+
+                <div id="alert-modal-succes" class="alert alert-success" style="display: none;"><strong>Succes!</strong> </div>
+                <div id="alert-modal-failed" class="alert alert-danger" style="display: none;"><strong>Failed!</strong> </div>
         </div>
         
         <!-- Modal footer -->

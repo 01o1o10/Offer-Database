@@ -97,6 +97,26 @@ $(document).ready(function(){
         filter.calcOtherVals($(this))
     })
 
+    $(document).on('click', '#steel-price-submit', function(){
+        var price = ui.readSteelPriceAlert()
+        insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
+    })
+
+    $(document).on('click', '#cuprum-price-submit', function(){
+        var price = ui.readSteelPriceAlert()
+        insert.addPrice(price, {tableName: 'scuprumprices', cols: ['cp_date', 'cp_price']})
+    })
+
+    $(document).on('click', '#lead-price-submit', function(){
+        var price = ui.readSteelPriceAlert()
+        insert.addPrice(price, {tableName: 'leadprices', cols: ['lp_date', 'lp_price']})
+    })
+
+    $(document).on('click', '#zinc-price-submit', function(){
+        var price = ui.readSteelPriceAlert()
+        insert.addPrice(price, {tableName: 'zincprices', cols: ['zp_date', 'zp_price']})
+    })
+
 
 
 
@@ -111,5 +131,9 @@ $(document).ready(function(){
         ui.writeDate('add-offer-date', od.getDateNow())
         od.setExchangeRateNow()
         od.setInflationTableToDb()
+        od.setSteelCurrentPrice()
+        od.setCuprumCurrentPrice()
+        od.setLeadCurrentPrice()
+        od.setZincCurrentPrice()
     }
 })
