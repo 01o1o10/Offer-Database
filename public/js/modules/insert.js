@@ -20,7 +20,7 @@ module.exports = {
                         ui.alert('add-product-failed', '<strong>Failed!</strong> This product is already exists!')
                     }
                     else{
-                        var sqlStatement = "insert into products(c_id, p_name, inf_effect, steel_effect, cup_effect, lead_effect, wms_effect) values(" + data.category + ",'" + data.product + "', " + data.inf + ", " + data.steel + ", " + data.cup + ", " + data.lead + ", " + data.wms + ");"
+                        var sqlStatement = "insert into products(c_id, p_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect) values(" + data.category + ",'" + data.product + "', " + data.inf + ", " + data.steel + ", " + data.cup + ", " + data.lead + ", " + data.zinc + ", " + data.wms + ");"
                         sql.query(sqlStatement, function(check){
                             if(check.insertId){
                                 console.log(sqlStatement)
@@ -112,9 +112,9 @@ module.exports = {
             }
             else {
                 var sqlStatement = "insert into offers(pd_id, pj_id, s_id, price, date, exchange, usd, eur) values(" + data.product + ", " + data.project + ", " + data.supplier + ", " + data.price + ", '" + data.date + "', '" + data.exchange + "', " + data.usd + ", " + data.eur + ");"
+                console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     if(check.insertId){
-                        console.log(sqlStatement)
                         ui.alert('add-offer-succes', '<strong>Success!</strong> Offer saved succesfully!')
                     }
                 })

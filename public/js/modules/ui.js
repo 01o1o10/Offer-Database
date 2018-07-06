@@ -30,6 +30,7 @@ module.exports = {
         data.steel = document.getElementById('add-product-steel').value
         data.cup = document.getElementById('add-product-cup').value
         data.lead = document.getElementById('add-product-lead').value
+        data.zinc = document.getElementById('add-product-zinc').value
         data.wms = document.getElementById('add-product-wms').value
         return data
     },
@@ -173,11 +174,21 @@ module.exports = {
         for(var i = 0; i < data.length; i++){
             var tr = document.createElement('DIV')
             tr.setAttribute('class', 'row tr')
-            for(var j = 0; j < keys.length && j < 8; j++){
+            for(var j = 0; j < keys.length; j++){
                 var td = document.createElement('DIV')
                 td.setAttribute('class', 'col td')
                 if(j == 0){
                     td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span class="glyphicon filter-edit-icon">&#x270f;</span>'
+                }
+                else if(keys[j] == 'usd'){
+                    td.innerHTML
+                    td.setAttribute('title', data[i][keys[j]])
+                    td.style.display = 'none'
+                }
+                else if(j >= 9){
+                    td.innerHTML
+                    td.setAttribute('title', data[i][keys[j]])
+                    td.style.display = 'none'
                 }
                 else{
                     td.innerHTML = data[i][keys[j]]
@@ -246,18 +257,18 @@ module.exports = {
     },
 
     readResultsRow: function(row){
-        var priceInfo = {}
-        priceInfo.product = row.children().eq(1).text()
-        priceInfo.category = row.children().eq(2).text()
-        priceInfo.project = row.children().eq(3).text()
-        priceInfo.supplier = row.children().eq(4).text()
-        priceInfo.price = row.children().eq(5).text()
-        priceInfo.type = row.children().eq(6).text()
-        priceInfo.date = row.children().eq(7).text()
-        priceInfo.usd = row.children().eq(8).text()
-        priceInfo.eur = row.children().eq(9).text()
-        priceInfo.inf = row.children().eq(10).text()
-        return priceInfo
+        var rowInfo = {}
+        rowInfo.product = row.children().eq(1).attr('title')
+        rowInfo.category = row.children().eq(2).attr('title')
+        rowInfo.project = row.children().eq(3).attr('title')
+        rowInfo.supplier = row.children().eq(4).attr('title')
+        rowInfo.price = row.children().eq(5).attr('title')
+        rowInfo.type = row.children().eq(6).attr('title')
+        rowInfo.date = row.children().eq(7).attr('title')
+        rowInfo.usd = row.children().eq(8).attr('title')
+        rowInfo.eur = row.children().eq(9).attr('title')
+        rowInfo.inf = row.children().eq(10).attr('title')
+        return rowInfo
     },
 
     setAlertModal: function(message, succes){

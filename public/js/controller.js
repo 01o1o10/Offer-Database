@@ -36,9 +36,20 @@ $(document).ready(function(){
 
     $(document).on('click', '#add-offer-submit', function(){
         var data = ui.readAddOfferModal()
-        data.usd = od.getDollarRate()
-        data.eur = od.getEuroRate()
-        insert.addOffer(data)
+        if(data.date == od.getDateNow()){
+            data.usd = od.setExchangeRateNow[0].selling
+            data.eur = od.setExchangeRateNow[1].selling
+            insert.addOffer(data)
+        }
+        else{
+            od.getDollarRate(data.date, function(rate1){
+                data.usd = rate1
+                od.getEuroRate(data.date, function(rate2){
+                    data.eur = rate2
+                    insert.addOffer(data)
+                })
+            })
+        }
     })
 
     $(document).on('click', '#filter-product-submit', function(){

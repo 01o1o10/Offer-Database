@@ -8,8 +8,6 @@ module.exports = {
     },
 
     setExchangeRateNow: function(){
-        var request = require('request');
-
         request('http://www.doviz.com/api/v1/currencies/all/latest', function (error, response, body) {
             if(error) throw error;
             exchangeRate = JSON.parse(body).slice(0, 2);
@@ -18,12 +16,86 @@ module.exports = {
         });
     },
 
-    getDollarRate: function(){
-        return exchangeRate[0].selling.toString()
+    getDollarRate: function(date2, cb){
+        var date1 = this.OneDayAgo(date2)
+        var url = 'https://doviz.com/api/v1/currencies/USD/archive?start=' + date1 + '&end=' + date2
+        console.log(url)
+        request(url, function (error, response, body) {
+            if(error) throw error;
+            exchangeRate = JSON.parse(body);
+            console.log(exchangeRate)
+            cb(exchangeRate[0].selling)
+        });
     },
 
-    getEuroRate: function(){
-        return exchangeRate[1].selling.toString()
+    getEuroRate: function(date2, cb){
+        var date1 = this.OneDayAgo(date2)
+        var url = 'https://doviz.com/api/v1/currencies/EUR/archive?start=' + date1 + '&end=' + date2
+        console.log(url)
+        request(url, function (error, response, body) {
+            if(error) throw error;
+            exchangeRate = JSON.parse(body);
+            console.log(exchangeRate)
+            cb(exchangeRate[0].selling)
+        });
+    },
+
+    getMetalPrice: function(date, code,cb){
+        var date = this.OneDayAgo(date)
+        var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date + '&end_date=' + date + '&api_key=DsrViFcryyTfVWUDvyCD'
+        request(url, function (error, response, body) {
+            if(error) throw error;
+            var html = document.createElement('DIV')
+            html.innerHTML = body
+            body = html.getElementsByTagName('code')[0].textContent
+            exchangeRate = JSON.parse(body);
+            cb(exchangeRate.dataset.data[0][1] + 1)
+        });
+    },
+
+    OneDayAgo: function(date){
+        var year = parseInt(date.substr(0, 4))
+        var month = parseInt(date.substr(5, 7))
+        var day = parseInt(date.substr(8, 10))
+        if(day > 1){
+            day--
+            return year + '-' + month + '-' + day
+        }
+        else if(month == 3){
+            month--
+            if(year%4 == 0 && month == 2){
+                day = 29
+            }
+            else if(year%4 != 0 && month == 2){
+                day = 28
+            }
+            return year + '-' + month + '-' + day
+        }
+        else if(month > 1){
+            if(month < 9){
+                if(month % 2 == 1){
+                    day = 31
+                }
+                else{
+                    day = 30
+                }
+            }
+            else{
+                if(month % 2 ==1){
+                    day = 30
+                }
+                else{
+                    day = 31
+                }
+            }
+            return year + '-' + month + '-' + day
+        }
+        else{
+            year--
+            month = 12
+            day = 31
+            return year + '-' + month + '-' + day
+        }
     },
 
     setInflationTableToDb: function(){

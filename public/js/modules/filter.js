@@ -1,7 +1,7 @@
 module.exports = {
     filterProducts: function(categories){
         console.log(categories)
-        var sqlStatement = "select p_id, p_name, c_name from products p, categories c where p.c_id=c.c_id"
+        var sqlStatement = "select p_id, p_name, c_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect from products p, categories c where p.c_id=c.c_id"
         if(categories.length == 1){
             sqlStatement += " and p.c_id=" + categories[0]
         }
@@ -16,7 +16,7 @@ module.exports = {
 
         console.log(sqlStatement)
         sql.query(sqlStatement, function(data){
-            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Cuprum', 'Lead', 'Workmanship'], 'delete-products')
+            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Cuprum', 'Lead', 'Zinc', 'Workmanship'], 'delete-products')
         })
     },
 
@@ -139,58 +139,92 @@ module.exports = {
         if(!price.children().length){
             var data = {}
             var rowInfo = ui.readResultsRow(price.parent())
+            var effect = {}
 
             sql.query("select * from products where p_name='" + rowInfo.product + "';", function(data1){
                 sql.query("select sp_price from steelprices where sp_date='" + rowInfo.date + "' or sp_date='" + od.getDateNow() + "' order by sp_date asc;", function(data2){
-                    sql.query("select cp_price from cuprumprices where cp_date='" + rowInfo.date + "' or cp_date='" + od.getDateNow() + "' order by cp_date asc;", function(data3){
-                        sql.query("select lp_price from leadprices where lp_date='" + rowInfo.date + "' or lp_date='" + od.getDateNow() + "' order by lp_date asc;", function(data4){
-                            sql.query("select zp_price from zincprices where zp_date='" + rowInfo.date + "' or zp_date='" + od.getDateNow() + "' order by zp_date asc;", function(data5){
-                                sql.query("select mw_amount from minwage where left(mw_date, 4)='" + rowInfo.date.substr(0, 4) + "' or left(mw_date, 4)='" + od.getDateNow().substr(0, 4) + "' order by mw_date asc;", function(data5){
-                                    var ce = data1.inf_effect*data.inf + data1.steel_effect*(data2[1].sp_price/data2[0].sp_price) + data1.cup_effect*(data3[1].cp_price/data3[0].cp_price) + data1.lead_effect*(data4[1].lp_price/data4[0].lp_price) + data1.zinc_effect*(data5[1].zp_price/data5[0].zp_price) + data1.wms_effect*(data6[1].mw_amount/data6[0].mw_amount)
-
-                                    data.cell11 = '1'
-                                    data.cell12 = rowInfo.usd
-                                    data.cell13 = rowInfo.eur
-
-                                    data.cell31 = rowInfo.inf
-                                    data.cell32 = od.getDollarRate()
-                                    data.cell33 = od.getEuroRate()
-
-                                    if(rowInfo.type == 'TL'){
-                                        data.cell21 = rowInfo.price
-                                        data.cell22 = Math.round(parseFloat(rowInfo.price) / parseFloat(rowInfo.usd))
-                                        data.cell23 = Math.round(parseFloat(rowInfo.price) / parseFloat(rowInfo.eur))
-                        
-                                        data.cell41 = parseFloat(rowInfo.price) * ce
-                                        data.cell42 = Math.round(parseFloat(rowInfo.price) * ce / od.getDollarRate())
-                                        data.cell43 = Math.round(parseFloat(rowInfo.price) * ce / od.getEuroRate())
-                                    }
-                                    else if(rowInfo.type == '$'){
-                                        data.cell21 = Math.round(Math.round(parseFloat(rowInfo.price) * parseFloat(rowInfo.usd)))
-                                        data.cell22 = rowInfo.price
-                                        data.cell23 = Math.round(parseFloat(rowInfo.price) / (parseFloat(rowInfo.eur)/parseFloat(rowInfo.usd)))
-                        
-                                        data.cell41 = Math.round(parseFloat(rowInfo.price) * od.getDollarRate() * ce)
-                                        data.cell42 = rowInfo.price * ce
-                                        data.cell43 = Math.round(parseFloat(rowInfo.price) * ce / (od.getEuroRate()/od.getDollarRate()))
-                                    }
-                                    else{
-                                        data.cell21 = Math.round(parseFloat(rowInfo.price) * parseFloat(rowInfo.eur))
-                                        data.cell22 = Math.round(parseFloat(rowInfo.price) * (parseFloat(rowInfo.eur)/parseFloat(rowInfo.usd)))
-                                        data.cell23 = rowInfo.price
-                        
-                                        data.cell41 = Math.round(parseFloat(rowInfo.price) * ce * od.getEuroRate())
-                                        data.cell42 = Math.round(parseFloat(rowInfo.price) * ce * (od.getEuroRate()/od.getDollarRate()))
-                                        data.cell43 = rowInfo.price * ce
-                                    }
+                    if(data2.length == 0){
+                        ui.alert('alert-modal-failed', 'Your iron material price is missing!')
+                    }
+                    else if(data2.length == 1){
+                        data2[1] = {}
+                        data2[1].sp_price = data2[0].sp_price
+                    }
+                    od.getMetalPrice(od.getDateNow(), 'CU', function(price11){
+                        od.getMetalPrice(rowInfo.date, 'CU', function(price12){
+                            effect.cup = data1[0].cup_effect* ((price11/price12) - 1)
+                            od.getMetalPrice(od.getDateNow(), 'PB', function(price21){
+                                od.getMetalPrice(rowInfo.date, 'PB', function(price22){
+                                    effect.lead = data1[0].cup_effect* ((price21/price22) - 1)
+                                    od.getMetalPrice(od.getDateNow(), 'ZI', function(price31){
+                                        od.getMetalPrice(rowInfo.date, 'ZI', function(price32){
+                                            effect.zinc = data1[0].cup_effect* ((price31/price32) - 1)
+                                            sql.query("select mw_amount from minwage where left(mw_date, 4)='" + rowInfo.date.substr(0, 4) + "' or left(mw_date, 4)='" + od.getDateNow().substr(0, 4) + "' order by mw_date asc;", function(data6){
+                                                if(data6.length == 0){
+                                                    ui.alert('alert-modal-failed', 'Minimum wage is missing!')
+                                                }
+                                                else if(data6.length == 1){
+                                                    data6[1] = {}
+                                                    data6[1].mw_amount = data6[0].mw_amount
+                                                }
+            
+                                                effect.inf = data1[0].inf_effect * (rowInfo.inf - 1)
+                                                effect.steel = data1[0].steel_effect*((data2[1].sp_price/data2[0].sp_price) - 1)
+                                                effect.wms = data1[0].wms_effect*((data6[1].mw_amount/data6[0].mw_amount) - 1)
+            
+                                                var ce =  1 + effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.wms
+            
+                                                console.log(effect, ce)
+            
+                                                data.cell11 = '1'
+                                                data.cell12 = rowInfo.usd
+                                                data.cell13 = rowInfo.eur
+            
+                                                data.cell31 = rowInfo.inf
+                                                data.cell32 = od.getDollarRate()
+                                                data.cell33 = od.getEuroRate()
+            
+                                                if(rowInfo.type == 'TL'){
+                                                    data.cell21 = rowInfo.price
+                                                    data.cell22 = Math.round(parseFloat(rowInfo.price) / parseFloat(rowInfo.usd))
+                                                    data.cell23 = Math.round(parseFloat(rowInfo.price) / parseFloat(rowInfo.eur))
                                     
-                                    ui.showOtherVals(price, data)
+                                                    data.cell41 = Math.round(parseFloat(rowInfo.price) * ce)
+                                                    data.cell42 = Math.round(parseFloat(rowInfo.price) * ce / od.getDollarRate())
+                                                    data.cell43 = Math.round(parseFloat(rowInfo.price) * ce / od.getEuroRate())
+                                                }
+                                                else if(rowInfo.type == '$'){
+                                                    data.cell21 = Math.round(Math.round(parseFloat(rowInfo.price) * parseFloat(rowInfo.usd)))
+                                                    data.cell22 = rowInfo.price
+                                                    data.cell23 = Math.round(parseFloat(rowInfo.price) / (parseFloat(rowInfo.eur)/parseFloat(rowInfo.usd)))
+                                    
+                                                    data.cell41 = Math.round(parseFloat(rowInfo.price) * od.getDollarRate() * ce)
+                                                    data.cell42 = Math.round(rowInfo.price * ce)
+                                                    data.cell43 = Math.round(parseFloat(rowInfo.price) * ce / (od.getEuroRate()/od.getDollarRate()))
+                                                }
+                                                else{
+                                                    data.cell21 = Math.round(parseFloat(rowInfo.price) * parseFloat(rowInfo.eur))
+                                                    data.cell22 = Math.round(parseFloat(rowInfo.price) * (parseFloat(rowInfo.eur)/parseFloat(rowInfo.usd)))
+                                                    data.cell23 = rowInfo.price
+                                    
+                                                    data.cell41 = Math.round(parseFloat(rowInfo.price) * ce * od.getEuroRate())
+                                                    data.cell42 = Math.round(parseFloat(rowInfo.price) * ce * (od.getEuroRate()/od.getDollarRate()))
+                                                    data.cell43 = Math.round(rowInfo.price * ce)
+                                                }
+                                                
+                                                ui.showOtherVals(price, data)
+                                            })
+                                        })
+                                    })
                                 })
                             })
                         })
                     })
                 })
             })
+        }
+        else {
+            ui.showOtherVals(price, data)
         }
     }
 }
