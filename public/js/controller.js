@@ -148,9 +148,6 @@ $(document).ready(function(){
         od.setExchangeRateNow()
         od.setInflationTableToDb()
         od.setSteelCurrentPrice()
-        od.setCuprumCurrentPrice()
-        od.setLeadCurrentPrice()
-        od.setZincCurrentPrice()
         od.setMwCurrentAmount()
     }
 })
