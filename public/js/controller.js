@@ -6,6 +6,7 @@ const insert = require('./public/js/modules/insert')
 const od = require('./public/js/modules/outdata')
 const filter = require('./public/js/modules/filter')
 const del = require('./public/js/modules/delete')
+const excel = require('./public/js/modules/excel')
 
 $(document).ready(function(){
     /////     VARIABLES
@@ -131,6 +132,14 @@ $(document).ready(function(){
     $(document).on('click', '#mw-amount-submit', function(){
         var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'minwage', cols: ['mw_date', 'mw_amount']})
+    })
+
+    $(document).on('click', '#import-excel-submit', function(){
+        excel.import(ui.readImportExcelModal())
+    })
+
+    $(document).on('click', '#export-excel-submit', function(){
+        excel.export(ui.readExportExcelModal())
     })
 
 

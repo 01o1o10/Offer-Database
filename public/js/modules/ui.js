@@ -140,9 +140,15 @@ module.exports = {
         return date
     },
 
-    alert: function(id, message){
+    alert: function(id, message, succes){
         var alrt = $('#' + id)
-        alrt.html(alrt.html() + message)
+        alrt.html('')
+        if(succes){
+            alrt.html('<strong>Succes!</strong> ' + message)
+        }
+        else{
+            alrt.html('<strong>Failed!</strong> ' + message)
+        }
         alrt.slideToggle('slow');
         setTimeout(function(){
             alrt.slideToggle('slow');
@@ -257,17 +263,17 @@ module.exports = {
     },
 
     readResultsRow: function(row){
+        var header = $('#result-header')
+        var headers = []
+        for(var i = 0; i < header.children().length; i++){
+            headers.push(header.children().eq(i).text())
+        }
+        console.log('headers: ', headers)
         var rowInfo = {}
-        rowInfo.product = row.children().eq(1).attr('title')
-        rowInfo.category = row.children().eq(2).attr('title')
-        rowInfo.project = row.children().eq(3).attr('title')
-        rowInfo.supplier = row.children().eq(4).attr('title')
-        rowInfo.price = row.children().eq(5).attr('title')
-        rowInfo.type = row.children().eq(6).attr('title')
-        rowInfo.date = row.children().eq(7).attr('title')
-        rowInfo.usd = row.children().eq(8).attr('title')
-        rowInfo.eur = row.children().eq(9).attr('title')
-        rowInfo.inf = row.children().eq(10).attr('title')
+        for(var i = 1; i < headers.length; i++){
+            rowInfo[headers[i]] = row.children().eq(i).attr('title')
+        }
+        console.log('rowInfo: ', rowInfo)
         return rowInfo
     },
 
@@ -290,5 +296,15 @@ module.exports = {
     readPriceAlert: function(){
         var price = $('#alert-price-input').val()
         return price
+    },
+
+    readImportExcelModal: function(){
+        var fileName = document.getElementById('import-excel-file-name').files[0].path
+        return fileName
+    },
+
+    readExportExcelModal: function(){
+        var fileName = document.getElementById('export-excel-file-name').files[0].path
+        return fileName
     }
 }

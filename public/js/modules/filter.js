@@ -95,7 +95,7 @@ module.exports = {
                 sqlStatement += ' and o.price>=' + parseFloat(filter.minPrice)
             }
             else {
-                ui.alert('filter-offer-failed', '<strong>Failed!</strong> Price must be numeric!')
+                ui.alert('filter-offer-failed', 'Price must be numeric!', false)
             }
         }
 
@@ -104,7 +104,7 @@ module.exports = {
                 sqlStatement += ' and o.price<=' + parseFloat(filter.maxPrice)
             }
             else {
-                ui.alert('filter-offer-failed', '<strong>Failed!</strong> Price must be numeric!')
+                ui.alert('filter-offer-failed', 'Price must be numeric!', false)
             }
         }
 
@@ -144,7 +144,7 @@ module.exports = {
             sql.query("select * from products where p_name='" + rowInfo.product + "';", function(data1){
                 sql.query("select sp_price from steelprices where sp_date='" + rowInfo.date + "' or sp_date='" + od.getDateNow() + "' order by sp_date asc;", function(data2){
                     if(data2.length == 0){
-                        ui.alert('alert-modal-failed', 'Your iron material price is missing!')
+                        ui.alert('alert-modal-failed', 'Your steel material price is missing!', false)
                     }
                     else if(data2.length == 1){
                         data2[1] = {}
@@ -161,7 +161,7 @@ module.exports = {
                                             effect.zinc = data1[0].cup_effect* ((price31/price32) - 1)
                                             sql.query("select mw_amount from minwage where left(mw_date, 4)='" + rowInfo.date.substr(0, 4) + "' or left(mw_date, 4)='" + od.getDateNow().substr(0, 4) + "' order by mw_date asc;", function(data6){
                                                 if(data6.length == 0){
-                                                    ui.alert('alert-modal-failed', 'Minimum wage is missing!')
+                                                    ui.alert('alert-modal-failed', 'Minimum wage is missing!', false)
                                                 }
                                                 else if(data6.length == 1){
                                                     data6[1] = {}
