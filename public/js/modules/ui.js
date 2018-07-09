@@ -96,29 +96,36 @@ module.exports = {
     },
    
     writeUpdateProductModal: function(data){
-        document.getElementById('update-product-category').value = data.category
-        document.getElementById('update-product-name').value = data.product
+        console.log(data)
+        document.getElementById('update-product-category').value = data.Category
+        document.getElementById('update-product-name').value = data.Product
+        document.getElementById('update-product-inf').value = data.Inflation
+        document.getElementById('update-product-steel').value = data.Steel
+        document.getElementById('update-product-cup').value = data.Cuprum
+        document.getElementById('update-product-lead').value = data.Lead
+        document.getElementById('update-product-zinc').value = data.Zinc
+        document.getElementById('update-product-wms').value = data.Workmanship
     },
 
-    writeUpdateCategoryModal: function(category){
-        document.getElementById('update-category-name').value = category
+    writeUpdateCategoryModal: function(data){
+        document.getElementById('update-category-name').value = data.Category
     },
 
-    writeUpdateProjectModal: function(project){
-        document.getElementById('update-project-name').value = project
+    writeUpdateProjectModal: function(data){
+        document.getElementById('update-project-name').value = data.Project
     },
 
-    writeUpdateSupplierModal: function(supplier){
-        document.getElementById('update-supplier-name').value = supplier
+    writeUpdateSupplierModal: function(data){
+        document.getElementById('update-supplier-name').value = data.Supplier
     },
 
     writeUpdateOfferModal: function(data){
-        $('#update-offer-product').val(data.product)
-        $('#update-offer-project').val(data.project)
-        $('#update-offer-supplier').val(data.supplier)
-        $('#update-offer-exchange').val(data.exchange)
-        $('#update-offer-price').val(data.price)
-        this.writeDate('update-offer-date', data.date)
+        $('#update-offer-product').val(data.Product)
+        $('#update-offer-project').val(data.Project)
+        $('#update-offer-supplier').val(data.Supplier)
+        $('#update-offer-exchange').val(data.Exchange)
+        $('#update-offer-price').val(data.Price)
+        this.writeDate('update-offer-date', data.Date)
     },
 
     writeDate: function(id, data){
@@ -184,7 +191,7 @@ module.exports = {
                 var td = document.createElement('DIV')
                 td.setAttribute('class', 'col td')
                 if(j == 0){
-                    td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span class="glyphicon filter-edit-icon">&#x270f;</span>'
+                    td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span id="' + keys[0] + '" class="glyphicon filter-edit-icon">&#x270f;</span>'
                 }
                 else if(keys[j] == 'usd'){
                     td.setAttribute('title', data[i][keys[j]])

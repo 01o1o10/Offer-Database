@@ -437,6 +437,7 @@
 
 
     <!-- Update Offer Modal -->
+  <button style="display: none" id="update-offer-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-offer-modal"></button>
     <div class="modal" id="update-offer-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -462,9 +463,9 @@
                             </div>
                             <div class="input-group mt-3 mb-3">
                                 <select class="form-control col-sm-3" id="update-offer-exchange">
-                                    <option value="tl">TL</option>
-                                    <option value="usd">USD</option>
-                                    <option value="eur">EURO</option>
+                                    <option value="TL">₺</option>
+                                    <option value="$">$</option>
+                                    <option value="€">€</option>
                                 </select>
                                 <input id="update-offer-price" type="text" class="form-control col-sm-9" placeholder="Price">
                             </div>
@@ -594,7 +595,7 @@
                             <div id="update-offer-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
-                                <button type="button" class="btn btn-primary" id="update-offer-submit">Add</button>
+                                <button type="button" class="btn btn-primary" id="update-offer-submit">Update</button>
                             </div>
                         </form>
                     </div>
@@ -604,6 +605,7 @@
     </div>
 
     <!-- Update Product Modal -->
+  <button style="display: none" id="update-product-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-product-modal"></button>
     <div class="modal" id="update-product-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -624,12 +626,30 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" id="update-product-name" placeholder="Product name...">
                             </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-inf" placeholder="Inflation effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-steel" placeholder="Steel effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-cup" placeholder="Cuprum effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-lead" placeholder="Lead effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-zinc" placeholder="Zinc effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-wms" placeholder="Workmanship effect...">
+                            </div>
 
                             <div id="update-product-succes" class="alert alert-success" style="display: none;"></div>
                             <div id="update-product-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
-                                <button type="button" class="btn btn-primary" id="update-product-submit">Add</button>
+                                <button type="button" class="btn btn-primary" id="update-product-submit">Update</button>
                             </div>
                         </form>
                     </div>
@@ -639,6 +659,7 @@
     </div>
 
     <!-- Update Category Modal -->
+  <button style="display: none" id="update-category-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-category-modal"></button>
     <div class="modal" id="update-category-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -661,7 +682,7 @@
                             <div id="update-category-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
-                                <button type="button" class="btn btn-primary" id="update-category-submit">Add</button>
+                                <button type="button" class="btn btn-primary" id="update-category-submit">Update</button>
                             </div>
                         </form>
                     </div>
@@ -671,6 +692,7 @@
     </div>
 
     <!-- Update Project Modal -->
+  <button style="display: none" id="update-project-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-project-modal"></button>
     <div class="modal" id="update-project-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -693,7 +715,7 @@
                             <div id="update-project-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
-                                <button type="button" class="btn btn-primary" id="update-project-submit">Add</button>
+                                <button type="button" class="btn btn-primary" id="update-project-submit">Update</button>
                             </div>
                         </form>
                     </div>
@@ -703,6 +725,7 @@
     </div>
 
     <!-- Update Supplier Modal -->
+  <button style="display: none" id="update-supplier-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-supplier-modal"></button>
     <div class="modal" id="update-supplier-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -725,7 +748,7 @@
                             <div id="update-supplier-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
-                                <button type="button" class="btn btn-primary" id="update-supplier-submit">Add</button>
+                                <button type="button" class="btn btn-primary" id="update-supplier-submit">Update</button>
                             </div>
                         </form>
                     </div>
@@ -1081,7 +1104,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4>Add Product</h4>
+                    <h4>Filter Product</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 

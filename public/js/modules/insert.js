@@ -112,7 +112,7 @@ module.exports = {
             }
         }
         else{
-            sql.query("select * from projects where p_name='" + project + "';", function(projectCheck){
+            sql.query("select * from projects where pj_name='" + project + "';", function(projectCheck){
                 if(projectCheck.length != 0){
                     if(cb){
                         cb('This project is already exists!')
@@ -122,7 +122,7 @@ module.exports = {
                     }
                 }
                 else{
-                    var sqlStatement = "insert into projects(p_name) values('" + project + "');"
+                    var sqlStatement = "insert into projects(pj_name) values('" + project + "');"
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
                         if(check){

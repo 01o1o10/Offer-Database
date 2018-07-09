@@ -7,7 +7,8 @@ const od = require('./public/js/modules/outdata')
 const filter = require('./public/js/modules/filter')
 const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
-const login = require('./public/js/modules/login')
+const user = require('./public/js/modules/user')
+const update = require('./public/js/modules/update')
 
 $(document).ready(function(){
     /////     VARIABLES
@@ -146,7 +147,33 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#login-modal-submit', function(){
-        login.login(ui.readLoginModal())
+        user.login(ui.readLoginModal())
+    })
+
+    $(document).on('click', '.filter-edit-icon', function(){
+        var value = $(this).attr('id')
+        switch(value){
+            case 'o_id':
+                ui.writeUpdateOfferModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-offer-modal-button').click()
+                break
+            case 'p_id':
+                ui.writeUpdateProductModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-product-modal-button').click()
+                break
+            case 'c_id':
+                ui.writeUpdateCategoryModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-category-modal-button').click()
+                break
+            case 'pj_id':
+                ui.writeUpdateProjectModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-project-modal-button').click()
+                break
+            case 's_id':
+                ui.writeUpdateSupplierModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-supplier-modal-button').click()
+                break
+        }
     })
 
 

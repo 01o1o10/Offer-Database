@@ -1,6 +1,5 @@
 module.exports = {
     filterProducts: function(categories){
-        console.log(categories)
         var sqlStatement = "select p_id, p_name, c_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect from products p, categories c where p.c_id=c.c_id"
         if(categories.length == 1){
             sqlStatement += " and p.c_id=" + categories[0]
@@ -39,7 +38,7 @@ module.exports = {
     },
 
     filterOffers: function(filter){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, o.price, o.exchange, substr(o.date, 1, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.p_id and o.s_id=s.s_id)"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.pj_name as project, s.s_name, o.price, o.exchange, substr(o.date, 1, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id)"
 
         if(filter.products.length == 1){
             sqlStatement += " and pd.p_id=" + filter.products[0]

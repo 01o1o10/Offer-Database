@@ -12,7 +12,7 @@ module.exports = {
                 })
                 break
             case 'select-project':
-                sql.query('select p_id, p_name from projects;', function(options){
+                sql.query('select pj_id, pj_name from projects;', function(options){
                     setOptions(className, options, 'Select project...', ['p_id', 'p_name'])
                 })
                 break
