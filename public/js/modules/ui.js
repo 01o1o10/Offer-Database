@@ -187,12 +187,10 @@ module.exports = {
                     td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span class="glyphicon filter-edit-icon">&#x270f;</span>'
                 }
                 else if(keys[j] == 'usd'){
-                    td.innerHTML
                     td.setAttribute('title', data[i][keys[j]])
                     td.style.display = 'none'
                 }
                 else if(j >= 9){
-                    td.innerHTML
                     td.setAttribute('title', data[i][keys[j]])
                     td.style.display = 'none'
                 }
@@ -201,6 +199,11 @@ module.exports = {
                     td.setAttribute('title', data[i][keys[j]])
                 }
                 if(keys[j] == 'price'){
+                    var price = td.innerHTML
+                    for(var index = 3; index < price.length; index += 4){
+                        price = price.substr(0, index) + '.' + price.substr(index)
+                    }
+                    td.innerHTML = price
                     td.classList.add('price')
                 }
                 tr.appendChild(td)
@@ -277,6 +280,20 @@ module.exports = {
         return rowInfo
     },
 
+    readPriceInfo: function(row){
+        var priceInfo = {}
+        priceInfo.product = row.children().eq(1).attr('title')
+        priceInfo.category = row.children().eq(2).attr('title')
+        priceInfo.price = row.children().eq(5).attr('title')
+        priceInfo.type = row.children().eq(6).attr('title')
+        priceInfo.date = row.children().eq(7).attr('title')
+        priceInfo.usd = row.children().eq(8).attr('title')
+        priceInfo.eur = row.children().eq(9).attr('title')
+        priceInfo.inf = row.children().eq(10).attr('title')
+        console.log('priceInfo: ', priceInfo)
+        return priceInfo
+    },
+
     setAlertModal: function(message, succes){
         if(succes){
             $('#alert-modal-suc').html('<strong>Succes!</strong> ' + message)
@@ -306,5 +323,12 @@ module.exports = {
     readExportExcelModal: function(){
         var fileName = document.getElementById('export-excel-file-name').files[0].path
         return fileName
+    },
+
+    readLoginModal: function(){
+        var userInfo = {}
+        userInfo.userName = document.getElementById('login-modal-username').value
+        userInfo.password =  document.getElementById('login-modal-password').value
+        return userInfo
     }
 }

@@ -48,7 +48,6 @@ h1 {
 
 
 
-
 /***** Navbar *****/
 .navbar {
     display: block;
@@ -153,6 +152,25 @@ h1 {
     color: white;
     font-size: 25px;
     text-decoration: bold;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    margin: 0;
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    font-size: 25px;
+    text-decoration: bold;
+    z-index: 90;
+  }
+
+.sticky + #result-body {
+    padding-top: 102px;
 }
 
 .tr {

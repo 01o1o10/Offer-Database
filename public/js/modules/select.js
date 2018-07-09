@@ -22,6 +22,13 @@ module.exports = {
                 })
                 break
         }
+    },
+
+    update: function(data){
+        var selects = $('.' + data.className)
+        for(var i = 0; i < selects.length; i++){
+            selects[i].sumo.add(data.value, data.text);
+        }
     }
 }
 

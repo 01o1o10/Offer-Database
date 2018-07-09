@@ -1,101 +1,111 @@
 var request = require('request');
 
 module.exports = {
-    exchangeRate: [],
-
+    
     getDateNow: function(){
         return (new Date()).toISOString().substr(0, 10)
     },
 
-    setExchangeRateNow: function(){
+    setExchangeRateNow: function(cb){
         request('http://www.doviz.com/api/v1/currencies/all/latest', function (error, response, body) {
             if(error) throw error;
-            exchangeRate = JSON.parse(body).slice(0, 2);
-            document.getElementById('dolar').innerHTML = ' ' +exchangeRate[0].selling
-            document.getElementById('euro').innerHTML = ' ' +exchangeRate[1].selling
+            var exchangeRate = JSON.parse(body).slice(0, 2)
+            document.getElementById('dolar').innerHTML = ' ' + exchangeRate[0].selling
+            document.getElementById('euro').innerHTML = ' ' + exchangeRate[1].selling
+            if(cb){
+                cb(exchangeRate)
+            }
         });
     },
 
     getDollarRate: function(date2, cb){
-        var date1 = this.OneDayAgo(date2)
+        var date1 = this.dayAgo(date2, 2)
         var url = 'https://doviz.com/api/v1/currencies/USD/archive?start=' + date1 + '&end=' + date2
         console.log(url)
         request(url, function (error, response, body) {
             if(error) throw error;
-            exchangeRate = JSON.parse(body);
-            console.log(exchangeRate)
-            cb(exchangeRate[0].selling)
+            var dollarRate = JSON.parse(body);
+            cb(dollarRate[0].selling)
         });
     },
 
     getEuroRate: function(date2, cb){
-        var date1 = this.OneDayAgo(date2)
+        var date1 = this.dayAgo(date2, 2)
         var url = 'https://doviz.com/api/v1/currencies/EUR/archive?start=' + date1 + '&end=' + date2
         console.log(url)
         request(url, function (error, response, body) {
             if(error) throw error;
-            exchangeRate = JSON.parse(body);
-            console.log(exchangeRate)
-            cb(exchangeRate[0].selling)
+            var euroRate = JSON.parse(body);
+            cb(euroRate[0].selling)
         });
     },
 
-    getMetalPrice: function(date, code,cb){
-        var date = this.OneDayAgo(date)
-        var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date + '&end_date=' + date + '&api_key=DsrViFcryyTfVWUDvyCD'
+    getMetalPrice: function(date2, code,cb){
+        var date1 = this.dayAgo(date2, 5)
+        var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date1 + '&end_date=' + date2 + '&api_key=DsrViFcryyTfVWUDvyCD'
+        console.log(url)
         request(url, function (error, response, body) {
             if(error) throw error;
             var html = document.createElement('DIV')
             html.innerHTML = body
             body = html.getElementsByTagName('code')[0].textContent
-            exchangeRate = JSON.parse(body);
-            cb(exchangeRate.dataset.data[0][1] + 1)
+            var metalPrice = JSON.parse(body);
+            console.log(metalPrice)
+            cb(metalPrice.dataset.data[0][1] + 1)
         });
     },
 
-    OneDayAgo: function(date){
+    dayAgo: function(date, dif){
+        console.log(date)
         var year = parseInt(date.substr(0, 4))
         var month = parseInt(date.substr(5, 7))
         var day = parseInt(date.substr(8, 10))
-        if(day > 1){
-            day--
-            return year + '-' + month + '-' + day
-        }
-        else if(month == 3){
-            month--
-            if(year%4 == 0 && month == 2){
-                day = 29
+        if(dif > 0 && dif < 26){
+            if(day > dif + 1){
+                day -= dif
             }
-            else if(year%4 != 0 && month == 2){
-                day = 28
+            else if(month == 3){
+                month--
+                if(year%4 == 0 && month == 2){
+                    day = 30 - dif
+                }
+                else if(year%4 != 0 && month == 2){
+                    day = 29 - dif
+                }
             }
-            return year + '-' + month + '-' + day
-        }
-        else if(month > 1){
-            if(month < 9){
-                if(month % 2 == 1){
-                    day = 31
+            else if(month > 1){
+                if(month < 9){
+                    if(month % 2 == 1){
+                        day = 32 - dif
+                    }
+                    else{
+                        day = 31 - dif
+                    }
                 }
                 else{
-                    day = 30
+                    if(month % 2 ==1){
+                        day = 31 -dif
+                    }
+                    else{
+                        day = 32 -dif
+                    }
                 }
             }
             else{
-                if(month % 2 ==1){
-                    day = 30
-                }
-                else{
-                    day = 31
-                }
+                year--
+                month = 12
+                day = 32 - dif
             }
-            return year + '-' + month + '-' + day
+
+            if(day < 10){
+                day = '0' + day
+            }
+            if(month < 10){
+                month = '0' + month
+            }
         }
-        else{
-            year--
-            month = 12
-            day = 31
-            return year + '-' + month + '-' + day
-        }
+        
+        return year + '-' + month + '-' + day
     },
 
     setInflationTableToDb: function(){

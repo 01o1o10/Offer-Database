@@ -7,6 +7,7 @@ const od = require('./public/js/modules/outdata')
 const filter = require('./public/js/modules/filter')
 const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
+const login = require('./public/js/modules/login')
 
 $(document).ready(function(){
     /////     VARIABLES
@@ -38,9 +39,11 @@ $(document).ready(function(){
     $(document).on('click', '#add-offer-submit', function(){
         var data = ui.readAddOfferModal()
         if(data.date == od.getDateNow()){
-            data.usd = od.setExchangeRateNow[0].selling
-            data.eur = od.setExchangeRateNow[1].selling
-            insert.addOffer(data)
+            od.setExchangeRateNow(function(exchange){
+                data.usd = exchange[0].selling
+                data.eur = exchange[1].selling
+                insert.addOffer(data)
+            })
         }
         else{
             od.getDollarRate(data.date, function(rate1){
@@ -140,6 +143,10 @@ $(document).ready(function(){
 
     $(document).on('click', '#export-excel-submit', function(){
         excel.export(ui.readExportExcelModal())
+    })
+
+    $(document).on('click', '#login-modal-submit', function(){
+        login.login(ui.readLoginModal())
     })
 
 
