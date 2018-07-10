@@ -1,5 +1,7 @@
 "use strict";
 
+const ipc = require('electron').ipcMain
+
 const {app, BrowserWindow} = require('electron')
 
 
@@ -26,9 +28,7 @@ const {app, BrowserWindow} = require('electron')
   // ve tarayıcı pencereleri oluşturmaya hazır olduğunda çağrılır.
   // Bazı API'ler sadece bu olayın gerçekleşmesinin ardından kullanılabilir.
   app.on('ready', createWindow)
-  app.on('ready', function(){
-    
-  })
+
 
   // Bütün pencereler kapatıldığında çıkış yap.
   app.on('window-all-closed', () => {
@@ -48,3 +48,8 @@ const {app, BrowserWindow} = require('electron')
   })
   // Bu dosyada, uygulamanızın özel ana işleminin geri kalan bölümünü ekleyebilirsiniz
   // Kod. Ayrıca bunları ayrı dosyalara koyabilir ve buradan isteyebilirsiniz.
+
+
+  ipc.on('update-notify-value', function (event, arg) {
+    console.log(arg)
+  })

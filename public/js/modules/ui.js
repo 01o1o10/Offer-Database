@@ -1,5 +1,7 @@
 module.exports = {
     
+    updateId: 0,
+    
     readFilterProductModal: function(){
         categories = $('#filter-product-category').val()
         return categories
@@ -64,28 +66,42 @@ module.exports = {
    
     readUpdateProductModal: function(){
         var data = {}
+        data.id = this.updateId
         data.category = document.getElementById('update-product-category').value
         data.product = document.getElementById('update-product-name').value
+        data.inf = document.getElementById('update-product-inf').value
+        data.steel = document.getElementById('update-product-steel').value
+        data.cup = document.getElementById('update-product-cup').value
+        data.lead = document.getElementById('update-product-lead').value
+        data.zinc = document.getElementById('update-product-zinc').value
+        data.wms = document.getElementById('update-product-wms').value
         return data
     },
 
     readUpdateCategoryModal: function(){
-        var category = document.getElementById('update-category-name').value
-        return category
+        var data = {}
+        data.category = document.getElementById('update-category-name').value
+        data.id = this.updateId
+        return data
     },
 
     readUpdateProjectModal: function(){
-        var project = document.getElementById('update-project-name').value
-        return project
+        var data = {}
+        data.project = document.getElementById('update-project-name').value
+        data.id = this.updateId
+        return data
     },
 
     readUpdateSupplierModal: function(){
-        var supplier = document.getElementById('update-supplier-name').value
-        return supplier
+        var data = {}
+        data.supplier = document.getElementById('update-supplier-name').value
+        data.id = this.updateId
+        return data
     },
 
     readUpdateOfferModal: function(){
         var data = {}
+        data.id = this.updateId
         data.product = $('#update-offer-product').val()
         data.project = $('#update-offer-project').val()
         data.supplier = $('#update-offer-supplier').val()
@@ -97,7 +113,6 @@ module.exports = {
    
     writeUpdateProductModal: function(data){
         console.log(data)
-        document.getElementById('update-product-category').value = data.Category
         document.getElementById('update-product-name').value = data.Product
         document.getElementById('update-product-inf').value = data.Inflation
         document.getElementById('update-product-steel').value = data.Steel
@@ -105,6 +120,9 @@ module.exports = {
         document.getElementById('update-product-lead').value = data.Lead
         document.getElementById('update-product-zinc').value = data.Zinc
         document.getElementById('update-product-wms').value = data.Workmanship
+        sql.query("select * from categories where c_name='" + data.Category + "';", function(category){
+            document.getElementById('update-product-category').value = category[0].c_id
+        })
     },
 
     writeUpdateCategoryModal: function(data){
@@ -120,12 +138,22 @@ module.exports = {
     },
 
     writeUpdateOfferModal: function(data){
-        $('#update-offer-product').val(data.Product)
-        $('#update-offer-project').val(data.Project)
-        $('#update-offer-supplier').val(data.Supplier)
         $('#update-offer-exchange').val(data.Exchange)
         $('#update-offer-price').val(data.Price)
         this.writeDate('update-offer-date', data.Date)
+        /*document.getElementById('update-offer-product').value = product[0].p_id
+        sql.query("select * from products where p_name='" + data.Product + "';", function(product){
+            alert(product[0].p_id)
+            document.getElementById('update-offer-product').value = product[0].p_id
+        })
+        sql.query("select * from projects where pj_name='" + data.Project + "';", function(project){
+            alert(project[0].pj_id)
+            document.getElementById('update-offer-project').value = project[0].pj_id
+        })
+        sql.query("select * from suppliers where s_name='" + data.Supplier + "';", function(supplier){
+            alert(supplier[0].s_id)
+            document.getElementById('update-offer-supplier').value = supplier[0].s_id
+        })*/
     },
 
     writeDate: function(id, data){
@@ -134,7 +162,7 @@ module.exports = {
         date.push(data.substr(5, 7).substr(0, 2))
         date.push(data.substr(8, 10))
 
-        $('#' + id).children().eq(1).children().first().prop('selectedIndex', parseInt(date[0].substr(2, 4)))
+        $('#' + id).children().eq(1).children().first().first().prop('selectedIndex', parseInt(date[0].substr(2, 4)-15))
         $('#' + id).children().eq(3).children().first().prop('selectedIndex', parseInt(date[1])-1)
         $('#' + id).children().eq(5).children().first().prop('selectedIndex', parseInt(date[2])-1)
     },
@@ -280,6 +308,8 @@ module.exports = {
         }
         console.log('headers: ', headers)
         var rowInfo = {}
+        this.updateId = row.children().eq(0).children().eq(0).attr('id')
+        console.log(this.updateId)
         for(var i = 1; i < headers.length; i++){
             rowInfo[headers[i]] = row.children().eq(i).attr('title')
         }

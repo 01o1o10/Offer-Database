@@ -21,6 +21,9 @@ $(document).ready(function(){
     /////     OPERATIONS
     start()
 
+
+    
+    /////     ADD EVENTS
     $(document).on('click', '#add-product-submit', function(){
         insert.addProduct(ui.readAddProductModal())
     })
@@ -57,6 +60,9 @@ $(document).ready(function(){
         }
     })
 
+
+    
+    /////     FILTER EVENTS
     $(document).on('click', '#filter-product-submit', function(){
         filter.filterProducts(ui.readFilterProductModal())
     })
@@ -85,6 +91,9 @@ $(document).ready(function(){
         filter.filterMaxPrices()
     })
 
+    
+
+    /////     DELETE EVENTS
     $(document).on('click', '#delete-products', function(){
         del.deleteData(ui.getSelectedRowsId(), {tableName: 'products', idColName: 'p_id'})
     })
@@ -105,10 +114,16 @@ $(document).ready(function(){
         del.deleteData(ui.getSelectedRowsId(), {tableName: 'offers', idColName: 'o_id'})
     })
 
+
+    
+    /////     SELECT EVENTS
     $(document).on('change', '#head-checkbox', function(){
         ui.selectAll()
     })
 
+
+
+    /////     PRICE EVENTS
     $(document).on('click', '.price', function(){
         filter.calcOtherVals($(this))
     })
@@ -118,26 +133,14 @@ $(document).ready(function(){
         insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
     })
 
-    $(document).on('click', '#cuprum-price-submit', function(){
-        var price = ui.readPriceAlert()
-        insert.addPrice(price, {tableName: 'scuprumprices', cols: ['cp_date', 'cp_price']})
-    })
-
-    $(document).on('click', '#lead-price-submit', function(){
-        var price = ui.readPriceAlert()
-        insert.addPrice(price, {tableName: 'leadprices', cols: ['lp_date', 'lp_price']})
-    })
-
-    $(document).on('click', '#zinc-price-submit', function(){
-        var price = ui.readPriceAlert()
-        insert.addPrice(price, {tableName: 'zincprices', cols: ['zp_date', 'zp_price']})
-    })
-
     $(document).on('click', '#mw-amount-submit', function(){
         var price = ui.readPriceAlert()
         insert.addPrice(price, {tableName: 'minwage', cols: ['mw_date', 'mw_amount']})
     })
 
+
+    
+    /////     EXCEL EVENTS
     $(document).on('click', '#import-excel-submit', function(){
         excel.import(ui.readImportExcelModal())
     })
@@ -146,10 +149,10 @@ $(document).ready(function(){
         excel.export(ui.readExportExcelModal())
     })
 
-    $(document).on('click', '#login-modal-submit', function(){
-        user.login(ui.readLoginModal())
-    })
 
+    
+
+    /////     UPDATE EVENTS
     $(document).on('click', '.filter-edit-icon', function(){
         var value = $(this).attr('id')
         switch(value){
@@ -176,6 +179,34 @@ $(document).ready(function(){
         }
     })
 
+    $(document).on('click', '#update-supplier-submit', function(){
+        update.updateSupplier(ui.readUpdateSupplierModal())
+    })
+
+    $(document).on('click', '#update-project-submit', function(){
+        update.updateProject(ui.readUpdateProjectModal())
+    })
+
+    $(document).on('click', '#update-category-submit', function(){
+        update.updateCategory(ui.readUpdateCategoryModal())
+    })
+
+    $(document).on('click', '#update-product-submit', function(){
+        update.updateProduct(ui.readUpdateProductModal())
+    })
+
+    $(document).on('click', '#update-offer-submit', function(){
+        update.updateOffer(ui.readUpdateOfferModal())
+    })
+
+    
+    
+
+    /////     USER EVENTS
+    $(document).on('click', '#login-modal-submit', function(){
+        user.login(ui.readLoginModal())
+    })
+
 
 
 
@@ -192,5 +223,10 @@ $(document).ready(function(){
         od.setInflationTableToDb()
         od.setSteelCurrentPrice()
         od.setMwCurrentAmount()
+
+        const electron = require('electron')
+        const ipc = electron.ipcRenderer
+        
+        ipc.send('update-notify-value', 'merhabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     }
 })

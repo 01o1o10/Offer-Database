@@ -90,6 +90,7 @@ module.exports = {
                         day = 32 -dif
                     }
                 }
+                month--
             }
             else{
                 year--
