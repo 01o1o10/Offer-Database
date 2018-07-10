@@ -227,6 +227,6 @@ $(document).ready(function(){
         const electron = require('electron')
         const ipc = electron.ipcRenderer
         
-        ipc.send('update-notify-value', 'merhabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        ipc.send('selam', 'merhabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     }
 })
