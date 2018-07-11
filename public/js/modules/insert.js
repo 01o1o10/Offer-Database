@@ -267,7 +267,7 @@ module.exports = {
                                                     console.log('i: ' + i + ' ' + data[i][5] + ' için id: ' + productId[0].p_id)
                                                     offerInfo.product = productId[0].p_id
                                                     if(data[i][0]){
-                                                        sql.query("select p_id from projects where p_name='" + data[i][0] + "';", function(projectId){
+                                                        sql.query("select pj_id from projects where pj_name='" + data[i][0] + "';", function(projectId){
                                                             if(projectId[0]){
                                                                 console.log('i: ' + i + ' ' + data[i][0] + ' için id: ' + projectId[0].p_id)
                                                                 offerInfo.project = projectId[0].p_id

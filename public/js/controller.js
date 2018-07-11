@@ -9,14 +9,18 @@ const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
 const update = require('./public/js/modules/update')
 
+
+
+
+
+/////     VARIABLES
+var userInfo
+
+
+
+
+
 $(document).ready(function(){
-    /////     VARIABLES
-
-
-
-
-
-
     /////     OPERATIONS
     start()
 
@@ -102,7 +106,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-projects', function(){
-        del.deleteData(ui.getSelectedRowsId(), {tableName: 'projects', idColName: 'p_id'})
+        del.deleteData(ui.getSelectedRowsId(), {tableName: 'projects', idColName: 'pj_id'})
     })
 
     $(document).on('click', '#delete-suppliers', function(){
@@ -218,5 +222,11 @@ $(document).ready(function(){
         od.setInflationTableToDb()
         od.setSteelCurrentPrice()
         od.setMwCurrentAmount()
+
+        const ipc = require('electron').ipcRenderer
+        ipc.send('user-data')
+        ipc.on('user-data-reply', function(event, data){
+            userInfo = data
+        })
     }
 })

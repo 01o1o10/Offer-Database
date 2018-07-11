@@ -49,8 +49,12 @@ const {app, BrowserWindow} = require('electron')
   // ve tarayıcı pencereleri oluşturmaya hazır olduğunda çağrılır.
   // Bazı API'ler sadece bu olayın gerçekleşmesinin ardından kullanılabilir.
   app.on('ready', createWindowLogin)
+
+  var userData = {}
+
   ipc.on('login', function(event, userInfo){
-    auth.login(userInfo, function(loginResult){
+    auth.login(userInfo, function(loginResult, data){
+      userData = data
       if(loginResult == 'succes'){
         createWindow()
         winLogin.close()
@@ -59,6 +63,12 @@ const {app, BrowserWindow} = require('electron')
         event.sender.send('login-reply', loginResult)
       }
     })
+  })
+
+  
+
+  ipc.on('user-data', function(event){
+    event.sender.send('user-data-reply', userData)
   })
 
   // Bütün pencereler kapatıldığında çıkış yap.
