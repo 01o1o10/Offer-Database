@@ -7,7 +7,6 @@ const od = require('./public/js/modules/outdata')
 const filter = require('./public/js/modules/filter')
 const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
-const user = require('./public/js/modules/user')
 const update = require('./public/js/modules/update')
 
 $(document).ready(function(){
@@ -202,10 +201,6 @@ $(document).ready(function(){
     
     
 
-    /////     USER EVENTS
-    $(document).on('click', '#login-modal-submit', function(){
-        user.login(ui.readLoginModal())
-    })
 
 
 
@@ -223,10 +218,5 @@ $(document).ready(function(){
         od.setInflationTableToDb()
         od.setSteelCurrentPrice()
         od.setMwCurrentAmount()
-
-        const electron = require('electron')
-        const ipc = electron.ipcRenderer
-        
-        ipc.send('selam', 'merhabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
     }
 })

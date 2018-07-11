@@ -14,20 +14,18 @@
     
       <div class="container">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname" required>
+        <input id="uname" type="text" placeholder="Enter Username" name="uname" required>
     
         <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input id="password" type="password" placeholder="Enter Password" name="psw" required>
+                                
+        <div id="login-succes" class="alert alert-success" style="display: none;"></div>
+        <div id="login-failed" class="alert alert-danger" style="display: none;"></div>
             
-        <button type="submit">Login</button>
+        <button id="login-submit" type="button">Login</button>
         <label>
           <input type="checkbox" checked="checked" name="remember"> Remember me
         </label>
-      </div>
-    
-      <div class="container" style="background-color:#f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Forgot <a href="#">password?</a></span>
       </div>
     </form>
 
@@ -39,6 +37,7 @@
     <script type="application/javascript">
         window.$ = window.jQuery = require('./public/js/jquery/jquery.min.js');
     </script>
+    <script type="application/javascript" src="./public/js/modules/login.js"></script>
     <script type="application/javascript" src="./public/js/bootstrap/popper.min.js"></script>
     <script type="application/javascript" src="./public/js/bootstrap/bootstrap.min.js"></script>
 

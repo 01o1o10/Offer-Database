@@ -1,5 +1,6 @@
 "use strict";
 
+const auth = require('./public/js/modules/authentication')
 const ipc = require('electron').ipcMain
 
 const {app, BrowserWindow} = require('electron')
@@ -11,7 +12,7 @@ const {app, BrowserWindow} = require('electron')
   
   function createWindow () {
     // Tarayıcı penceresini oluştur.
-    win = new BrowserWindow({width: 2000, height: 1150})
+    win = new BrowserWindow({width: 1500, height: 900})
   
     // ve uygulamanın index.html'sini yükle.
     win.loadFile('index.html')
@@ -29,13 +30,13 @@ const {app, BrowserWindow} = require('electron')
   
   function createWindowLogin () {
     // Tarayıcı penceresini oluştur.
-    winLogin = new BrowserWindow({width: 550, height: 600, frame: false})
+    winLogin = new BrowserWindow({width: 550, height: 570, frame: false})
   
     // ve uygulamanın index.html'sini yükle.
     winLogin.loadFile('login.html')
   
     // Pencere kapatıldığında ortaya çıkar.
-    winLogin.on('closed', () => {
+    winLogin.on('close', () => {
     //Pencere nesnesini referans dışı bırakın,
     // uygulamanız çoklu pencereleri destekliyorsa genellikle pencereleri
     // bir dizide saklarsınız, bu, ilgili öğeyi silmeniz gereken zamandır.
@@ -48,8 +49,17 @@ const {app, BrowserWindow} = require('electron')
   // ve tarayıcı pencereleri oluşturmaya hazır olduğunda çağrılır.
   // Bazı API'ler sadece bu olayın gerçekleşmesinin ardından kullanılabilir.
   app.on('ready', createWindowLogin)
-  //app.on('ready', createWindow('index.html', true, 2000, 1150))
-
+  ipc.on('login', function(event, userInfo){
+    auth.login(userInfo, function(loginResult){
+      if(loginResult == 'succes'){
+        createWindow()
+        winLogin.close()
+      }
+      else{
+        event.sender.send('login-reply', loginResult)
+      }
+    })
+  })
 
   // Bütün pencereler kapatıldığında çıkış yap.
   app.on('window-all-closed', () => {
