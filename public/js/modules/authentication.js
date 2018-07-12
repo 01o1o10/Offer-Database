@@ -16,7 +16,7 @@ module.exports = {
                     cb('succes', check[0])
                 }
                 else{
-                    cb('The user name or password you entered is incorrect!')
+                    cb('Username or password is incorrect!')
                 }
             })
         }

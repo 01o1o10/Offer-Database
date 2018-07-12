@@ -8,6 +8,7 @@ const filter = require('./public/js/modules/filter')
 const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
 const update = require('./public/js/modules/update')
+const user = require('./public/js/modules/user')
 
 
 
@@ -179,6 +180,10 @@ $(document).ready(function(){
                 ui.writeUpdateSupplierModal(ui.readResultsRow($(this).parent().parent()))
                 $('#update-supplier-modal-button').click()
                 break
+            case 'u_id':
+                ui.writeUpdateUserModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-user-modal-button').click()
+                break
         }
     })
 
@@ -202,6 +207,29 @@ $(document).ready(function(){
         update.updateOffer(ui.readUpdateOfferModal())
     })
 
+
+
+
+
+
+    /////     USER EVENTS
+
+    $(document).on('click', '#add-user-submit', function(){
+        user.addUser(ui.readAddUserModal())
+    })
+
+    $(document).on('click', '#filter-user-submit', function(){
+        user.filterUser(ui.readFilterUserModal())
+    })
+
+    $(document).on('click', '#delete-users', function(){
+        del.deleteData(ui.getSelectedRowsId(), {tableName: 'users', idColName: 'u_id'})
+    })
+
+    $(document).on('click', '#update-user-submit', function(){
+        user.updateUser(ui.readUpdateUserModal())
+    })
+
     
     
 
@@ -217,11 +245,15 @@ $(document).ready(function(){
         select.getOptions('select-product')
         select.getOptions('select-project')
         select.getOptions('select-supplier')
+        select.getOptions('select-user-category')
         ui.writeDate('add-offer-date', od.getDateNow())
         od.setExchangeRateNow()
         od.setInflationTableToDb()
         od.setSteelCurrentPrice()
         od.setMwCurrentAmount()
+        od.getMetalPrices('CU', 'coppor')
+        od.getMetalPrices('PB', 'leadp')
+        od.getMetalPrices('ZI', 'zinc')
 
         const ipc = require('electron').ipcRenderer
         ipc.send('user-data')

@@ -269,8 +269,8 @@ module.exports = {
                                                     if(data[i][0]){
                                                         sql.query("select pj_id from projects where pj_name='" + data[i][0] + "';", function(projectId){
                                                             if(projectId[0]){
-                                                                console.log('i: ' + i + ' ' + data[i][0] + ' için id: ' + projectId[0].p_id)
-                                                                offerInfo.project = projectId[0].p_id
+                                                                console.log('i: ' + i + ' ' + data[i][0] + ' için id: ' + projectId[0].pj_id)
+                                                                offerInfo.project = projectId[0].pj_id
                                                                 if(data[i][1]){
                                                                     sql.query("select s_id from suppliers where s_name='" + data[i][1] + "';", function(supplierId){
                                                                         if(supplierId[0]){
@@ -285,7 +285,7 @@ module.exports = {
                                                                                 console.log(offerInfo)
                                                                                 insert.addOffer(offerInfo, function(chrck){
                                                                                     if($.isNumeric(check)){
-                                                                                        console.log('Kayıtlar veritabanına eklendi!')
+                                                                                        ui.alert('import-excel-succes', 'Kayıtlar veritabanına eklendi!', true)
                                                                                         i++
                                                                                         if(i != data.length){
                                                                                             insert.excelToDb(data, i)
@@ -308,7 +308,7 @@ module.exports = {
                                                                                         console.log(offerInfo)
                                                                                         insert.addOffer(offerInfo, function(check){
                                                                                             if($.isNumeric(check)){
-                                                                                                console.log('Kayıtlar veritabanına eklendi!')
+                                                                                                ui.alert('import-excel-succes', 'Kayıtlar veritabanına eklendi!', true)
                                                                                                 i++
                                                                                                 if(i != data.length){
                                                                                                     insert.excelToDb(data, i)

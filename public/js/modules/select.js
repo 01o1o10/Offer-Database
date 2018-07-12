@@ -21,6 +21,11 @@ module.exports = {
                     setOptions(className, options, 'Select supplier...', ['s_id', 's_name'])
                 })
                 break
+            case 'select-user-category':
+                sql.query('select categoryid, category_name from usercategories;', function(options){
+                    setOptions(className, options, 'Select category...', ['categoryid', 'category_name'])
+                })
+                break
         }
     },
 

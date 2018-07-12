@@ -40,23 +40,25 @@ module.exports = {
         });
     },
 
-    getMetalPrice: function(date2, code,cb){
-        var date1 = this.dayAgo(date2, 5)
-        var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date1 + '&end_date=' + date2 + '&api_key=DsrViFcryyTfVWUDvyCD'
-        console.log(url)
-        request(url, function (error, response, body) {
-            if(error) throw error;
-            var html = document.createElement('DIV')
-            html.innerHTML = body
-            body = html.getElementsByTagName('code')[0].textContent
-            var metalPrice = JSON.parse(body);
-            console.log(metalPrice)
-            cb(metalPrice.dataset.data[0][1] + 1)
-        });
+    getMetalPrices: function(code, tableName){
+        var date = this.dayAgo(this.getDateNow(), 1)
+        sql.query("select * from " + tableName + " where date='" + date + "';", function(check){
+            if(check.length == 0){
+                var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date + '&end_date=' + date + '&api_key=DsrViFcryyTfVWUDvyCD'
+                request(url, function (error, response, body) {
+                    if(error) throw error;
+
+                    var html = document.createElement('DIV')
+                    html.innerHTML = body
+                    body = html.getElementsByTagName('code')[0].textContent
+                    var metalPrices = JSON.parse(body).dataset.data;
+                    sql.query("insert into " + tableName + "(date, price) values('" + metalPrices[0][0] + "', " + metalPrices[0][2] + ");", function(check){})
+                });
+            }
+        })
     },
 
     dayAgo: function(date, dif){
-        console.log(date)
         var year = parseInt(date.substr(0, 4))
         var month = parseInt(date.substr(5, 7))
         var day = parseInt(date.substr(8, 10))
@@ -130,7 +132,7 @@ module.exports = {
     }, 
 
     setSteelCurrentPrice: function(){
-        sql.query("select * from steelprices where sp_date='" + this.getDateNow() + "';", function(data){
+        sql.query("select * from steel where date='" + this.getDateNow() + "';", function(data){
             if(data.length == 0){
                 request('https://www.lme.com/Metals/Ferrous/Steel-Rebar#tabIndex=0', function (error, response, body) {
                     if(error){
@@ -142,7 +144,7 @@ module.exports = {
                         var html = document.createElement('DIV')
                         html.innerHTML = body
                         var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
-                        insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
+                        insert.addPrice(price, {tableName: 'steel', cols: ['date', 'price']})
                     }
                 });
             }

@@ -1,6 +1,9 @@
 const ex = require('xlsx')
 
 module.exports = {
+
+    fileName: '',
+
     import: function(fileName){
         var workbook = ex.readFile(fileName);
         var worksheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -31,21 +34,37 @@ module.exports = {
     },
 
     export: function(fileName){
-        var data = []
+        excel.fileName = fileName
+        var rows = []
         var selectedRowsId = ui.getSelectedRowsId()
-        for(var i = 0; i < selectedRowsId.length; i++){
-            var hucreler = ui.readResultsRow($('#' + selectedRowsId[i]).parent().parent())
-            data.push(hucreler)
+        if(selectedRowsId.length == 0){
+            ui.alert('export-excel-failed', 'Any row selected!', false)
         }
-        console.log(data)
-        var ws = ex.utils.json_to_sheet(data)
+        else{
+            excel.getExtraData(rows, selectedRowsId, 0)
+        }
+    },
 
-        /* add to workbook */
-        var wb = ex.utils.book_new()
-        ex.utils.book_append_sheet(wb, ws, "Teklif Veritabanı")
+    getExtraData: function(rows, selectedRowsId, i){
+        var resultsRowData = ui.readResultsRow($('#' + selectedRowsId[i]).parent().parent())
+        resultsRowData.Price = parseFloat(resultsRowData.Price)
+        filter.calcOtherVals($('#' + selectedRowsId[i]).parent().parent().children().eq(5), function(ce, data, effect, prices, productInfo){
+            rows.push(Object.assign({}, resultsRowData, {ce: ce}, data, effect, prices, productInfo))
+            if(i == selectedRowsId.length-1){
+                console.log(rows)
+                var ws = ex.utils.json_to_sheet(rows)
         
-        /* generate an XLSX file */
-        ex.writeFile(wb, fileName)
-        ui.alert('export-excel-succes', 'Data exported!', true)
+                /* add to workbook */
+                var wb = ex.utils.book_new()
+                ex.utils.book_append_sheet(wb, ws, "Teklif Veritabanı")
+                
+                /* generate an XLSX file */
+                ex.writeFile(wb, excel.fileName)
+                ui.alert('export-excel-succes', 'Data exported!', true)
+            }
+            else{
+                excel.getExtraData(rows, selectedRowsId, ++i)
+            }
+        })
     }
 }

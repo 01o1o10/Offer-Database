@@ -133,84 +133,97 @@ module.exports = {
         })
     },
 
-    calcOtherVals: function(price){
+    calcOtherVals: function(price, cb){
         if(!price.children().length){
             var data = {}
-            var priceInfo = ui.readPriceInfo(price.parent())
             var effect = {}
+            var prices = {}
+            var offerInfo = ui.readOfferInfo(price.parent())
+            offerInfo.price = parseFloat(offerInfo.price)
+            console.log('Offer Info: ', offerInfo)
 
-            sql.query("select * from products where p_name='" + priceInfo.product + "';", function(data1){
-                sql.query("select sp_price from steelprices where sp_date='" + priceInfo.date + "' or sp_date='" + od.getDateNow() + "' order by sp_date asc;", function(data2){
-                    if(data2.length == 0){
-                        ui.alert('alert-modal-failed', 'Your steel material price is missing!', false)
-                    }
-                    else if(data2.length == 1){
-                        data2[1] = {}
-                        data2[1].sp_price = data2[0].sp_price
-                    }
-                    od.getMetalPrice(od.getDateNow(), 'CU', function(price11){
-                        od.getMetalPrice(priceInfo.date, 'CU', function(price12){
-                            effect.cup = data1[0].cup_effect* ((price11/price12) - 1)
-                            od.getMetalPrice(od.getDateNow(), 'PB', function(price21){
-                                od.getMetalPrice(priceInfo.date, 'PB', function(price22){
-                                    effect.lead = data1[0].lead_effect* ((price21/price22) - 1)
-                                    od.getMetalPrice(od.getDateNow(), 'ZI', function(price31){
-                                        od.getMetalPrice(priceInfo.date, 'ZI', function(price32){
-                                            effect.zinc = data1[0].zinc_effect* ((price31/price32) - 1)
-                                            sql.query("select mw_amount from minwage where left(mw_date, 4)='" + priceInfo.date.substr(0, 4) + "' or left(mw_date, 4)='" + od.getDateNow().substr(0, 4) + "' order by mw_date asc;", function(data6){
-                                                if(data6.length == 0){
-                                                    ui.alert('alert-modal-failed', 'Minimum wage is missing!', false)
-                                                }
-                                                else if(data6.length == 1){
-                                                    data6[1] = {}
-                                                    data6[1].mw_amount = data6[0].mw_amount
-                                                }
-            
-                                                effect.inf = data1[0].inf_effect * (priceInfo.inf - 1)
-                                                effect.steel = data1[0].steel_effect*((data2[1].sp_price/data2[0].sp_price) - 1)
-                                                effect.wms = data1[0].wms_effect*((data6[1].mw_amount/data6[0].mw_amount) - 1)
-            
-                                                var ce =  1 + effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.wms
-            
-                                                console.log(effect, ce)
-            
-                                                data.cell11 = '1'
-                                                data.cell12 = priceInfo.usd
-                                                data.cell13 = priceInfo.eur
-            
-                                                data.cell31 = priceInfo.inf
-                                                od.setExchangeRateNow(function(exchange){
-                                                    data.cell32 = exchange[0].selling
-                                                    data.cell33 = exchange[1].selling
-            
-                                                    if(priceInfo.type == 'TL'){
-                                                        data.cell21 = priceInfo.price
-                                                        data.cell22 = Math.round(parseFloat(priceInfo.price) / parseFloat(priceInfo.usd))
-                                                        data.cell23 = Math.round(parseFloat(priceInfo.price) / parseFloat(priceInfo.eur))
-                                        
-                                                        data.cell41 = Math.round(parseFloat(priceInfo.price) * ce)
-                                                        data.cell42 = Math.round(parseFloat(priceInfo.price) * ce / data.cell32)
-                                                        data.cell43 = Math.round(parseFloat(priceInfo.price) * ce / data.cell33)
-                                                    }
-                                                    else if(priceInfo.type == '$'){
-                                                        data.cell21 = Math.round(Math.round(parseFloat(priceInfo.price) * parseFloat(priceInfo.usd)))
-                                                        data.cell22 = priceInfo.price
-                                                        data.cell23 = Math.round(parseFloat(priceInfo.price) / (parseFloat(priceInfo.eur)/parseFloat(priceInfo.usd)))
-                                        
-                                                        data.cell41 = Math.round(parseFloat(priceInfo.price) * data.cell32 * ce)
-                                                        data.cell42 = Math.round(priceInfo.price * ce)
-                                                        data.cell43 = Math.round(parseFloat(priceInfo.price) * ce / (data.cell33/data.cell32))
-                                                    }
-                                                    else{
-                                                        data.cell21 = Math.round(parseFloat(priceInfo.price) * parseFloat(priceInfo.eur))
-                                                        data.cell22 = Math.round(parseFloat(priceInfo.price) * (parseFloat(priceInfo.eur)/parseFloat(priceInfo.usd)))
-                                                        data.cell23 = priceInfo.price
-                                        
-                                                        data.cell41 = Math.round(parseFloat(priceInfo.price) * ce * data.cell33)
-                                                        data.cell42 = Math.round(parseFloat(priceInfo.price) * ce * (data.cell33/data.cell32))
-                                                        data.cell43 = Math.round(priceInfo.price * ce)
-                                                    }
-                                                    ui.showOtherVals(price, data)
+            sql.query("select price from steel where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                prices.steelPriceNew = check[0].price
+                sql.query("select price from steel where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                    prices.steelPriceOld = (check[0]) ? check[0].price : prices.steelPriceNew
+                    sql.query("select price from coppor where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                        prices.cuprumPriceNew = check[0].price
+                        sql.query("select price from coppor where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                            prices.cuprumPriceOld = check[0].price
+                            sql.query("select price from leadp where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                                prices.leadPriceNew = check[0].price
+                                sql.query("select price from leadp where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                    prices.leadPriceOld = check[0].price
+                                    sql.query("select price from zinc where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                                        prices.zincPriceNew = check[0].price
+                                        sql.query("select price from zinc where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                            prices.zincPriceOld = check[0].price
+                                            sql.query("select * from products where p_name='" + offerInfo.product + "';", function(check){
+                                                var productInfo = check[0]
+                                                console.log('Product Info: ', productInfo)
+                                                sql.query("select mw_amount from minwage where left(mw_date, 4)>='" + offerInfo.date.substr(0, 4) + "' and left(mw_date, 4)<='" + od.getDateNow().substr(0, 4) + "' order by mw_date desc;", function(check){
+                                                    prices.mwNew = check[0].mw_amount
+                                                    prices.mwOld = check[check.length - 1].mw_amount
+                                                    console.log('Prices: ', prices)
+    
+                                                    effect.inf = productInfo.inf_effect * (offerInfo.inf - 1)
+                                                    effect.steel = productInfo.steel_effect *((prices.steelPriceNew/prices.steelPriceOld) - 1)
+                                                    effect.cup = productInfo.cup_effect * ((prices.cuprumPriceNew/prices.cuprumPriceOld) - 1)
+                                                    effect.lead = productInfo.lead_effect * ((prices.leadPriceNew/prices.leadPriceOld) - 1)
+                                                    effect.zinc = productInfo.zinc_effect * ((prices.zincPriceNew/prices.zincPriceOld) - 1)
+                                                    effect.wms = productInfo.wms_effect *((prices.mwNew/prices.mwOld) - 1)
+                                                    console.log('Effects: ', effect)
+
+                                                    var ce =  1 + effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.wms
+                                                    console.log('CE: ', ce)
+                
+                                                    data.cell11 = 1
+                                                    data.cell12 = parseFloat(offerInfo.usd)
+                                                    data.cell13 = parseFloat(offerInfo.eur)
+                
+                                                    data.cell31 = parseFloat(offerInfo.inf)
+    
+    
+                                                    od.setExchangeRateNow(function(exchange){
+                                                        data.cell32 = exchange[0].selling
+                                                        data.cell33 = exchange[1].selling
+                
+                                                        if(offerInfo.type == 'TL'){
+                                                            data.cell21 = parseFloat(offerInfo.price.toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.price / parseFloat(offerInfo.usd)).toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.price / parseFloat(offerInfo.eur)).toFixed(2))
+                                                            
+                                                            data.cell41 = parseFloat((offerInfo.price * ce).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.price * ce / data.cell32).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.price * ce / data.cell33).toFixed(2))
+                                                        }
+                                                        else if(offerInfo.type == '$'){
+                                                            data.cell21 = parseFloat(((offerInfo.price * parseFloat(offerInfo.usd))).toFixed(2))
+                                                            data.cell22 = parseFloat(offerInfo.price.toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.price / (parseFloat(offerInfo.eur)/parseFloat(offerInfo.usd))).toFixed(2))
+                                            
+                                                            data.cell41 = parseFloat((offerInfo.price * data.cell32 * ce).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.price * ce).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
+                                                        }
+                                                        else{
+                                                            data.cell21 = parseFloat((offerInfo.price * parseFloat(offerInfo.eur)).toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.price * (parseFloat(offerInfo.eur)/parseFloat(offerInfo.usd))).toFixed(2))
+                                                            data.cell23 = parseFloat(offerInfo.price.toFixed(2))
+                                            
+                                                            data.cell41 = parseFloat((offerInfo.price * ce * data.cell33).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.price * ce * (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.price * ce).toFixed(2))
+                                                        }
+                                                        console.log('Data: ', data)
+
+                                                        if(cb){
+                                                            cb(ce, data, effect, prices, productInfo)
+                                                        }
+                                                        else{
+                                                            ui.showOtherVals(price, data)
+                                                        }
+                                                    })
                                                 })
                                             })
                                         })

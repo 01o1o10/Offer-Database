@@ -2,26 +2,10 @@ module.exports = {
     
     updateId: 0,
     
+    /////     PRODUCT FUNCTIONS
     readFilterProductModal: function(){
         categories = $('#filter-product-category').val()
         return categories
-    },
-   
-    readFilterOfferModal: function(){
-        var data = {}
-        data.categories = $('#filter-offer-category').val()
-        data.products = $('#filter-offer-product').val()
-        data.projects = $('#filter-offer-project').val()
-        data.suppliers = $('#filter-offer-supplier').val()
-        data.sort = $('#filter-offer-sort').val()
-        data.ascDesc = $('#filter-offer-select-asc-desc').val()
-        data.exchange = $('#filter-offer-exchange').val()
-        data.minPrice = $('#filter-offer-min-price').val()
-        data.maxPrice = $('#filter-offer-max-price').val()
-        data.date1 = this.readDate('filter-offer-date1')
-        data.date2 = this.readDate('filter-offer-date2')
-        console.log(data)
-        return data
     },
    
     readAddProductModal: function(){
@@ -36,33 +20,6 @@ module.exports = {
         data.wms = document.getElementById('add-product-wms').value
         return data
     },
-
-    readAddCategoryModal: function(){
-        var category = document.getElementById('add-category-name').value
-        return category
-    },
-
-    readAddProjectModal: function(){
-        var project = document.getElementById('add-project-name').value
-        return project
-    },
-
-    readAddSupplierModal: function(){
-        var supplier = document.getElementById('add-supplier-name').value
-        return supplier
-    },
-
-    readAddOfferModal: function(){
-        var data = {}
-        data.product = $('#add-offer-product').val()
-        data.project = $('#add-offer-project').val()
-        data.supplier = $('#add-offer-supplier').val()
-        data.exchange = $('#add-offer-exchange').val()
-        data.price = $('#add-offer-price').val()
-        data.date = this.readDate('add-offer-date')
-        console.log(data)
-        return data
-    },
    
     readUpdateProductModal: function(){
         var data = {}
@@ -75,39 +32,6 @@ module.exports = {
         data.lead = document.getElementById('update-product-lead').value
         data.zinc = document.getElementById('update-product-zinc').value
         data.wms = document.getElementById('update-product-wms').value
-        return data
-    },
-
-    readUpdateCategoryModal: function(){
-        var data = {}
-        data.category = document.getElementById('update-category-name').value
-        data.id = this.updateId
-        return data
-    },
-
-    readUpdateProjectModal: function(){
-        var data = {}
-        data.project = document.getElementById('update-project-name').value
-        data.id = this.updateId
-        return data
-    },
-
-    readUpdateSupplierModal: function(){
-        var data = {}
-        data.supplier = document.getElementById('update-supplier-name').value
-        data.id = this.updateId
-        return data
-    },
-
-    readUpdateOfferModal: function(){
-        var data = {}
-        data.id = this.updateId
-        data.product = $('#update-offer-product').val()
-        data.project = $('#update-offer-project').val()
-        data.supplier = $('#update-offer-supplier').val()
-        data.exchange = $('#update-offer-exchange').val()
-        data.price = $('#update-offer-price').val()
-        data.date = this.readDate('update-offer-date')
         return data
     },
    
@@ -125,37 +49,132 @@ module.exports = {
         })
     },
 
-    writeUpdateCategoryModal: function(data){
-        document.getElementById('update-category-name').value = data.Category
+
+
+
+
+   
+    /////     OFFER FUNCTIONS
+    readFilterOfferModal: function(){
+        var data = {}
+        data.categories = $('#filter-offer-category').val()
+        data.products = $('#filter-offer-product').val()
+        data.projects = $('#filter-offer-project').val()
+        data.suppliers = $('#filter-offer-supplier').val()
+        data.sort = $('#filter-offer-sort').val()
+        data.ascDesc = $('#filter-offer-select-asc-desc').val()
+        data.exchange = $('#filter-offer-exchange').val()
+        data.minPrice = $('#filter-offer-min-price').val()
+        data.maxPrice = $('#filter-offer-max-price').val()
+        data.date1 = this.readDate('filter-offer-date1')
+        data.date2 = this.readDate('filter-offer-date2')
+        console.log(data)
+        return data
     },
 
-    writeUpdateProjectModal: function(data){
-        document.getElementById('update-project-name').value = data.Project
+    readAddOfferModal: function(){
+        var data = {}
+        data.product = $('#add-offer-product').val()
+        data.project = $('#add-offer-project').val()
+        data.supplier = $('#add-offer-supplier').val()
+        data.exchange = $('#add-offer-exchange').val()
+        data.price = $('#add-offer-price').val()
+        data.date = this.readDate('add-offer-date')
+        console.log(data)
+        return data
     },
 
-    writeUpdateSupplierModal: function(data){
-        document.getElementById('update-supplier-name').value = data.Supplier
+    readUpdateOfferModal: function(){
+        var data = {}
+        data.id = this.updateId
+        data.product = $('#update-offer-product').val()
+        data.project = $('#update-offer-project').val()
+        data.supplier = $('#update-offer-supplier').val()
+        data.exchange = $('#update-offer-exchange').val()
+        data.price = $('#update-offer-price').val()
+        data.date = this.readDate('update-offer-date')
+        return data
     },
 
     writeUpdateOfferModal: function(data){
         $('#update-offer-exchange').val(data.Exchange)
         $('#update-offer-price').val(data.Price)
         this.writeDate('update-offer-date', data.Date)
-        /*document.getElementById('update-offer-product').value = product[0].p_id
-        sql.query("select * from products where p_name='" + data.Product + "';", function(product){
-            alert(product[0].p_id)
-            document.getElementById('update-offer-product').value = product[0].p_id
-        })
-        sql.query("select * from projects where pj_name='" + data.Project + "';", function(project){
-            alert(project[0].pj_id)
-            document.getElementById('update-offer-project').value = project[0].pj_id
-        })
-        sql.query("select * from suppliers where s_name='" + data.Supplier + "';", function(supplier){
-            alert(supplier[0].s_id)
-            document.getElementById('update-offer-supplier').value = supplier[0].s_id
-        })*/
     },
 
+
+
+
+
+
+    /////     CATEGORY FUNCTIONS
+    readAddCategoryModal: function(){
+        var category = document.getElementById('add-category-name').value
+        return category
+    },
+
+    readUpdateCategoryModal: function(){
+        var data = {}
+        data.category = document.getElementById('update-category-name').value
+        data.id = this.updateId
+        return data
+    },
+
+    writeUpdateCategoryModal: function(data){
+        document.getElementById('update-category-name').value = data.Category
+    },
+
+
+
+
+
+
+
+    /////     PROJECT FUNCTIONS
+    readAddProjectModal: function(){
+        var project = document.getElementById('add-project-name').value
+        return project
+    },
+
+    readUpdateProjectModal: function(){
+        var data = {}
+        data.project = document.getElementById('update-project-name').value
+        data.id = this.updateId
+        return data
+    },
+
+    writeUpdateProjectModal: function(data){
+        document.getElementById('update-project-name').value = data.Project
+    },
+
+
+
+
+
+
+    /////     SUPPLIER FUNCTIONS
+    readAddSupplierModal: function(){
+        var supplier = document.getElementById('add-supplier-name').value
+        return supplier
+    },
+
+    readUpdateSupplierModal: function(){
+        var data = {}
+        data.supplier = document.getElementById('update-supplier-name').value
+        data.id = this.updateId
+        return data
+    },
+
+    writeUpdateSupplierModal: function(data){
+        document.getElementById('update-supplier-name').value = data.Supplier
+    },
+
+
+
+
+
+
+    /////     DATE FUNCTIONS
     writeDate: function(id, data){
         var date = []
         date.push(data.substr(0, 4))
@@ -175,6 +194,12 @@ module.exports = {
         return date
     },
 
+
+
+
+
+
+    /////     ALERT FUNCTIONS
     alert: function(id, message, succes){
         var alrt = $('#' + id)
         alrt.html('')
@@ -190,6 +215,33 @@ module.exports = {
         }, 3000);
     },
 
+    setAlertModal: function(message, succes){
+        if(succes){
+            $('#alert-modal-suc').html('<strong>Succes!</strong> ' + message)
+            $('#alert-modal-close').attr('class', 'btn btn-success')
+            $('#alert-modal-suc').show()
+            $('#alert-modal-fail').hide()
+        }
+        else{
+            $('#alert-modal-fail').html('<strong>Failed!</strong> ' + message)
+            $('#alert-modal-close').attr('class', 'btn btn-danger')
+            $('#alert-modal-fail').show()
+            $('#alert-modal-suc').hide()
+        }
+        document.getElementById('alert-modal-submit').click()
+    },
+
+    readPriceAlert: function(){
+        var price = $('#alert-price-input').val()
+        return price
+    },
+
+
+
+
+
+
+    /////     RESULT FUNCTIONS
     setResults: function(data, header, deleteBtnId){
         var resultHeader = document.getElementById('result-header')
 
@@ -234,11 +286,11 @@ module.exports = {
                     td.setAttribute('title', data[i][keys[j]])
                 }
                 if(keys[j] == 'price'){
-                    var price = td.innerHTML
+                    /*var price = td.innerHTML
                     for(var index = 3; index < price.length; index += 4){
                         price = price.substr(0, index) + '.' + price.substr(index)
                     }
-                    td.innerHTML = price
+                    td.innerHTML = price*/
                     td.classList.add('price')
                 }
                 tr.appendChild(td)
@@ -317,7 +369,7 @@ module.exports = {
         return rowInfo
     },
 
-    readPriceInfo: function(row){
+    readOfferInfo: function(row){
         var priceInfo = {}
         priceInfo.product = row.children().eq(1).attr('title')
         priceInfo.category = row.children().eq(2).attr('title')
@@ -331,27 +383,13 @@ module.exports = {
         return priceInfo
     },
 
-    setAlertModal: function(message, succes){
-        if(succes){
-            $('#alert-modal-suc').html('<strong>Succes!</strong> ' + message)
-            $('#alert-modal-close').attr('class', 'btn btn-success')
-            $('#alert-modal-suc').show()
-            $('#alert-modal-fail').hide()
-        }
-        else{
-            $('#alert-modal-fail').html('<strong>Failed!</strong> ' + message)
-            $('#alert-modal-close').attr('class', 'btn btn-danger')
-            $('#alert-modal-fail').show()
-            $('#alert-modal-suc').hide()
-        }
-        document.getElementById('alert-modal-submit').click()
-    },
 
-    readPriceAlert: function(){
-        var price = $('#alert-price-input').val()
-        return price
-    },
 
+
+
+
+
+    /////      EXCEL FUNCTIONS
     readImportExcelModal: function(){
         var fileName = document.getElementById('import-excel-file-name').files[0].path
         return fileName
@@ -362,10 +400,86 @@ module.exports = {
         return fileName
     },
 
-    readLoginModal: function(){
-        var userInfo = {}
-        userInfo.userName = document.getElementById('login-modal-username').value
-        userInfo.password =  document.getElementById('login-modal-password').value
-        return userInfo
-    }
+
+
+
+
+    
+    /////     USER FUNCTIONS
+    readAddUserModal: function(){
+        var data = {}
+        data.category = document.getElementById('add-user-category').value
+        data.fname = document.getElementById('add-user-firstname').value
+        data.lname = document.getElementById('add-user-lastname').value
+        data.uname = document.getElementById('add-user-username').value
+        data.pass = document.getElementById('add-user-password').value
+        data.vpass = document.getElementById('add-user-vpassword').value
+
+        var checkboxes = $('#add-user input[type="checkbox"]')
+        console.log(checkboxes)
+        data.auth = ''
+
+        for(var i = 0; i < checkboxes.length; i++){
+            if(checkboxes[i].checked){
+                data.auth += 1
+            }
+            else {
+                data.auth += 0
+            }
+        }
+        console.log('User Info: ', data)
+        return data
+    },
+
+    readFilterUserModal: function(){
+        var category = document.getElementById('filter-user-category').value
+        return category
+    },
+   
+    writeUpdateUserModal: function(data){
+        console.log(data)
+        document.getElementById('update-user-firstname').value = data.Firstname
+        document.getElementById('update-user-lastname').value = data.Lastname
+        document.getElementById('update-user-username').value = data.Username
+
+        var checkboxes = $('#update-user input[type="checkbox"]')
+        console.log(checkboxes)
+
+        for(var i = 0; i < checkboxes.length; i++){
+            console.log(data.Authority.charAt(i))
+            if(data.Authority.charAt(i) == '1'){
+                checkboxes[i].checked = true
+            }
+            else{
+                checkboxes[i].checked = false
+            }
+        }
+
+        sql.query("select u_categoryid from users where u_name='" + data.Username + "';", function(category){
+            document.getElementById('update-user-category').value = category[0].u_categoryid    
+        })
+    },
+
+    readUpdateUserModal: function(){
+        var data = {}
+        data.category = document.getElementById('update-user-category').value
+        data.fname = document.getElementById('update-user-firstname').value
+        data.lname = document.getElementById('update-user-lastname').value
+        data.uname = document.getElementById('update-user-username').value
+
+        var checkboxes = $('#update-user input[type="checkbox"]')
+        console.log(checkboxes)
+        data.auth = ''
+
+        for(var i = 0; i < checkboxes.length; i++){
+            if(checkboxes[i].checked){
+                data.auth += 1
+            }
+            else {
+                data.auth += 0
+            }
+        }
+        console.log('User Info: ', data)
+        return data
+    },
 }
