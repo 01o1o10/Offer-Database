@@ -76,7 +76,7 @@ module.exports = {
                 ui.alert('update-offer-failed', 'Price must be numeric!', false)
             }
             else {
-                var sqlStatement = "update offers set pd_id=" + data.product + ", pj_id=" + data.project + ", s_id=" + data.supplier + ", price=" + data.price + ", date='" + data.date + "', exchange='" + data.exchange + "' where o_id=" + data.id + ";"
+                var sqlStatement = "update offers set pd_id=" + data.product + ", pj_id=" + data.project + ", s_id=" + data.supplier + ", price=" + data.price + ", date='" + data.date + "', exchange='" + data.exchange + "', usd=" + data.usd + ", eur=" + data.eur + " where o_id=" + data.id + ";"
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     ui.alert('update-offer-succes', 'Offer saved succesfully!', true)

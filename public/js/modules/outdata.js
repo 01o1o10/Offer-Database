@@ -40,7 +40,7 @@ module.exports = {
         });
     },
 
-    getMetalPrices: function(code, tableName){
+    getMetalPrices: function(code, tableName){  
         var date = this.dayAgo(this.getDateNow(), 1)
         sql.query("select * from " + tableName + " where date='" + date + "';", function(check){
             if(check.length == 0){
@@ -113,22 +113,33 @@ module.exports = {
 
     setInflationTableToDb: function(){
         request('http://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Istatistikler/Enflasyon+Verileri', function (error, response, body) {
-            if(error) throw error;
+            if(error){
+                throw error
+            }
             else{
-                sql.query('delete from inflation;', function(){})
                 var html = document.createElement('DIV')
                 html.innerHTML = body
-                var tbody = html.getElementsByTagName('tbody')[0].getElementsByTagName('tr')
-                for(var i = 0; i < tbody.length; i++){
-                    var tds = tbody[i].getElementsByTagName('td')
-                    sql.query("insert into inflation values('" + tds[0].innerHTML.substr(3, 7) + "-" + tds[0].innerHTML.substr(0, 2) + "-01', " + tds[2].innerHTML + ");", function(){})
-                }
+                var tr = html.getElementsByTagName('tbody')[0].rows[0]
+                /*for(var i = 0; i < tr.length; i++){
+                    var sqlStatement = "insert into inflation(date, inf) values('" + od.reverseDate('01-' + tr[i].cells[0].textContent) + "', " + tr[i].cells[2].textContent + ");"
+                    sql.query(sqlStatement, function(check){})
+                }*/
+                sql.query("select * from inflation where left(date, 7)='" + tr.cells[0].textContent.substr(3, 7) + '-' + tr.cells[0].textContent.substr(0, 2) + "';", function(check){
+                    if(check.length == 0){
+                        sql.query("insert into inflation(date, inf) values('" + tr.cells[0].textContent.substr(3, 7) + '-' + tr.cells[0].textContent.substr(0,2) + '-01' + "', " + tr.cells[2].textContent + ");", function(check){
+                            console.log('Inlflation saved succesfully!')
+                        })
+                    }
+                    else{
+                        console.log('Inflation for this date is already exists!')
+                    }
+                })
             }
         });
     },
 
     reverseDate: function(date){
-        console.log(date.substr(8, 10) + '-' + date.substr(5, 7).substr(0, 2) + '-' + date.substr(0, 4))
+        return (date.substr(6, 10) + '-' + date.substr(3, 5).substr(0, 2) + '-' + date.substr(0, 2))
     }, 
 
     setSteelCurrentPrice: function(){

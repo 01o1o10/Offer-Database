@@ -24,6 +24,18 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="row">
+            <div class="col-sm-3 nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn user-button">
+                        <img src="./public/images/user.png" style=" display: inline; height: 49px; width: 49px;">
+                        <b><p id="fullname" style="font-size: 20px;; color: white; display: inline;"></p></b>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#user-change-password-modal">Change Password</a>
+                        <a href="#" data-toggle="modal" data-target="#user-authorities-modal" id="user-authorities-button">List Authorities</a>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-2 nav-item">
                 <div class="dropdown">
                     <button class="dropbtn">Add</button>
@@ -50,19 +62,21 @@
             </div>
             <div class="col-sm-2 nav-item">
                 <div class="dropdown">
-                    <button class="dropbtn">Excel</button>
+                    <button class="dropbtn">User</button>
                     <div class="dropdown-content">
-                        <a href="#" data-toggle="modal" data-target="#export-excel-modal">Export Excel</a>
-                        <a href="#" data-toggle="modal" data-target="#import-excel-modal">Import Excel</a>
+                        <a href="#" data-toggle="modal" data-target="#add-user-modal">Add User</a>
+                        <a href="#" data-toggle="modal" data-target="#filter-user-modal">Filter Users</a>
+                        <a href="#" data-toggle="modal" data-target="#add-user-category-modal">Add Users Category</a>
+                        <a id="filter-user-category-submit">Filter Users Category</a>
                     </div>
                 </div>
             </div>
             <div class="col-sm-2 nav-item">
                 <div class="dropdown">
-                    <button class="dropbtn">User</button>
+                    <button class="dropbtn">Excel</button>
                     <div class="dropdown-content">
-                        <a href="#" data-toggle="modal" data-target="#add-user-modal">Add User</a>
-                        <a href="#" data-toggle="modal" data-target="#filter-user-modal">Filter Users</a>
+                        <a href="#" data-toggle="modal" data-target="#export-excel-modal">Export Excel</a>
+                        <a href="#" data-toggle="modal" data-target="#import-excel-modal">Import Excel</a>
                     </div>
                 </div>
             </div>
@@ -1343,27 +1357,65 @@
                     </br>
                     <label>Excel Permissions</label>
                     <div >
-                    <input type="checkbox" id="export-excel-perm">
-                    <label >Export Excel</label>
+                        <input type="checkbox" id="export-excel-perm">
+                        <label >Export Excel</label>
                     </div>
                     <div >
-                    <input type="checkbox" id="import-excel-perm">
-                    <label >Import Excel</label>
+                        <input type="checkbox" id="import-excel-perm">
+                        <label >Import Excel</label>
                     </div>
   
                     </br>
                     <label>Price Permissions</label>
                     <div >
-                    <input type="checkbox" id="show-price-details-excel-perm">
-                    <label >Show Price Details</label>
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Show Price Details</label>
                     </div>
                     <div >
-                    <input type="checkbox" id="set-minimum-wage-perm">
-                    <label >Set Minimum Wage</label>
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Set Minimum Wage</label>
                     </div>
                     <div >
-                    <input type="checkbox" id="set-steel-price-perm">
-                    <label >Set Steel Price</label>
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Set Steel Price</label>
+                    </div>
+  
+                    </br>
+                    <label>User Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Add User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Filter User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Delete User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Update User</label>
+                    </div>
+  
+                    </br>
+                    <label>User Category Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Add User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Filter User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Delete User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Update User Category</label>
                     </div>
                                 
                     <div id="add-user-succes" class="alert alert-success" style="display: none;"></div>
@@ -1379,7 +1431,7 @@
         </div>
     </div>
 
-    <!-- Filter Product Modal -->
+    <!-- Filter User Modal -->
     <div class="modal" id="filter-user-modal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1407,7 +1459,7 @@
         </div>
     </div>
 
-    <!-- Update Product Modal -->
+    <!-- Update User Modal -->
     <button style="display: none" id="update-user-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-user-modal"></button>
     <div class="modal" id="update-user-modal">
         <div class="modal-dialog">
@@ -1562,12 +1614,338 @@
                                 <input type="checkbox" id="set-steel-price-perm">
                                 <label >Set Steel Price</label>
                             </div>
+    
+                            </br>
+                            <label>User Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User</label>
+                            </div>
+        
+                            </br>
+                            <label>User Category Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User Category</label>
+                            </div>
 
                             <div id="update-user-succes" class="alert alert-success" style="display: none;"></div>
                             <div id="update-user-failed" class="alert alert-danger" style="display: none;"></div>
 
                             <div class="form-group" style="float: right; margin: 10px;">
                                 <button type="button" class="btn btn-primary" id="update-user-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Category Modal -->
+    <div class="modal" id="add-user-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-user-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="add-user-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-user-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-user-category-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Category Modal -->
+    <button style="display: none" id="update-user-category-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-user-category-modal"></button>
+    <div class="modal" id="update-user-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update User Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-user-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="update-user-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-user-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-user-category-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Change Password Modal -->
+    <div class="modal" id="user-change-password-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-oldpass" placeholder="Old password...">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-newpass" placeholder="New password...">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-newpasscheck" placeholder="Verify new password...">
+                            </div>
+                            
+                            <div id="user-change-password-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="user-change-password-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="user-change-password-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Authorities Modal -->
+    <div class="modal" id="user-authorities-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>User Authorities</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="user-authorities-form">
+                            <label>Add Permissions</label>
+                            <div >
+                                <input type="checkbox" id="add-product-perm">
+                                <label >Add Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-category-perm">
+                                <label >Add Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-project-perm">
+                                <label >Add Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-supplier-perm">
+                                <label >Add Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-offer-perm">
+                                <label >Add Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Filter Permissions</label>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Offer</label>
+                            </div>
+        
+                            <div >
+                                <input type="checkbox" id="filter-offer-max-prices-perm">
+                                <label >Filter Max Prices</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-offer-min-prices-perm">
+                                <label >Filter Min Prices</label>
+                            </div>
+        
+                            </br>
+                            <label>Delete Permissions</label>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Update Permissions</label>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Excel Permissions</label>
+                            <div >
+                                <input type="checkbox" id="export-excel-perm">
+                                <label >Export Excel</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="import-excel-perm">
+                                <label >Import Excel</label>
+                            </div>
+        
+                            </br>
+                            <label>Price Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Show Price Details</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Set Minimum Wage</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Set Steel Price</label>
+                            </div>
+    
+                            </br>
+                            <label>User Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User</label>
+                            </div>
+        
+                            </br>
+                            <label>User Category Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User Category</label>
                             </div>
                         </form>
                     </div>

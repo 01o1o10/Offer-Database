@@ -34,6 +34,14 @@ module.exports = {
                     ui.alert('add-product-failed', 'Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!', false)
                 }
             }
+            else if((data.inf + data.steel + data.lead + data.zinc + data.wms) != 1){
+                if(cb){
+                    cb('Total effects value must be equal to 1!')
+                }
+                else{
+                    ui.alert('add-product-failed', 'Total effects value must be equal to 1!', false)
+                }
+            }
             else{
                 sql.query("select * from products where p_name='" + data.product + "';", function(product){
                     if(product.length  != 0){

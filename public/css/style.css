@@ -19,6 +19,12 @@ header {
     opacity: 0.3;
 }
 
+img {
+    margin: 3px;
+    padding: 0;
+    display: block;
+}
+
 h1 {
     font-size: 5vw;
     color: black;
@@ -30,6 +36,10 @@ h1 {
     font-size: 4vw;
     margin: 0;
     padding: 0;
+}
+
+#alert-modal {
+    z-index: 9999999999;
 }
 
 
@@ -76,6 +86,11 @@ h1 {
     font-size: 16px;
     border: none;
     cursor: pointer;
+}
+
+.user-button {
+    padding: 0;
+    margin: 0;
 }
 
 .dropdown-content {

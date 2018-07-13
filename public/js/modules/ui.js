@@ -437,16 +437,13 @@ module.exports = {
     },
    
     writeUpdateUserModal: function(data){
-        console.log(data)
         document.getElementById('update-user-firstname').value = data.Firstname
         document.getElementById('update-user-lastname').value = data.Lastname
         document.getElementById('update-user-username').value = data.Username
 
         var checkboxes = $('#update-user input[type="checkbox"]')
-        console.log(checkboxes)
 
         for(var i = 0; i < checkboxes.length; i++){
-            console.log(data.Authority.charAt(i))
             if(data.Authority.charAt(i) == '1'){
                 checkboxes[i].checked = true
             }
@@ -482,4 +479,47 @@ module.exports = {
         console.log('User Info: ', data)
         return data
     },
+
+    /////     USER CATEGORY FUNCTIONS
+    readAddUserCategoryModal: function(){
+        var category = document.getElementById('add-user-category-name').value
+        return category
+    },
+
+    readUpdateUserCategoryModal: function(){
+        var data = {}
+        data.category = document.getElementById('update-user-category-name').value
+        data.id = this.updateId
+        return data
+    },
+
+    writeUpdateUserCategoryModal: function(data){
+        document.getElementById('update-user-category-name').value = data.Category
+    },
+
+    /////     USER SELF FUNCTIONS
+    setUserInfo: function(userInfo){
+        document.getElementById('fullname').textContent = userInfo.u_fname + ' ' + userInfo.u_lname
+    },
+
+    readChangePasswordModal: function(){
+         var data = {}
+         data.oldPass = document.getElementById('user-change-password-oldpass').value
+         data.newPass = document.getElementById('user-change-password-newpass').value
+         data.newPassCheck = document.getElementById('user-change-password-newpasscheck').value
+         return data
+    },
+   
+    writeUserAuthoritiesModal: function(){
+        var checkboxes = $('#user-authorities-form input[type="checkbox"]')
+
+        for(var i = 0; i < checkboxes.length; i++){
+            if(userInfo.u_aut.charAt(i) == '1'){
+                checkboxes[i].checked = true
+            }
+            else{
+                checkboxes[i].checked = false
+            }
+        }
+    }
 }

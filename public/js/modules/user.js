@@ -69,4 +69,71 @@ module.exports = {
             }
         }
     },
+
+    addUserCategory: function(category, cb){
+        if(!category){
+            ui.alert('add-user-category-failed', 'Category name can not be empty!', false)
+        }
+        else{
+            sql.query("select * from usercategories where category_name='" + category + "';", function(categoryCheck){
+                if(categoryCheck.length != 0){
+                    ui.alert('add-user-category-failed', 'This category is already exists!', false)
+                }
+                else{
+                    var sqlStatement = "insert into usercategories(category_name) values('" + category + "');"
+                    console.log(sqlStatement)
+                    sql.query(sqlStatement, function(check){
+                        if(check){
+                            select.update({className: 'select-user-category', value: check.insertId, text: category})
+                            ui.alert('add-user-category-succes', 'Category saved succesfully!', true)
+                        }
+                    })
+                }
+            })
+        }
+    },
+
+    updateUserCategory: function(data){
+        if(!data.category){
+            ui.alert('update-user-category-failed', 'Category name can not be empty!', false)
+        }
+        else{
+            var sqlStatement = "update usercategories set category_name='" + data.category + "' where categoryid=" + data.id + ";"
+            console.log(sqlStatement)
+            sql.query(sqlStatement, function(check){
+                ui.alert('update-user-category-succes', 'Category udated succesfully!', true)
+            })
+        }
+    },
+
+    filterUserCategories: function(){
+        sql.query('select * from usercategories;', function(data){
+            ui.setResults(data, ['Category'], 'delete-user-categories')
+        })
+    },
+
+    changePassword: function(passInfo){
+        if(!passInfo){
+            ui.alert('user-change-password-failed', 'Password data is empty!', false)
+        }
+        else if(!passInfo.oldPass || !passInfo.newPass || !passInfo.newPassCheck){
+            ui.alert('user-change-password-failed', 'Any field can not be empty!', false)
+        }
+        else if(passInfo.newPass != passInfo.newPassCheck){
+            ui.alert('user-change-password-failed', 'Verify is not ok!', false)
+        }
+        else{
+            sql.query("select * from users where u_name='" + userInfo.u_name + "';", function(check){
+                if(check[0].u_pass != passInfo.oldPass){
+                    ui.alert('user-change-password-failed', 'Old password is incorrect!', false)
+                }
+                else{
+                    var sqlStatement = "update users set u_pass='" + passInfo.newPass + "' where u_name='" + userInfo.u_name + "';"
+                    sql.query(sqlStatement, function(check){
+                        ui.alert('user-change-password-succes', 'Password changed successfully!', true)
+                    })
+                }
+            })
+        }
+    }
 }
