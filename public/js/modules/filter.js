@@ -142,21 +142,21 @@ module.exports = {
             offerInfo.price = parseFloat(offerInfo.price)
             console.log('Offer Info: ', offerInfo)
 
-            sql.query("select price from steel where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+            sql.query("select price from steel where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                 prices.steelPriceNew = check[0].price
-                sql.query("select price from steel where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                sql.query("select price from steel where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
                     prices.steelPriceOld = (check[0]) ? check[0].price : prices.steelPriceNew
-                    sql.query("select price from coppor where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                    sql.query("select price from coppor where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                         prices.cuprumPriceNew = check[0].price
-                        sql.query("select price from coppor where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                        sql.query("select price from coppor where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
                             prices.cuprumPriceOld = check[0].price
-                            sql.query("select price from leadp where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                            sql.query("select price from leadp where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                                 prices.leadPriceNew = check[0].price
-                                sql.query("select price from leadp where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                sql.query("select price from leadp where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
                                     prices.leadPriceOld = check[0].price
-                                    sql.query("select price from zinc where date>='" + od.dayAgo(od.getDateNow(), 3) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
+                                    sql.query("select price from zinc where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                                         prices.zincPriceNew = check[0].price
-                                        sql.query("select price from zinc where date>='" + od.dayAgo(offerInfo.date, 3) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                        sql.query("select price from zinc where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
                                             prices.zincPriceOld = check[0].price
                                             sql.query("select * from products where p_name='" + offerInfo.product + "';", function(check){
                                                 var productInfo = check[0]
