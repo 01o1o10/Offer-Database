@@ -210,6 +210,12 @@ $(document).ready(function(){
         ui.selectAll()
     })
 
+    $(document).on('sumo:closed', '#filter-offer-category', function(sumo) {
+        var sel = $('#filter-offer-product')[0]
+        var categories = $('#filter-offer-category').val()
+        select.setingSelectProduct(sel, categories)
+    });
+
 
 
 

@@ -8,6 +8,7 @@ module.exports = {
         var workbook = ex.readFile(fileName);
         var worksheet = workbook.Sheets[workbook.SheetNames[0]];
         var data = this.readExcelAsArray(worksheet)
+        $('#import-excel-progress').css('width', '0')
         insert.excelToDb(data, 0)
         console.log(data)
     }, 
@@ -55,6 +56,7 @@ module.exports = {
             delete productInfo.c_id
             rows.push(Object.assign({}, resultsRowData, {ce: ce}, data, effect, prices, productInfo))
             if(i == selectedRowsId.length-1){
+                $('#export-excel-progress').css('width', '' + 100 + '%')
                 console.log(rows)
                 var ws = ex.utils.json_to_sheet(rows)
         
@@ -67,6 +69,7 @@ module.exports = {
                 ui.alert('export-excel-succes', 'Data exported!', true)
             }
             else{
+                $('#export-excel-progress').css('width', '' + ((i/selectedRowsId.length)*100) + '%')
                 excel.getExtraData(rows, selectedRowsId, ++i)
             }
         })

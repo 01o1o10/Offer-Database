@@ -330,7 +330,7 @@ module.exports = {
 
     showOtherVals: function(price, data){
         if(!price.children().length){
-            var table = '<div class="dropdown-content-price"><table class="table table-striped table-dark" style="margin: 0;"><thead><tr><th></th><th>t</th><th>$</th><th>€</th></tr></thead><tr><td>Old</td><td id="11"></td><td id="12"></td><td id="13"></td></tr><tr><td>*</td><td id="21"></td><td id="22"></td><td id="23"></td></tr><tr><td>New</td><td id="31"></td><td id="32"></td><td id="33"></td></tr><tr><td>*</td><td id="41"></td><td id="42"></td><td id="43"></td></tr></tbody></table></div>'
+            var table = '<div class="dropdown-content-price"><table class="table table-striped table-dark" style="margin: 0;"><thead><tr><th></th><th>t</th><th>$</th><th>€</th></tr></thead><tr><td>Old Offer</td><td id="11"></td><td id="12"></td><td id="13"></td></tr><tr><td>*</td><td id="21"></td><td id="22"></td><td id="23"></td></tr><tr><td>Expected Offer</td><td id="31"></td><td id="32"></td><td id="33"></td></tr><tr><td>*</td><td id="41"></td><td id="42"></td><td id="43"></td></tr></tbody></table></div>'
             price.html(price.html() + table)
 
             row = ['1', '2', '3', '4']

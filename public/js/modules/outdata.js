@@ -51,9 +51,15 @@ module.exports = {
                     else{
                         var html = document.createElement('DIV')
                         html.innerHTML = body
-                        var cells = html.getElementsByTagName('table')[0].rows[1].cells
-                        var price = cells[cells.length-1].textContent
-                        insert.addPrice(price, {tableName: tableName, cols: ['date', 'price']})
+                        var table = html.getElementsByTagName('table')[0]
+                        if(table){
+                            var cells = table.rows[1].cells
+                            var price = cells[cells.length-1].textContent
+                            insert.addPrice(price, {tableName: tableName, cols: ['date', 'price']})
+                        }
+                        else{
+                            ui.setAlertModal('Price can not get for' + tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
+                        }
                     }
                 });
             }
@@ -132,9 +138,6 @@ module.exports = {
                             console.log('Inlflation saved succesfully!')
                         })
                     }
-                    else{
-                        console.log('Inflation for this date is already exists!')
-                    }
                 })
             }
         });
@@ -151,5 +154,71 @@ module.exports = {
                 ui.setAlertModal(html , false)
             }
         })
+    },
+
+    steeltodb: function(){
+        var file = 'C:/Users/ilyas/Desktop/mobility/Offer-Database/deneme.txt'
+        console.log(file) 
+        fs = require('fs');
+        fs.readFile(file, 'utf-8', function(err, data){
+            if(err) throw err
+            var table = document.createElement('TABLE')
+            table.innerHTML = data
+            var sqlStatement = ''
+            for(var i = 0; i < table.rows.length; i++){
+                sqlStatement = "insert into steel(date, price) values('" + od.editDate(table.rows[i].cells[0].textContent) + "', " + table.rows[i].cells[1].textContent + ");"
+                console.log(sqlStatement)
+                sql.query(sqlStatement, function(check){})
+                if(i == table.rows.length){
+                    alert('bitti')
+                }
+            }
+        });
+
+    },
+
+    editDate: function(date){
+        var year = date.substr(8, 4)
+        var month = date.substr(0, 3)
+        var day = date.substr(4, 2)
+
+        switch(month){
+            case 'Jan': month = '01'
+                break
+            
+            case 'Feb': month = '02'
+                break
+            
+            case 'Mar': month = '03'
+                break
+            
+            case 'Apr': month = '04'
+                break
+            
+            case 'May': month = '05'
+                break
+            
+            case 'Jun': month = '06'
+                break
+            
+            case 'Jul': month = '07'
+                break
+            
+            case 'Aug': month = '08'
+                break
+            
+            case 'Sep': month = '09'
+                break
+            
+            case 'Oct': month = 10
+                break
+            
+            case 'Nov': month = 11
+                break
+            
+            case 'Dec': month = 12
+                break
+        }
+        return year + '-' + month + '-' + day
     }
 }

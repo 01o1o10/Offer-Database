@@ -34,6 +34,31 @@ module.exports = {
         for(var i = 0; i < selects.length; i++){
             selects[i].sumo.add(data.value, data.text);
         }
+    },
+
+    setingSelectProduct: function(sel, categories){
+        var options = sel.childNodes
+        for(var i=options.length; i>=1; i--)
+        {
+            sel.sumo.remove(i-1);
+        }
+        var sqlStatement = 'select * from products'
+        if(categories.length == 1){
+            sqlStatement += " where c_id=" + categories[0]
+        }
+        else if(categories.length > 1){
+            sqlStatement += " where (c_id=" + categories[0]
+            for(var i = 1; i < categories.length; i++){
+                sqlStatement += " or c_id=" + categories[i]
+            }
+            sqlStatement += ")"
+        }
+        sqlStatement += ";"
+        sql.query(sqlStatement, function(check){
+            for(var i = 0; i < check.length; i++){
+                sel.sumo.add(check[i].p_id, check[i].p_name);
+            }
+        })
     }
 }
 

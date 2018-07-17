@@ -247,20 +247,20 @@ module.exports = {
     addPrice: function(price, tableInfo){
         //add metal prices to db
         if(!price){
-            ui.alert('alert-modal-failed', 'Price can not be empty!', false)
+            ui.setAlertModal('Price can not get for' + tableInfo.tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
         }
         else if(!$.isNumeric(price)){
-            ui.alert('alert-modal-failed', 'Price must be numeric!', false)
+            ui.setAlertModal('Price must be numeric for' + tableInfo.tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
         }
         else {
             var sqlStatement = "insert into " + tableInfo.tableName + "(" + tableInfo.cols[0] + ", " + tableInfo.cols[1] + ") values('" + od.getDateNow() + "', " + price + ");"
-            sql.query(sqlStatement, function(check){
-                ui.alert('alert-modal-succes', 'Price insert process is ok!', true)
-            })
+            sql.query(sqlStatement, function(check){})
         }
     },
 
     excelToDb: function(data, i){
+        console.log(data.length, i)
+        $('#import-excel-progress').css('width', '' + ((i/data.length-1)*100) + '%')
         if(data[i][4] > '2015-01-01'){
             insert.addCategory(data[i][6], function(categoryResult){
                 console.log('i: ' + i + ' category id: ' + categoryResult)
@@ -309,7 +309,6 @@ module.exports = {
                                                                                 console.log(offerInfo)
                                                                                 insert.addOffer(offerInfo, function(chrck){
                                                                                     if($.isNumeric(check)){
-                                                                                        ui.alert('import-excel-succes', 'Kayıtlar veritabanına eklendi!', true)
                                                                                         i++
                                                                                         if(i != data.length){
                                                                                             insert.excelToDb(data, i)
@@ -332,7 +331,6 @@ module.exports = {
                                                                                         console.log(offerInfo)
                                                                                         insert.addOffer(offerInfo, function(check){
                                                                                             if($.isNumeric(check)){
-                                                                                                ui.alert('import-excel-succes', 'Kayıtlar veritabanına eklendi!', true)
                                                                                                 i++
                                                                                                 if(i != data.length){
                                                                                                     insert.excelToDb(data, i)
