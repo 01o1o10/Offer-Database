@@ -9,14 +9,17 @@ module.exports = {
             if(!data.category){
                 ui.alert('update-product-failed', 'Please select a category!', false)
             }
-            else if(!data.product || !data.inf || !data.steel || !data.cup || !data.lead || !data.zinc || !data.wms){
+            else if(!data.product || !data.inf || !data.steel || !data.cup || !data.lead || !data.zinc || !data.wms || !data.extra){
                 ui.alert('update-product-failed', 'Fields can not be empty!', false)
             }
-            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms)){
+            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms) || !$.isNumeric(data.extra)){
                 ui.alert('update-product-failed', 'Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!', false)
             }
+            else if((parseFloat(data.inf) + parseFloat(data.steel) + parseFloat(data.cup) + parseFloat(data.lead) + parseFloat(data.zinc) + parseFloat(data.wms) + parseFloat(data.extra)) != 1){
+                ui.alert('update-product-failed', 'Total effects value must be equal to 1!', false)
+            }
             else{
-                var sqlStatement = "update products set c_id=" + data.category + ", p_name='" + data.product + "', inf_effect=" + data.inf + ", steel_effect=" + data.steel + ", cup_effect=" + data.cup + ", lead_effect=" + data.lead + ", zinc_effect=" + data.zinc + ", wms_effect=" + data.wms + " where p_id=" + data.id + ";"
+                var sqlStatement = "update products set c_id=" + data.category + ", p_name='" + data.product + "', inf_effect=" + data.inf + ", steel_effect=" + data.steel + ", cup_effect=" + data.cup + ", lead_effect=" + data.lead + ", zinc_effect=" + data.zinc + ", wms_effect=" + data.wms + ", extra_effect=" + data.extra + " where p_id=" + data.id + ";"
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     ui.alert('update-product-succes', 'Product updated succesfully!', true)

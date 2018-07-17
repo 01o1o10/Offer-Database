@@ -2,6 +2,7 @@ module.exports = {
     deleteData: function(idArray, tableInfo){
         var sqlStatement = "delete from " + tableInfo.tableName
         if(idArray.length == 1){
+
             sqlStatement += " where " + tableInfo.idColName + "=" + idArray[0]
         }
         else if(idArray.length > 1){
@@ -13,7 +14,7 @@ module.exports = {
         sqlStatement += ";"
 
         if(idArray.length != 0){
-            sql.query(sqlStatement, function(check2){
+            sql.query(sqlStatement, function(check){
                 var checkedCheckboxes = $('.result-checkbox:checkbox:checked')
                 for(var i = 0; i < checkedCheckboxes.length; i++){
                     checkedCheckboxes[i].parentNode.parentNode.remove()

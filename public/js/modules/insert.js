@@ -18,7 +18,7 @@ module.exports = {
                     ui.alert('add-product-failed', 'Please select a category!', false)
                 }
             }
-            else if(!data.product || !data.inf || !data.steel || !data.cup || !data.lead || !data.zinc || !data.wms){
+            else if(!data.product || !data.inf || !data.steel || !data.cup || !data.lead || !data.zinc || !data.wms || !data.extra){
                 if(cb){
                     cb('Fields can not be empty!')
                 }
@@ -26,7 +26,7 @@ module.exports = {
                     ui.alert('add-product-failed', 'Fields can not be empty!', false)
                 }
             }
-            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms)){
+            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms) || !$.isNumeric(data.extra)){
                 if(cb){
                     cb('Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!')
                 }
@@ -34,7 +34,7 @@ module.exports = {
                     ui.alert('add-product-failed', 'Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!', false)
                 }
             }
-            else if((data.inf + data.steel + data.lead + data.zinc + data.wms) != 1){
+            else if((parseFloat(data.inf) + parseFloat(data.steel) + parseFloat(data.cup) + parseFloat(data.lead) + parseFloat(data.zinc) + parseFloat(data.wms) + parseFloat(data.extra)) != 1){
                 if(cb){
                     cb('Total effects value must be equal to 1!')
                 }
@@ -53,10 +53,13 @@ module.exports = {
                         }
                     }
                     else{
-                        var sqlStatement = "insert into products(c_id, p_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect) values(" + data.category + ",'" + data.product + "', " + data.inf + ", " + data.steel + ", " + data.cup + ", " + data.lead + ", " + data.zinc + ", " + data.wms + ");"
+                        var sqlStatement = "insert into products(c_id, p_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect, extra_effect) values(" + data.category + ",'" + data.product + "', " + data.inf + ", " + data.steel + ", " + data.cup + ", " + data.lead + ", " + data.zinc + ", " + data.wms + ", " + data.extra + ");"
                         console.log(sqlStatement)
                         sql.query(sqlStatement, function(check){
                             if(check){
+                                var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10) values('add', 'products', '" + userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", "+ data.category + ",'" + data.product + "', " + data.inf + ", " + data.steel + ", " + data.cup + ", " + data.lead + ", " + data.zinc + ", " + data.wms + ", " + data.extra + ");"
+                                console.log(sqlStatement)
+                                sql.query(sqlStatement, function(check){})
                                 select.update({className: 'select-product', value: check.insertId, text: data.product})
                                 if(cb){
                                     cb(check.insertId)
@@ -96,6 +99,9 @@ module.exports = {
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
                         if(check){
+                            var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'categories', '" + userInfo.u_name + "', '" + od.getDateNow() + "', " + check.insertId + ", '"+ category + "');"
+                            console.log(sqlStatement)
+                            sql.query(sqlStatement, function(check){})
                             select.update({className: 'select-category', value: check.insertId, text: category})
                             if(cb){
                                 cb(check.insertId)
@@ -134,6 +140,9 @@ module.exports = {
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
                         if(check){
+                            var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'projects', '" + userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", '"+ project + "');"
+                            console.log(sqlStatement)
+                            sql.query(sqlStatement, function(check){})
                             select.update({className: 'select-project', value: check.insertId, text: project})
                             if(cb){
                                 cb(check.insertId)
@@ -172,6 +181,9 @@ module.exports = {
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
                         if(check){
+                            var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'supplier', '" + userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", '"+ supplier + "');"
+                            console.log(sqlStatement)
+                            sql.query(sqlStatement, function(check){})
                             select.update({className: 'select-supplier', value: check.insertId, text: supplier})
                             if(cb){
                                 cb(check.insertId)
@@ -216,6 +228,9 @@ module.exports = {
                 var sqlStatement = "insert into offers(pd_id, pj_id, s_id, price, date, exchange, usd, eur) values(" + data.product + ", " + data.project + ", " + data.supplier + ", " + data.price + ", '" + data.date + "', '" + data.exchange + "', " + data.usd + ", " + data.eur + ");"
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
+                    var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9) values('add', 'offers', '" + userInfo.u_name + "', '" + od.getDateNow() + "', " + check.insertId  + ",'" + data.product + "', '" + data.project + "', '" + data.supplier + "', '" + data.price + "', '" + data.date + "', '" + data.exchange + "', '" + data.usd + "', '" + data.eur + "');"
+                    console.log(sqlStatement)
+                    sql.query(sqlStatement, function(check){})
                     if(check){
                         if(cb){
                             cb(check.insertId)
@@ -264,6 +279,7 @@ module.exports = {
                                     productInfo.lead = data[i][10]
                                     productInfo.zinc = data[i][11]
                                     productInfo.wms = data[i][12]
+                                    productInfo.extra = data[i][13]
                                     productInfo.category = categoryId[0].c_id
                                     console.log(productInfo)
                                     insert.addProduct(productInfo, function(productResult){

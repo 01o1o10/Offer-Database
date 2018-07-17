@@ -40,19 +40,21 @@ module.exports = {
         });
     },
 
-    getMetalPrices: function(code, tableName){  
-        var date = this.dayAgo(this.getDateNow(), 1)
-        sql.query("select * from " + tableName + " where date='" + date + "';", function(check){
-            if(check.length == 0){
-                var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=' + date + '&end_date=' + date + '&api_key=DsrViFcryyTfVWUDvyCD'
+    getMetalPrices: function(url, tableName){
+        sql.query("select * from " + tableName + " where date='" + this.getDateNow() + "';", function(data){
+            if(data.length == 0){
                 request(url, function (error, response, body) {
-                    if(error) throw error;
-
-                    var html = document.createElement('DIV')
-                    html.innerHTML = body
-                    body = html.getElementsByTagName('code')[0].textContent
-                    var metalPrices = JSON.parse(body).dataset.data;
-                    sql.query("insert into " + tableName + "(date, price) values('" + metalPrices[0][0] + "', " + metalPrices[0][2] + ");", function(check){})
+                    if(error){
+                        ui.setAlertModal('Price can not get for' + tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
+                        throw error
+                    }
+                    else{
+                        var html = document.createElement('DIV')
+                        html.innerHTML = body
+                        var cells = html.getElementsByTagName('table')[0].rows[1].cells
+                        var price = cells[cells.length-1].textContent
+                        insert.addPrice(price, {tableName: tableName, cols: ['date', 'price']})
+                    }
                 });
             }
         })
@@ -140,26 +142,6 @@ module.exports = {
 
     reverseDate: function(date){
         return (date.substr(6, 10) + '-' + date.substr(3, 5).substr(0, 2) + '-' + date.substr(0, 2))
-    }, 
-
-    setSteelCurrentPrice: function(){
-        sql.query("select * from steel where date='" + this.getDateNow() + "';", function(data){
-            if(data.length == 0){
-                request('https://www.lme.com/Metals/Ferrous/Steel-Rebar#tabIndex=0', function (error, response, body) {
-                    if(error){
-                        var html = 'Steel price can not get from the page!</br><form><div class="form-group"><input type="text" class="form-control" id="alert-price-input" placeholder="Type steel today price..."></div><div class="form-group"><button type="button" class="form-control btn btn-primary" id="steel-price-submit">Set</button></div></form>'
-                        ui.setAlertModal(html , false)
-                        throw error
-                    }
-                    else{
-                        var html = document.createElement('DIV')
-                        html.innerHTML = body
-                        var price = html.getElementsByTagName('table')[0].rows[1].cells[1].textContent
-                        insert.addPrice(price, {tableName: 'steel', cols: ['date', 'price']})
-                    }
-                });
-            }
-        })
     },
 
     setMwCurrentAmount: function(){

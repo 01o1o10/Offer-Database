@@ -477,11 +477,11 @@ $(document).ready(function(){
         ui.writeDate('add-offer-date', od.getDateNow())
         od.setExchangeRateNow()
         od.setInflationTableToDb()
-        od.setSteelCurrentPrice()
         od.setMwCurrentAmount()
-        od.getMetalPrices('CU', 'coppor')
-        od.getMetalPrices('PB', 'leadp')
-        od.getMetalPrices('ZI', 'zinc')
+        od.getMetalPrices('https://www.lme.com/Metals/Ferrous/Steel-Rebar#tabIndex=0', 'steel')
+        od.getMetalPrices('https://www.lme.com/en-GB/Metals/Non-ferrous/Copper#tabIndex=0', 'coppor')
+        od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Lead#tabIndex=0', 'leadp')
+        od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Zinc#tabIndex=0', 'zinc')
 
         const ipc = require('electron').ipcRenderer
         ipc.send('user-data')

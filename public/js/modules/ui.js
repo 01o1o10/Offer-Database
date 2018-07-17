@@ -18,6 +18,7 @@ module.exports = {
         data.lead = document.getElementById('add-product-lead').value
         data.zinc = document.getElementById('add-product-zinc').value
         data.wms = document.getElementById('add-product-wms').value
+        data.extra = document.getElementById('add-product-extra').value
         return data
     },
    
@@ -32,6 +33,7 @@ module.exports = {
         data.lead = document.getElementById('update-product-lead').value
         data.zinc = document.getElementById('update-product-zinc').value
         data.wms = document.getElementById('update-product-wms').value
+        data.extra = document.getElementById('update-product-extra').value
         return data
     },
    
@@ -44,6 +46,7 @@ module.exports = {
         document.getElementById('update-product-lead').value = data.Lead
         document.getElementById('update-product-zinc').value = data.Zinc
         document.getElementById('update-product-wms').value = data.Workmanship
+        document.getElementById('update-product-extra').value = data.Extra
         sql.query("select * from categories where c_name='" + data.Category + "';", function(category){
             document.getElementById('update-product-category').value = category[0].c_id
         })
@@ -273,11 +276,11 @@ module.exports = {
                 if(j == 0){
                     td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span id="' + keys[0] + '" class="glyphicon filter-edit-icon">&#x270f;</span>'
                 }
-                else if(keys[j] == 'usd'){
+                else if(keys[j] == 'usd' || keys[j] == 'eur'){
                     td.setAttribute('title', data[i][keys[j]])
                     td.style.display = 'none'
                 }
-                else if(j >= 9){
+                else if(j >= 10){
                     td.setAttribute('title', data[i][keys[j]])
                     td.style.display = 'none'
                 }

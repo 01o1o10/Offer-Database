@@ -1,6 +1,6 @@
 module.exports = {
     filterProducts: function(categories){
-        var sqlStatement = "select p_id, p_name, c_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect from products p, categories c where p.c_id=c.c_id"
+        var sqlStatement = "select p_id, p_name, c_name, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect, extra_effect from products p, categories c where p.c_id=c.c_id"
         if(categories.length == 1){
             sqlStatement += " and p.c_id=" + categories[0]
         }
@@ -15,7 +15,7 @@ module.exports = {
 
         console.log(sqlStatement)
         sql.query(sqlStatement, function(data){
-            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Cuprum', 'Lead', 'Zinc', 'Workmanship'], 'delete-products')
+            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Cuprum', 'Lead', 'Zinc', 'Workmanship', 'Extra'], 'delete-products')
         })
     },
 
@@ -166,53 +166,60 @@ module.exports = {
                                                     prices.mwOld = check[check.length - 1].mw_amount
                                                     console.log('Prices: ', prices)
     
-                                                    effect.inf = productInfo.inf_effect * (offerInfo.inf - 1)
-                                                    effect.steel = productInfo.steel_effect *((prices.steelPriceNew/prices.steelPriceOld) - 1)
-                                                    effect.cup = productInfo.cup_effect * ((prices.cuprumPriceNew/prices.cuprumPriceOld) - 1)
-                                                    effect.lead = productInfo.lead_effect * ((prices.leadPriceNew/prices.leadPriceOld) - 1)
-                                                    effect.zinc = productInfo.zinc_effect * ((prices.zincPriceNew/prices.zincPriceOld) - 1)
-                                                    effect.wms = productInfo.wms_effect *((prices.mwNew/prices.mwOld) - 1)
+                                                    effect.inf = productInfo.inf_effect * offerInfo.inf
+                                                    effect.steel = productInfo.steel_effect *prices.steelPriceNew/prices.steelPriceOld
+                                                    effect.cup = productInfo.cup_effect * prices.cuprumPriceNew/prices.cuprumPriceOld
+                                                    effect.lead = productInfo.lead_effect * prices.leadPriceNew/prices.leadPriceOld
+                                                    effect.zinc = productInfo.zinc_effect * prices.zincPriceNew/prices.zincPriceOld
+                                                    effect.wms = productInfo.wms_effect * prices.mwNew/prices.mwOld
+                                                    effect.cur = productInfo.extra_effect
                                                     console.log('Effects: ', effect)
-
-                                                    var ce =  1 + effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.wms
-                                                    console.log('CE: ', ce)
                 
                                                     data.cell11 = 1
                                                     data.cell12 = parseFloat(offerInfo.usd)
                                                     data.cell13 = parseFloat(offerInfo.eur)
                 
                                                     data.cell31 = parseFloat(offerInfo.inf)
-    
-    
                                                     od.setExchangeRateNow(function(exchange){
                                                         data.cell32 = exchange[0].selling
                                                         data.cell33 = exchange[1].selling
+
+                                                        var dolInf = data.cell32/data.cell12
                 
                                                         if(offerInfo.type == 'TL'){
+                                                            var ce = effect.inf + (effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur) * dolInf + effect.wms
+                                                            console.log('Katsayı: ' + ce)
+
                                                             data.cell21 = parseFloat(offerInfo.price.toFixed(2))
-                                                            data.cell22 = parseFloat((offerInfo.price / parseFloat(offerInfo.usd)).toFixed(2))
-                                                            data.cell23 = parseFloat((offerInfo.price / parseFloat(offerInfo.eur)).toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.price / data.cell12).toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.price / data.cell13).toFixed(2))
                                                             
                                                             data.cell41 = parseFloat((offerInfo.price * ce).toFixed(2))
                                                             data.cell42 = parseFloat((offerInfo.price * ce / data.cell32).toFixed(2))
                                                             data.cell43 = parseFloat((offerInfo.price * ce / data.cell33).toFixed(2))
                                                         }
                                                         else if(offerInfo.type == '$'){
-                                                            data.cell21 = parseFloat(((offerInfo.price * parseFloat(offerInfo.usd))).toFixed(2))
+                                                            var ce = effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
+                                                            console.log('Katsayı: ' + ce)
+
+                                                            data.cell21 = parseFloat((offerInfo.price * data.cell12).toFixed(2))
                                                             data.cell22 = parseFloat(offerInfo.price.toFixed(2))
-                                                            data.cell23 = parseFloat((offerInfo.price / (parseFloat(offerInfo.eur)/parseFloat(offerInfo.usd))).toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.price / (data.cell12/data.cell13)).toFixed(2))
                                             
-                                                            data.cell41 = parseFloat((offerInfo.price * data.cell32 * ce).toFixed(2))
+                                                            data.cell41 = parseFloat((offerInfo.price * ce * data.cell32).toFixed(2))
                                                             data.cell42 = parseFloat((offerInfo.price * ce).toFixed(2))
-                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell32/data.cell33)).toFixed(2))
                                                         }
                                                         else{
-                                                            data.cell21 = parseFloat((offerInfo.price * parseFloat(offerInfo.eur)).toFixed(2))
-                                                            data.cell22 = parseFloat((offerInfo.price * (parseFloat(offerInfo.eur)/parseFloat(offerInfo.usd))).toFixed(2))
+                                                            var ce = effect.inf + (effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur) * dolInf + effect.wms/dolInf
+                                                            console.log('Katsayı: ' + ce)
+
+                                                            data.cell21 = parseFloat((offerInfo.price * data.cell13).toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.price / (data.cell13/data.cell12)).toFixed(2))
                                                             data.cell23 = parseFloat(offerInfo.price.toFixed(2))
                                             
                                                             data.cell41 = parseFloat((offerInfo.price * ce * data.cell33).toFixed(2))
-                                                            data.cell42 = parseFloat((offerInfo.price * ce * (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
                                                             data.cell43 = parseFloat((offerInfo.price * ce).toFixed(2))
                                                         }
                                                         console.log('Data: ', data)
