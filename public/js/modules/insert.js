@@ -259,8 +259,7 @@ module.exports = {
     },
 
     excelToDb: function(data, i){
-        console.log(data.length, i)
-        $('#import-excel-progress').css('width', '' + ((i/data.length-1)*100) + '%')
+        $('#import-excel-progress').css('width', '' + ((i/(data.length-3))*100) + '%')
         if(data[i][4] > '2015-01-01'){
             insert.addCategory(data[i][6], function(categoryResult){
                 console.log('i: ' + i + ' category id: ' + categoryResult)
