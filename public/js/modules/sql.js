@@ -18,7 +18,10 @@ module.exports = {
 
     query: function(sql, cb){
         this.con.query(sql, function (err, result) {
-            if (err) throw err
+            if (err){
+                cb(err)
+                throw err
+            }
             cb(result)
         })
     }

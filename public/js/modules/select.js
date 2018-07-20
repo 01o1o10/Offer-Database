@@ -26,6 +26,11 @@ module.exports = {
                     setOptions(className, options, 'Select category...', ['categoryid', 'category_name'])
                 })
                 break
+            case 'select-user':
+                sql.query("select u_name, concat(u_fname, ' ', u_lname) as fullName from users;", function(options){
+                    setOptions(className, options, 'Select user...', ['u_name', 'fullName'])
+                })
+                break
         }
     },
 
@@ -68,5 +73,5 @@ function setOptions(className, options, ph, keys){
     for(var i in options){
         $('.' + className).append('<option value="' + options[i][keys[0]] + '">' + options[i][keys[1]] + '</option>')
     }
-    $('.' + className).SumoSelect({search: true, searchText: 'Enter here.', placeholder: ph});
+    $('.' + className).SumoSelect({search: true, placeholder: ph});
 }

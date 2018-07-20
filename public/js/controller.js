@@ -15,7 +15,7 @@ const user = require('./public/js/modules/user')
 
 
 /////     VARIABLES
-var userInfo
+
 
 
 
@@ -24,12 +24,14 @@ var userInfo
 $(document).ready(function(){
     /////     OPERATIONS
     start()
+    $('#filter-action-type').SumoSelect({placeholder: 'Select action type...'});
+    $('#filter-action-data').SumoSelect({placeholder: 'Select effected data...'});
 
 
     
     /////     ADD EVENTS
     $(document).on('click', '#add-product-submit', function(){
-        if(userInfo.u_aut.charAt(0) == '1'){
+        if(user.userInfo.u_aut.charAt(0) == '1'){
             insert.addProduct(ui.readAddProductModal())
         }
         else{
@@ -38,7 +40,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#add-category-submit', function(){
-        if(userInfo.u_aut.charAt(1) == '1'){
+        if(user.userInfo.u_aut.charAt(1) == '1'){
             insert.addCategory(ui.readAddCategoryModal())
         }
         else{
@@ -47,7 +49,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#add-project-submit', function(){
-        if(userInfo.u_aut.charAt(2) == '1'){
+        if(user.userInfo.u_aut.charAt(2) == '1'){
             insert.addProject(ui.readAddProjectModal())
         }
         else{
@@ -56,7 +58,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#add-supplier-submit', function(){
-        if(userInfo.u_aut.charAt(3) == '1'){
+        if(user.userInfo.u_aut.charAt(3) == '1'){
             insert.addSupplier(ui.readAddSupplierModal())
         }
         else{
@@ -65,7 +67,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#add-offer-submit', function(){
-        if(userInfo.u_aut.charAt(4) == '1'){
+        if(user.userInfo.u_aut.charAt(4) == '1'){
             var data = ui.readAddOfferModal()
             if(data.date == od.getDateNow()){
                 od.setExchangeRateNow(function(exchange){
@@ -93,7 +95,7 @@ $(document).ready(function(){
     
     /////     FILTER EVENTS
     $(document).on('click', '#filter-product-submit', function(){
-        if(userInfo.u_aut.charAt(5) == '1'){
+        if(user.userInfo.u_aut.charAt(5) == '1'){
             filter.filterProducts(ui.readFilterProductModal())
         }
         else{
@@ -102,7 +104,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-category-submit', function(){
-        if(userInfo.u_aut.charAt(6) == '1'){
+        if(user.userInfo.u_aut.charAt(6) == '1'){
             filter.filterCategories()
         }
         else{
@@ -111,7 +113,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-project-submit', function(){
-        if(userInfo.u_aut.charAt(7) == '1'){
+        if(user.userInfo.u_aut.charAt(7) == '1'){
             filter.filterProjects()
         }
         else{
@@ -120,7 +122,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-supplier-submit', function(){
-        if(userInfo.u_aut.charAt(8) == '1'){
+        if(user.userInfo.u_aut.charAt(8) == '1'){
             filter.filterSuppliers()
         }
         else{
@@ -129,7 +131,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-offer-submit', function(){
-        if(userInfo.u_aut.charAt(9) == '1'){
+        if(user.userInfo.u_aut.charAt(9) == '1'){
             filter.filterOffers(ui.readFilterOfferModal())
         }
         else{
@@ -138,7 +140,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-offer-min-prices', function(){
-        if(userInfo.u_aut.charAt(10) == '1'){
+        if(user.userInfo.u_aut.charAt(10) == '1'){
             filter.filterMinPrices()
         }
         else{
@@ -147,7 +149,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-offer-max-prices', function(){
-        if(userInfo.u_aut.charAt(11) == '1'){
+        if(user.userInfo.u_aut.charAt(11) == '1'){
             filter.filterMaxPrices()
         }
         else{
@@ -159,7 +161,7 @@ $(document).ready(function(){
 
     /////     DELETE EVENTS
     $(document).on('click', '#delete-products', function(){
-        if(userInfo.u_aut.charAt(12) == '1'){
+        if(user.userInfo.u_aut.charAt(12) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'products', idColName: 'p_id'})
         }
         else{
@@ -168,7 +170,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-categories', function(){
-        if(userInfo.u_aut.charAt(13) == '1'){
+        if(user.userInfo.u_aut.charAt(13) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'categories', idColName: 'c_id'})
         }
         else{
@@ -177,7 +179,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-projects', function(){
-        if(userInfo.u_aut.charAt(14) == '1'){
+        if(user.userInfo.u_aut.charAt(14) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'projects', idColName: 'pj_id'})
         }
         else{
@@ -186,7 +188,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-suppliers', function(){
-        if(userInfo.u_aut.charAt(15) == '1'){
+        if(user.userInfo.u_aut.charAt(15) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'suppliers', idColName: 's_id'})
         }
         else{
@@ -195,7 +197,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-offers', function(){
-        if(userInfo.u_aut.charAt(16) == '1'){
+        if(user.userInfo.u_aut.charAt(16) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'offers', idColName: 'o_id'})
         }
         else{
@@ -253,11 +255,15 @@ $(document).ready(function(){
                 ui.writeUpdateUserCategoryModal(ui.readResultsRow($(this).parent().parent()))
                 $('#update-user-category-modal-button').click()
                 break
+            case 'op_id':
+                ui.writeUpdateUserCategoryModal(ui.readResultsRow($(this).parent().parent()))
+                $('#update-user-category-modal-button').click()
+                break
         }
     })
 
     $(document).on('click', '#update-supplier-submit', function(){
-        if(userInfo.u_aut.charAt(17) == '1'){
+        if(user.userInfo.u_aut.charAt(17) == '1'){
             update.updateSupplier(ui.readUpdateSupplierModal())
         }
         else{
@@ -266,7 +272,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-project-submit', function(){
-        if(userInfo.u_aut.charAt(18) == '1'){
+        if(user.userInfo.u_aut.charAt(18) == '1'){
             update.updateProject(ui.readUpdateProjectModal())
         }
         else{
@@ -275,7 +281,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-category-submit', function(){
-        if(userInfo.u_aut.charAt(19) == '1'){
+        if(user.userInfo.u_aut.charAt(19) == '1'){
             update.updateCategory(ui.readUpdateCategoryModal())
         }
         else{
@@ -284,7 +290,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-product-submit', function(){
-        if(userInfo.u_aut.charAt(20) == '1'){
+        if(user.userInfo.u_aut.charAt(20) == '1'){
             update.updateProduct(ui.readUpdateProductModal())
         }
         else{
@@ -293,7 +299,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-offer-submit', function(){
-        if(userInfo.u_aut.charAt(21) == '1'){
+        if(user.userInfo.u_aut.charAt(21) == '1'){
             var data = ui.readUpdateOfferModal()
             if(data.date == od.getDateNow()){
                 od.setExchangeRateNow(function(exchange){
@@ -324,7 +330,7 @@ $(document).ready(function(){
     /////     EXCEL EVENTS
 
     $(document).on('click', '#export-excel-submit', function(){
-        if(userInfo.u_aut.charAt(23) == '1'){
+        if(user.userInfo.u_aut.charAt(23) == '1'){
             excel.export(ui.readExportExcelModal())
         }
         else{
@@ -333,7 +339,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#import-excel-submit', function(){
-        if(userInfo.u_aut.charAt(22) == '1'){
+        if(user.userInfo.u_aut.charAt(22) == '1'){
             excel.import(ui.readImportExcelModal())
         }
         else{
@@ -347,7 +353,7 @@ $(document).ready(function(){
 
     /////     PRICE EVENTS
     $(document).on('click', '.price', function(){
-        if(userInfo.u_aut.charAt(24) == '1'){
+        if(user.userInfo.u_aut.charAt(24) == '1'){
             filter.calcOtherVals($(this))
         }
         else{
@@ -356,7 +362,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#steel-price-submit', function(){
-        if(userInfo.u_aut.charAt(25) == '1'){
+        if(user.userInfo.u_aut.charAt(25) == '1'){
             var price = ui.readPriceAlert()
             insert.addPrice(price, {tableName: 'steelprices', cols: ['sp_date', 'sp_price']})
         }
@@ -366,7 +372,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#mw-amount-submit', function(){
-        if(userInfo.u_aut.charAt(26) == '1'){
+        if(user.userInfo.u_aut.charAt(26) == '1'){
             var price = ui.readPriceAlert()
             insert.addPrice(price, {tableName: 'minwage', cols: ['mw_date', 'mw_amount']})
         }
@@ -383,7 +389,7 @@ $(document).ready(function(){
     /////     USER EVENTS
 
     $(document).on('click', '#add-user-submit', function(){
-        if(userInfo.u_aut.charAt(27) == '1'){
+        if(user.userInfo.u_aut.charAt(27) == '1'){
             user.addUser(ui.readAddUserModal())
         }
         else{
@@ -392,7 +398,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-user-submit', function(){
-        if(userInfo.u_aut.charAt(28) == '1'){
+        if(user.userInfo.u_aut.charAt(28) == '1'){
             user.filterUser(ui.readFilterUserModal())
         }
         else{
@@ -401,7 +407,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-users', function(){
-        if(userInfo.u_aut.charAt(29) == '1'){
+        if(user.userInfo.u_aut.charAt(29) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'users', idColName: 'u_id'})
         }
         else{
@@ -410,7 +416,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-user-submit', function(){
-        if(userInfo.u_aut.charAt(30) == '1'){
+        if(user.userInfo.u_aut.charAt(30) == '1'){
             user.updateUser(ui.readUpdateUserModal())
         }
         else{
@@ -420,7 +426,7 @@ $(document).ready(function(){
     
     /////     USER CATEGORY EVENTS
     $(document).on('click', '#add-user-category-submit', function(){
-        if(userInfo.u_aut.charAt(31) == '1'){
+        if(user.userInfo.u_aut.charAt(31) == '1'){
             user.addUserCategory(ui.readAddUserCategoryModal())
         }
         else{
@@ -429,7 +435,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#filter-user-category-submit', function(){
-        if(userInfo.u_aut.charAt(32) == '1'){
+        if(user.userInfo.u_aut.charAt(32) == '1'){
             user.filterUserCategories()
         }
         else{
@@ -438,7 +444,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#delete-user-categories', function(){
-        if(userInfo.u_aut.charAt(34) == '1'){
+        if(user.userInfo.u_aut.charAt(34) == '1'){
             del.deleteData(ui.getSelectedRowsId(), {tableName: 'usercategories', idColName: 'categoryid'})
         }
         else{
@@ -447,7 +453,7 @@ $(document).ready(function(){
     })
 
     $(document).on('click', '#update-user-category-submit', function(){
-        if(userInfo.u_aut.charAt(33) == '1'){
+        if(user.userInfo.u_aut.charAt(33) == '1'){
             user.updateUserCategory(ui.readUpdateUserCategoryModal())
         }
         else{
@@ -464,6 +470,22 @@ $(document).ready(function(){
         ui.writeUserAuthoritiesModal()
     })
 
+
+
+
+
+
+    
+
+    /////     ACTION EVENTS
+    $(document).on('click', '#filter-action-submit', function(){
+        filter.filterAction(ui.readFilterActionModal())
+    })
+
+    $(document).on('click', '#delete-actions', function(){
+        del.deleteData(ui.getSelectedRowsId(), {tableName: 'operations', idColName: 'op_id'})
+    })
+
     
     
 
@@ -475,12 +497,16 @@ $(document).ready(function(){
     /////     FUNCTIONS
     function start(){
         sql.startconnection()
+        user.getUserInfo()
         select.getOptions('select-category')
         select.getOptions('select-product')
         select.getOptions('select-project')
         select.getOptions('select-supplier')
         select.getOptions('select-user-category')
+        select.getOptions('select-user')
         ui.writeDate('add-offer-date', od.getDateNow())
+        ui.writeDate('filter-offer-date2', od.getDateNow())
+        ui.writeDate('filter-action-date2', od.getDateNow())
         od.setExchangeRateNow()
         od.setInflationTableToDb()
         od.setMwCurrentAmount()
@@ -488,12 +514,5 @@ $(document).ready(function(){
         od.getMetalPrices('https://www.lme.com/en-GB/Metals/Non-ferrous/Copper#tabIndex=0', 'coppor')
         od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Lead#tabIndex=0', 'leadp')
         od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Zinc#tabIndex=0', 'zinc')
-
-        const ipc = require('electron').ipcRenderer
-        ipc.send('user-data')
-        ipc.on('user-data-reply', function(event, data){
-            userInfo = data
-            ui.setUserInfo(data)
-        })
     }
 })

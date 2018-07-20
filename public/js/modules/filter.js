@@ -15,7 +15,7 @@ module.exports = {
 
         console.log(sqlStatement)
         sql.query(sqlStatement, function(data){
-            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Cuprum', 'Lead', 'Zinc', 'Workmanship', 'Extra'], 'delete-products')
+            ui.setResults(data, ['Product', 'Category', 'Inflation', 'Steel', 'Copper', 'Lead', 'Zinc', 'Workmanship', 'Extra'], 'delete-products')
         })
     },
 
@@ -63,12 +63,12 @@ module.exports = {
         }
         
         if(filter.projects.length == 1){
-            sqlStatement += " and pj.p_id=" + filter.projects[0]
+            sqlStatement += " and pj.pj_id=" + filter.projects[0]
         }
         else if(filter.projects.length > 1){
-            sqlStatement += " and (pj.p_id=" + filter.projects[0]
+            sqlStatement += " and (pj.pj_id=" + filter.projects[0]
             for(var i = 1; i < filter.projects.length; i++){
-                sqlStatement += " or pj.p_id=" + filter.projects[i]
+                sqlStatement += " or pj.pj_id=" + filter.projects[i]
             }
             sqlStatement += ")"
         }
@@ -115,19 +115,19 @@ module.exports = {
         
         console.log(sqlStatement)
         sql.query(sqlStatement, function(data){
-            ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Exchange', 'Date'], 'delete-offers')
+            ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Currency', 'Date'], 'delete-offers')
         })
     },
 
     filterMinPrices: function(){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, min(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.p_id and o.s_id=s.s_id) group by pd.p_name"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, min(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
         sql.query(sqlStatement, function(data){
             ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Exchange', 'Date'], 'delete-offers')
         })
     },
 
     filterMaxPrices: function(){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, max(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.p_id and o.s_id=s.s_id) group by pd.p_name"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, max(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
         sql.query(sqlStatement, function(data){
             ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Exchange', 'Date'], 'delete-offers')
         })
@@ -199,7 +199,7 @@ module.exports = {
                                                             data.cell43 = parseFloat((offerInfo.price * ce / data.cell33).toFixed(2))
                                                         }
                                                         else if(offerInfo.type == '$'){
-                                                            var ce = effect.inf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
+                                                            var ce = effect.inf/dolInf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
                                                             console.log('Katsayı: ' + ce)
 
                                                             data.cell21 = parseFloat((offerInfo.price * data.cell12).toFixed(2))
@@ -208,10 +208,10 @@ module.exports = {
                                             
                                                             data.cell41 = parseFloat((offerInfo.price * ce * data.cell32).toFixed(2))
                                                             data.cell42 = parseFloat((offerInfo.price * ce).toFixed(2))
-                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell32/data.cell33)).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
                                                         }
                                                         else{
-                                                            var ce = effect.inf + (effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur) * dolInf + effect.wms/dolInf
+                                                            var ce = effect.inf/dolInf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
                                                             console.log('Katsayı: ' + ce)
 
                                                             data.cell21 = parseFloat((offerInfo.price * data.cell13).toFixed(2))
@@ -219,7 +219,7 @@ module.exports = {
                                                             data.cell23 = parseFloat(offerInfo.price.toFixed(2))
                                             
                                                             data.cell41 = parseFloat((offerInfo.price * ce * data.cell33).toFixed(2))
-                                                            data.cell42 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.price * ce * (data.cell33/data.cell32)).toFixed(2))
                                                             data.cell43 = parseFloat((offerInfo.price * ce).toFixed(2))
                                                         }
                                                         console.log('Data: ', data)
@@ -245,5 +245,64 @@ module.exports = {
         else {
             ui.showOtherVals(price, data)
         }
+    },
+
+    filterAction: function(filter){
+        var sqlStatement = "select op_id, op, op_table, op_user, op_date, col1, " + 
+            "(case " + 
+            "when op_table='products' then (select c_name from categories where c_id=col2) " + 
+            "when op_table='offers' then (select p_name from products where p_id=col2) " + 
+            "else col2 end) as col2, " + 
+            "(case " + 
+            "when op_table='offers' then (select pj_name from projects where pj_id=col3) " + 
+            "else col3 end) as col3, " + 
+            "(case " + 
+            "when op_table='offers' then (select s_name from suppliers where s_id=col4) " + 
+            "else col4 end) as col4, " + 
+            "col5, col6, col7, col8, col9, col10 from operations where op_date>='" + filter.date1 + "' and op_date<='" + filter.date2 + "'"
+
+        if(filter.tables.length == 1){
+            sqlStatement += " and op_table='" + filter.tables[0] + "'"
+        }
+        else if(filter.tables.length > 1){
+            sqlStatement += " and op_table='" + filter.tables[0] + "'"
+            for(var i = 1; i < filter.tables.length; i++){
+                sqlStatement += " or op_table='" + filter.tables[i] + "'"
+            }
+            sqlStatement += ")"
+        }
+
+        if(filter.types.length == 1){
+            sqlStatement += " and op='" + filter.types[0] + "'"
+        }
+        else if(filter.types.length > 1){
+            sqlStatement += " and op='" + filter.types[0] + "'"
+            for(var i = 1; i < filter.types.length; i++){
+                sqlStatement += " or op='" + filter.types[i] + "'"
+            }
+            sqlStatement += ")"
+        }
+
+        if(user.userInfo.u_aut.charAt(35) != '1'){
+            sqlStatement += " and op_user='" + user.userInfo.u_name + "'"
+        }
+        else if(filter.users.length == 1){
+            sqlStatement += " and op_user='" + filter.users[0] + "'"
+        }
+        else if(filter.users.length > 1){
+            sqlStatement += " and op_user='" + filter.users[0] + "'"
+            for(var i = 1; i < filter.users.length; i++){
+                sqlStatement += " or op_user='" + filter.users[i] + "'"
+            }
+            sqlStatement += ")"
+        }
+        sqlStatement += ";"
+
+        console.log(sqlStatement)
+
+        sql.query(sqlStatement, function(data){
+            console.log(data)
+            ui.setResults(data, ['Action', 'Dataset', 'User', 'Date', '*', '*', '*', '*', '*', '*', '*', '*', '*'], 'delete-actions')
+        })
     }
 }

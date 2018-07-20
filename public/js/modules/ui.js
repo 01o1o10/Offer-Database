@@ -42,13 +42,13 @@ module.exports = {
         document.getElementById('update-product-name').value = data.Product
         document.getElementById('update-product-inf').value = data.Inflation
         document.getElementById('update-product-steel').value = data.Steel
-        document.getElementById('update-product-cup').value = data.Cuprum
+        document.getElementById('update-product-cup').value = data.Copper
         document.getElementById('update-product-lead').value = data.Lead
         document.getElementById('update-product-zinc').value = data.Zinc
         document.getElementById('update-product-wms').value = data.Workmanship
         document.getElementById('update-product-extra').value = data.Extra
         sql.query("select * from categories where c_name='" + data.Category + "';", function(category){
-            document.getElementById('update-product-category').value = category[0].c_id
+            $('#update-product-category')[0].sumo.selectItem(category[0].c_id.toString())
         })
     },
 
@@ -100,9 +100,18 @@ module.exports = {
     },
 
     writeUpdateOfferModal: function(data){
-        $('#update-offer-exchange').val(data.Exchange)
+        $('#update-offer-exchange').val(data.Currency)
         $('#update-offer-price').val(data.Price)
         this.writeDate('update-offer-date', data.Date)
+        sql.query("select * from products where p_name='" + data.Product + "';", function(product){
+            $('#update-offer-product')[0].sumo.selectItem(product[0].p_id.toString())
+        })
+        sql.query("select * from projects where pj_name='" + data.Project + "';", function(project){
+            $('#update-offer-project')[0].sumo.selectItem(project[0].pj_id.toString())
+        })
+        sql.query("select * from suppliers where s_name='" + data.Supplier + "';", function(supplier){
+            $('#update-offer-supplier')[0].sumo.selectItem(supplier[0].s_id.toString())
+        })
     },
 
 
@@ -184,9 +193,9 @@ module.exports = {
         date.push(data.substr(5, 7).substr(0, 2))
         date.push(data.substr(8, 10))
 
-        $('#' + id).children().eq(1).children().first().first().prop('selectedIndex', parseInt(date[0].substr(2, 4)-15))
-        $('#' + id).children().eq(3).children().first().prop('selectedIndex', parseInt(date[1])-1)
-        $('#' + id).children().eq(5).children().first().prop('selectedIndex', parseInt(date[2])-1)
+        $('#' + id).children().eq(1).children().first().first().val(date[0])
+        $('#' + id).children().eq(3).children().first().val(date[1])
+        $('#' + id).children().eq(5).children().first().val(date[2])
     },
 
     readDate: function(id){
@@ -276,11 +285,7 @@ module.exports = {
                 if(j == 0){
                     td.innerHTML = '<input type="checkbox" id="' + data[i][keys[0]] + '" class="result-checkbox"><span id="' + keys[0] + '" class="glyphicon filter-edit-icon">&#x270f;</span>'
                 }
-                else if(keys[j] == 'usd' || keys[j] == 'eur'){
-                    td.setAttribute('title', data[i][keys[j]])
-                    td.style.display = 'none'
-                }
-                else if(j >= 10){
+                else if(keys[j] == 'usd' || keys[j] == 'eur' || keys[j] == 'inf' || keys[j] == 'col1'){
                     td.setAttribute('title', data[i][keys[j]])
                     td.style.display = 'none'
                 }
@@ -289,11 +294,6 @@ module.exports = {
                     td.setAttribute('title', data[i][keys[j]])
                 }
                 if(keys[j] == 'price'){
-                    /*var price = td.innerHTML
-                    for(var index = 3; index < price.length; index += 4){
-                        price = price.substr(0, index) + '.' + price.substr(index)
-                    }
-                    td.innerHTML = price*/
                     td.classList.add('price')
                 }
                 tr.appendChild(td)
@@ -515,14 +515,31 @@ module.exports = {
    
     writeUserAuthoritiesModal: function(){
         var checkboxes = $('#user-authorities-form input[type="checkbox"]')
-
-        for(var i = 0; i < checkboxes.length; i++){
-            if(userInfo.u_aut.charAt(i) == '1'){
+        console.log(user.userInfo.u_aut)
+        for(var i = 0; i < user.userInfo.u_aut.length; i++){
+            if(user.userInfo.u_aut.charAt(i) == '1'){
                 checkboxes[i].checked = true
             }
             else{
                 checkboxes[i].checked = false
             }
         }
+    },
+
+
+
+
+
+    /////     ACTIONS FUNCTIONS
+    readFilterActionModal: function(){
+        var data = {}
+        data.types = $('#filter-action-type').val()
+        data.users = $('#filter-action-user').val()
+        data.tables = $('#filter-action-data').val()
+        data.sort = $('#filter-action-sort').val()
+        data.asc_desc = $('#filter-action-select-asc-desc').val()
+        data.date1 = ui.readDate('filter-action-date1')
+        data.date2 = ui.readDate('filter-action-date2')
+        return data
     }
 }

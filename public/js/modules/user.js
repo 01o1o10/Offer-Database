@@ -1,4 +1,9 @@
+const ipc = require('electron').ipcRenderer
+
 module.exports = {
+
+    userInfo: {},
+    
     addUser: function(data){
         if(!data){
             ui.alert('add-user-failed', 'User data is empty!', false)
@@ -61,13 +66,22 @@ module.exports = {
                 ui.alert('update-user-failed', '    !', false)
             }
             else{
-                var sqlStatement = "update users set u_categoryid=" + data.category + ", u_fname='" + data.fname + "', u_lname='" + data.lname + "', u_name='" + data.uname + "', u_aut='" + data.auth + "';"
+                var sqlStatement = "update users set u_categoryid=" + data.category + ", u_fname='" + data.fname + "', u_lname='" + data.lname + "', u_name='" + data.uname + "', u_aut='" + data.auth + "' where u_id=" + ui.updateId + ";"
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
+                    user.getUserInfo(data.uname)
                     ui.alert('update-user-succes', 'User updated succesfully!', true)
                 })
             }
         }
+    },
+
+    getUserInfo: function(uname){
+        ipc.send('user-data', uname)
+        ipc.on('user-data-reply', function(event, data){
+            user.userInfo = data
+            ui.setUserInfo(data)
+        })
     },
 
     addUserCategory: function(category, cb){
