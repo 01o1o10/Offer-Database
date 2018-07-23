@@ -26,6 +26,11 @@ module.exports = {
                     sqlStatement = "update products set c_id=" + data.category + ", p_name='" + data.product + "', inf_effect=" + data.inf + ", steel_effect=" + data.steel + ", cup_effect=" + data.cup + ", lead_effect=" + data.lead + ", zinc_effect=" + data.zinc + ", wms_effect=" + data.wms + ", extra_effect=" + data.extra + " where p_id=" + data.id + ";"
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
+                        select.productId[data.product] = ui.updateId
+                        delete select.productId[check[0].p_name]
+                        select.productName[ui.updateId] = data.product
+                        $('.select product input[value=' + ui.updateId + ']').text(data.product)
+                        $('.select-product').sumo.reload()
                         ui.alert('update-product-succes', 'Product updated succesfully!', true)
                     })
                 })
@@ -75,7 +80,7 @@ module.exports = {
         }
         else{
             sql.query("select * from suppliers where s_id=" + data.id + ";", function(check){
-                var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('update', 'supplier', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check[0].s_id + ", '"+ check[0].s_name + "');"
+                var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('update', 'suppliers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check[0].s_id + ", '"+ check[0].s_name + "');"
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){})
                 sqlStatement = "update suppliers set s_name='" + data.supplier + "' where s_id=" + data.id + ";"
@@ -87,7 +92,7 @@ module.exports = {
         }
     },
 
-    updateOffer: function(data, cb){
+    updateOffer: function(data){
         if(!data){
             ui.alert('update-offer-failed', 'Entered offer data is empty!', false)
         }

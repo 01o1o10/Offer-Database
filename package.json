@@ -19,5 +19,14 @@
     "node-mysql": "^0.4.2",
     "request": "^2.87.0",
     "xlsx": "^0.13.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/01o1o10/Offer-Database.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/01o1o10/Offer-Database/issues"
+  },
+  "homepage": "https://github.com/01o1o10/Offer-Database#readme"
 }

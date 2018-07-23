@@ -1,4 +1,14 @@
 module.exports = {
+
+    productName: {},
+    categoryName: {},
+    projectName: {},
+    supplierName: {},
+    productId: {},
+    categoryId: {},
+    projectId: {},
+    supplierId: {},
+
     getOptions: function(className) {
         switch(className){
             case 'select-product':
@@ -71,6 +81,10 @@ function setOptions(className, options, ph, keys){
     $('.' + className).off()
     $('.' + className).innerHTML = ''
     for(var i in options){
+        if(className != 'select-user-category' && className != 'select-user'){
+            select[className.substr(7, 20) + 'Id'][options[i][keys[1]]] = options[i][keys[0]]
+            select[className.substr(7, 20) + 'Name'][options[i]['id' + keys[0]]] = options[i][keys[1]]
+        }
         $('.' + className).append('<option value="' + options[i][keys[0]] + '">' + options[i][keys[1]] + '</option>')
     }
     $('.' + className).SumoSelect({search: true, placeholder: ph});

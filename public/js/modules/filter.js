@@ -115,7 +115,7 @@ module.exports = {
         
         console.log(sqlStatement)
         sql.query(sqlStatement, function(data){
-            ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Currency', 'Date'], 'delete-offers')
+            ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Currency', 'Date', 'usd', 'eur', 'inf'], 'delete-offers')
         })
     },
 
@@ -138,7 +138,7 @@ module.exports = {
             var data = {}
             var effect = {}
             var prices = {}
-            var offerInfo = ui.readOfferInfo(price.parent())
+            var offerInfo = ui.readResultsRow(price.parent())
             offerInfo.price = parseFloat(offerInfo.price)
             console.log('Offer Info: ', offerInfo)
 
@@ -245,64 +245,5 @@ module.exports = {
         else {
             ui.showOtherVals(price, data)
         }
-    },
-
-    filterAction: function(filter){
-        var sqlStatement = "select op_id, op, op_table, op_user, op_date, col1, " + 
-            "(case " + 
-            "when op_table='products' then (select c_name from categories where c_id=col2) " + 
-            "when op_table='offers' then (select p_name from products where p_id=col2) " + 
-            "else col2 end) as col2, " + 
-            "(case " + 
-            "when op_table='offers' then (select pj_name from projects where pj_id=col3) " + 
-            "else col3 end) as col3, " + 
-            "(case " + 
-            "when op_table='offers' then (select s_name from suppliers where s_id=col4) " + 
-            "else col4 end) as col4, " + 
-            "col5, col6, col7, col8, col9, col10 from operations where op_date>='" + filter.date1 + "' and op_date<='" + filter.date2 + "'"
-
-        if(filter.tables.length == 1){
-            sqlStatement += " and op_table='" + filter.tables[0] + "'"
-        }
-        else if(filter.tables.length > 1){
-            sqlStatement += " and op_table='" + filter.tables[0] + "'"
-            for(var i = 1; i < filter.tables.length; i++){
-                sqlStatement += " or op_table='" + filter.tables[i] + "'"
-            }
-            sqlStatement += ")"
-        }
-
-        if(filter.types.length == 1){
-            sqlStatement += " and op='" + filter.types[0] + "'"
-        }
-        else if(filter.types.length > 1){
-            sqlStatement += " and op='" + filter.types[0] + "'"
-            for(var i = 1; i < filter.types.length; i++){
-                sqlStatement += " or op='" + filter.types[i] + "'"
-            }
-            sqlStatement += ")"
-        }
-
-        if(user.userInfo.u_aut.charAt(35) != '1'){
-            sqlStatement += " and op_user='" + user.userInfo.u_name + "'"
-        }
-        else if(filter.users.length == 1){
-            sqlStatement += " and op_user='" + filter.users[0] + "'"
-        }
-        else if(filter.users.length > 1){
-            sqlStatement += " and op_user='" + filter.users[0] + "'"
-            for(var i = 1; i < filter.users.length; i++){
-                sqlStatement += " or op_user='" + filter.users[i] + "'"
-            }
-            sqlStatement += ")"
-        }
-        sqlStatement += ";"
-
-        console.log(sqlStatement)
-
-        sql.query(sqlStatement, function(data){
-            console.log(data)
-            ui.setResults(data, ['Action', 'Dataset', 'User', 'Date', '*', '*', '*', '*', '*', '*', '*', '*', '*'], 'delete-actions')
-        })
     }
 }

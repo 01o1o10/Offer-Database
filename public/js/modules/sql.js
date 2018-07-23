@@ -20,9 +20,9 @@ module.exports = {
         this.con.query(sql, function (err, result) {
             if (err){
                 cb(err)
-                throw err
+            }else{
+                cb(result)
             }
-            cb(result)
         })
     }
 }

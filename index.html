@@ -65,7 +65,7 @@
                     <button class="dropbtn">Actions</button>
                     <div class="dropdown-content">
                         <a href="#" data-toggle="modal" data-target="#filter-action-modal">Filter Actions</a>
-                        <a id="filter-supplier-submit">Suppliers</a>
+                        <a id="cancel-actions-submit">Cancel Actions</a>
                     </div>
                 </div>
             </div>
@@ -1118,7 +1118,7 @@
         </div>
     </div>
 
-    <!-- Filter Offer Modal -->
+    <!-- Filter Action Modal -->
     <div class="modal" id="filter-action-modal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -1156,17 +1156,16 @@
                                     <div class="row">
                                         <div class="col">
                                             <select id="filter-action-sort" class="custom-select-md form-control">
-                                                <option value="sort" selected>Order By</option>
                                                 <option value="op">Action Type</option>
                                                 <option value="op_table">Action Data</option>
                                                 <option value="op_user">User</option>
-                                                <option value="op_date">Date</option>
+                                                <option value="op_date" selected>Date</option>
                                             </select>
                                         </div>
                                         <div class="col">
                                             <select id="filter-action-select-asc-desc" class="custom-select-md form-control">
-                                                <option value="ASC" selected>Ascending</option>
-                                                <option value="DESC">Descending</option>
+                                                <option value="ASC">Ascending</option>
+                                                <option value="DESC" selected>Descending</option>
                                             </select>
                                         </div>
                                     </div>

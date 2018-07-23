@@ -9,6 +9,7 @@ const del = require('./public/js/modules/delete')
 const excel = require('./public/js/modules/excel')
 const update = require('./public/js/modules/update')
 const user = require('./public/js/modules/user')
+const action = require('./public/js/modules/action')
 
 
 
@@ -255,10 +256,6 @@ $(document).ready(function(){
                 ui.writeUpdateUserCategoryModal(ui.readResultsRow($(this).parent().parent()))
                 $('#update-user-category-modal-button').click()
                 break
-            case 'op_id':
-                ui.writeUpdateUserCategoryModal(ui.readResultsRow($(this).parent().parent()))
-                $('#update-user-category-modal-button').click()
-                break
         }
     })
 
@@ -479,11 +476,15 @@ $(document).ready(function(){
 
     /////     ACTION EVENTS
     $(document).on('click', '#filter-action-submit', function(){
-        filter.filterAction(ui.readFilterActionModal())
+        action.filterAction(ui.readFilterActionModal())
     })
 
     $(document).on('click', '#delete-actions', function(){
         del.deleteData(ui.getSelectedRowsId(), {tableName: 'operations', idColName: 'op_id'})
+    })
+
+    $(document).on('click', '#cancel-actions-submit', function(){
+        action.cancelSelecteds()
     })
 
     

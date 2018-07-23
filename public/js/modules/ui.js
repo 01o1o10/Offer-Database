@@ -261,10 +261,19 @@ module.exports = {
         resultHeader.innerHTML = ''
         resultHeader.innerHTML = '<div class="col"><input type="checkbox" id="head-checkbox"><button style="margin: 0px 10px;" type="button" class="btn-sm btn-danger" id="' + deleteBtnId + '">Del</button>'
         for(var i in header){
-            var div = document.createElement('DIV')
-            div.setAttribute('class', 'col')
-            div.innerHTML = header[i]
-            resultHeader.appendChild(div)
+            if(header[i] == 'usd' || header[i] == 'eur' || header[i] == 'inf'){
+                var div = document.createElement('DIV')
+                div.setAttribute('class', 'col')
+                div.style.display = 'none'
+                div.innerHTML = header[i]
+                resultHeader.appendChild(div)
+            }
+            else {
+                var div = document.createElement('DIV')
+                div.setAttribute('class', 'col')
+                div.innerHTML = header[i]
+                resultHeader.appendChild(div)
+            }
         }
 
         //Getting data keys
@@ -276,6 +285,10 @@ module.exports = {
         // Setting body
         var resultBody = document.getElementById('result-body')
         resultBody.innerHTML = ''
+        var tr = document.createElement('DIV')
+        tr.setAttribute('class', 'row tr')
+        tr.innerHTML = '<p style="text-align: center; color: green; display: block; margin: auto;">' + data.length + ' result listed</p>'
+        resultBody.appendChild(tr)
         for(var i = 0; i < data.length; i++){
             var tr = document.createElement('DIV')
             tr.setAttribute('class', 'row tr')
@@ -363,27 +376,13 @@ module.exports = {
         }
         console.log('headers: ', headers)
         var rowInfo = {}
-        this.updateId = row.children().eq(0).children().eq(0).attr('id')
-        console.log(this.updateId)
+        ui.updateId = row.children().eq(0).children().eq(0).attr('id')
+        rowInfo.id = ui.updateId
         for(var i = 1; i < headers.length; i++){
             rowInfo[headers[i]] = row.children().eq(i).attr('title')
         }
         console.log('rowInfo: ', rowInfo)
         return rowInfo
-    },
-
-    readOfferInfo: function(row){
-        var priceInfo = {}
-        priceInfo.product = row.children().eq(1).attr('title')
-        priceInfo.category = row.children().eq(2).attr('title')
-        priceInfo.price = row.children().eq(5).attr('title')
-        priceInfo.type = row.children().eq(6).attr('title')
-        priceInfo.date = row.children().eq(7).attr('title')
-        priceInfo.usd = row.children().eq(8).attr('title')
-        priceInfo.eur = row.children().eq(9).attr('title')
-        priceInfo.inf = row.children().eq(10).attr('title')
-        console.log('priceInfo: ', priceInfo)
-        return priceInfo
     },
 
 
@@ -537,7 +536,7 @@ module.exports = {
         data.users = $('#filter-action-user').val()
         data.tables = $('#filter-action-data').val()
         data.sort = $('#filter-action-sort').val()
-        data.asc_desc = $('#filter-action-select-asc-desc').val()
+        data.ascDesc = $('#filter-action-select-asc-desc').val()
         data.date1 = ui.readDate('filter-action-date1')
         data.date2 = ui.readDate('filter-action-date2')
         return data

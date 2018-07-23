@@ -6,12 +6,183 @@ module.exports = {
 
     import: function(fileName){
         var workbook = ex.readFile(fileName);
-        var worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        var data = this.readExcelAsArray(worksheet)
+        var worksheet1 = workbook.Sheets[workbook.SheetNames[0]]
+        var worksheet2 = workbook.Sheets[workbook.SheetNames[1]]
+        var worksheet3 = workbook.Sheets[workbook.SheetNames[2]]
+        var data1 = this.readExcelAsArray(worksheet1)
+        var data2 = this.readExcelAsArray(worksheet2)
+        var data3 = this.readExcelAsArray(worksheet3)
+
         $('#import-excel-progress').css('width', '0')
-        insert.excelToDb(data, 0)
-        console.log(data)
-    }, 
+        excel.ws3ImportSupplierDb(data3, 0, function(){
+            $('#import-excel-progress').css('width', '0')
+            excel.ws3ImportProjectDb(data3, 0, function(){
+                $('#import-excel-progress').css('width', '0')
+                excel.ws3ImportCategoryDb(data3, 0, function(){
+                    $('#import-excel-progress').css('width', '0')
+                    excel.ws2ImportProductDb(data2, 0, function(){
+                        $('#import-excel-progress').css('width', '0')
+                        excel.ws2ImportOfferDb(data1, 0, function(){
+                            ui.setAlertModal('Data imported to DB from excel!', true)
+                        })
+                    })
+                })
+            })
+        })
+    },
+
+    ws3ImportSupplierDb: function(data, i, cb){
+        $('#import-excel-progress').css('width', '' + ((i/(data.length))*100) + '%')
+        if(data[i] && data[i][2]){
+            if(!select.supplierId[data[i][2]]){
+                sql.query("insert into suppliers(s_name) values('" + data[i][2] + "');", function(check){
+                    if(check.insertId){
+                        select.supplierId[data[i][2]] = check.insertId
+                        select.supplierName['id' + check.insertId] = data[i][2]
+                        var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'suppliers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", '"+ data[i][2] + "');"
+                        //console.log(sqlStatement)
+                        sql.query(sqlStatement, function(check){})
+                        select.update({className: 'select-supplier', value: check.insertId, text: data[i][2]})
+                        //console.log('Supplier saved succesfully!')
+                        excel.ws3ImportSupplierDb(data, ++i, cb)
+                    }
+                    else{
+                        //console.log('Supplier can not import to db')
+                        excel.ws3ImportSupplierDb(data, ++i, cb)
+                    }
+                })
+            }
+            else{
+                //console.log('Supplier is already exist!')
+                excel.ws3ImportSupplierDb(data, ++i, cb)
+            }
+        }
+        else{
+            //console.log('Suppliers saved succesfully!')
+            cb()
+        }
+    },
+
+    ws3ImportProjectDb: function(data, i, cb){
+        $('#import-excel-progress').css('width', '' + ((i/(data.length))*100) + '%')
+        if(data[i] && data[i][1]){
+            if(!select.projectId[data[i][2]]){
+                sql.query("insert into projects(pj_name) values('" + data[i][1] + "');", function(check){
+                    if(check.insertId){
+                        select.projectId[data[i][1]] = check.insertId
+                        select.projectName['id' + check.insertId] = data[i][1]
+                        var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'projects', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", '"+ data[i][1] + "');"
+                        //console.log(sqlStatement)
+                        sql.query(sqlStatement, function(check){})
+                        select.update({className: 'select-project', value: check.insertId, text: data[i][1]})
+                        //console.log('Project saved succesfully!')
+                        excel.ws3ImportProjectDb(data, ++i, cb)
+                    }
+                    else{
+                        //console.log('Supplier can not import to db!')
+                        excel.ws3ImportProjectDb(data, ++i, cb)
+                    }
+                })
+            }
+            else{
+                //console.log('Project is already exist!')
+                excel.ws3ImportProjectDb(data, ++i, cb)
+            }
+        }
+        else{
+            cb()
+        }
+    },
+
+    ws3ImportCategoryDb: function(data, i, cb){
+        $('#import-excel-progress').css('width', '' + ((i/(data.length))*100) + '%')
+        if(data[i] && data[i][0]){
+            if(!select.categoryId[data[i][0]]){
+                sql.query("insert into categories(c_name) values('" + data[i][0] + "');", function(check){
+                    if(check.insertId){
+                        select.categoryId[data[i][0]] = check.insertId
+                        select.categoryName['id' + check.insertId] = data[i][0]
+                        var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2) values('add', 'categories', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', " + check.insertId + ", '"+ data[i][0] + "');"
+                        //console.log(sqlStatement)
+                        sql.query(sqlStatement, function(check){})
+                        select.update({className: 'select-category', value: check.insertId, text: data[i][0]})
+                        //console.log('Category saved succesfully!')
+                        excel.ws3ImportCategoryDb(data, ++i, cb)
+                    }
+                    else{
+                        //console.log('Category can not import to db!')
+                        excel.ws3ImportCategoryDb(data, ++i, cb)
+                    }
+                })
+            }
+            else{
+                //console.log('Category is already exist!')
+                excel.ws3ImportCategoryDb(data, ++i, cb)
+            }
+        }
+        else{
+            cb()
+        }
+    },
+
+    ws2ImportProductDb: function(data, i, cb){
+        $('#import-excel-progress').css('width', '' + ((i/(data.length))*100) + '%')
+        if(data[i] && data[i][0]){
+            if(!select.productId[data[i][0]]){
+                var sqlStatement = "insert into products(p_name, c_id, inf_effect, steel_effect, cup_effect, lead_effect, zinc_effect, wms_effect, extra_effect) values('" + data[i][0] + "', " + select.categoryId[data[i][1]] + ", " + data[i][2] + ", " + data[i][3] + ", " + data[i][4] + ", " + data[i][5] + ", " + data[i][6] + ", " + data[i][7] + ", " + data[i][8] + ");"
+                //console.log(sqlStatement)
+                sql.query(sqlStatement, function(check){
+                    if(check.insertId){
+                        select.productId[data[i][0]] = check.insertId
+                        select.productName['id' + check.insertId] = data[i][0]
+                        var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10) values('add', 'products', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", "+ data[i][0] + "', " + select.categoryId[data[i][1]] + ", " + data[i][2] + ", " + data[i][3] + ", " + data[i][4] + ", " + data[i][5] + ", " + data[i][6] + ", " + data[i][7] + ", " + data[i][8] + ");"
+                        //console.log(sqlStatement)
+                        sql.query(sqlStatement, function(check){})
+                        select.update({className: 'select-product', value: check.insertId, text: data[i][0]})
+                        //console.log('Product saved succesfully!')
+                        excel.ws2ImportProductDb(data, ++i, cb)
+                    }
+                    else{
+                        //console.log('Project can not import to db!')
+                        excel.ws2ImportProductDb(data, ++i, cb)
+                    }
+                })
+            }
+            else{
+                //console.log('Project saved succesfully!')
+                excel.ws2ImportProductDb(data, ++i, cb)
+            }
+        }
+        else{
+            cb()
+        }
+    },
+
+    ws2ImportOfferDb: function(data, i, cb){
+        $('#import-excel-progress').css('width', '' + ((i/(data.length))*100) + '%')
+        if(data[i] && data[i][0]){
+            od.getExchangeRate(data[i][6], function(exchangeRate){
+                var sqlStatement = "insert into offers(pd_id, pj_id, s_id, price, exchange, date, usd, eur) values(" + select.productId[data[i][0]] + ", " + select.projectId[data[i][2]] + ", " + select.supplierId[data[i][3]] + ", " + data[i][4] + ", '" + data[i][5] + "', '" + data[i][6] + "', " + exchangeRate.usd + ", " + exchangeRate.eur + ");"
+                //console.log(sqlStatement)
+                sql.query(sqlStatement, function(check){
+                    if(check.insertId){
+                        var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9, col10) values('add', 'offers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', "+ check.insertId + ", "+ select.productId[data[i][0]] + ", " + select.projectId[data[i][2]] + ", " + select.supplierId[data[i][3]] + ", " + data[i][4] + ", '" + data[i][5] + "', '" + data[i][6] + "', " + exchangeRate.usd + ", " + exchangeRate.eur + ");"
+                        //console.log(sqlStatement)
+                        sql.query(sqlStatement, function(check){})
+                        //console.log('Offer saved succesfully!')
+                        excel.ws2ImportOfferDb(data, ++i, cb)
+                    }
+                    else{
+                        //console.log('Offer can not import to db!')
+                        excel.ws2ImportOfferDb(data, ++i, cb)
+                    }
+                })
+            })
+        }
+        else{
+            cb()
+        }
+    },
 
     readExcelAsArray: function(worksheet){
         var result = []
