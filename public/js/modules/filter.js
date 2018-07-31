@@ -38,7 +38,7 @@ module.exports = {
     },
 
     filterOffers: function(filter){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.pj_name as project, s.s_name, o.price, o.exchange, substr(o.date, 1, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id)"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.pj_name as project, s.s_name, o.price, o.exchange, substr(o.Date, 1, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.Date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id)"
 
         if(filter.products.length == 1){
             sqlStatement += " and pd.p_id=" + filter.products[0]
@@ -120,14 +120,14 @@ module.exports = {
     },
 
     filterMinPrices: function(){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, min(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, min(o.price), o.exchange, substr(o.Date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.Date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
         sql.query(sqlStatement, function(data){
             ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Exchange', 'Date'], 'delete-offers')
         })
     },
 
     filterMaxPrices: function(){
-        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, max(o.price), o.exchange, substr(o.date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
+        var sqlStatement = "select o.o_id, pd.p_name as product, c.c_name, pj.p_name as project, s.s_name, max(o.price), o.exchange, substr(o.Date, 0, 12) as date, o.usd, o.eur, (1.0 + ((select case when sum(inf) is null then 0 else sum(inf) end from inflation where left(date, 7)>=left(o.Date, 7))/100)) as inf from products pd, categories c, projects pj, suppliers s, offers o where (pd.c_id=c.c_id and o.pd_id=pd.p_id and o.pj_id=pj.pj_id and o.s_id=s.s_id) group by pd.p_name"
         sql.query(sqlStatement, function(data){
             ui.setResults(data, ['Product', 'Category', 'Project', 'Supplier', 'Price', 'Exchange', 'Date'], 'delete-offers')
         })
@@ -139,29 +139,29 @@ module.exports = {
             var effect = {}
             var prices = {}
             var offerInfo = ui.readResultsRow(price.parent())
-            offerInfo.price = parseFloat(offerInfo.price)
+            offerInfo.Price = parseFloat(offerInfo.Price)
             console.log('Offer Info: ', offerInfo)
 
             sql.query("select price from steel where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                 prices.steelPriceNew = check[0].price
-                sql.query("select price from steel where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                sql.query("select price from steel where date>='" + od.dayAgo(offerInfo.Date, 5) + "' and date<='" + offerInfo.Date + "' order by date desc;", function(check){
                     prices.steelPriceOld = (check[0]) ? check[0].price : prices.steelPriceNew
                     sql.query("select price from coppor where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                         prices.cuprumPriceNew = check[0].price
-                        sql.query("select price from coppor where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                        sql.query("select price from coppor where date>='" + od.dayAgo(offerInfo.Date, 5) + "' and date<='" + offerInfo.Date + "' order by date desc;", function(check){
                             prices.cuprumPriceOld = check[0].price
                             sql.query("select price from leadp where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                                 prices.leadPriceNew = check[0].price
-                                sql.query("select price from leadp where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                sql.query("select price from leadp where date>='" + od.dayAgo(offerInfo.Date, 5) + "' and date<='" + offerInfo.Date + "' order by date desc;", function(check){
                                     prices.leadPriceOld = check[0].price
                                     sql.query("select price from zinc where date>='" + od.dayAgo(od.getDateNow(), 5) + "' and date<='" + od.getDateNow() + "' order by date desc;", function(check){
                                         prices.zincPriceNew = check[0].price
-                                        sql.query("select price from zinc where date>='" + od.dayAgo(offerInfo.date, 5) + "' and date<='" + offerInfo.date + "' order by date desc;", function(check){
+                                        sql.query("select price from zinc where date>='" + od.dayAgo(offerInfo.Date, 5) + "' and date<='" + offerInfo.Date + "' order by date desc;", function(check){
                                             prices.zincPriceOld = check[0].price
-                                            sql.query("select * from products where p_name='" + offerInfo.product + "';", function(check){
+                                            sql.query("select * from products where p_name='" + offerInfo.Product + "';", function(check){
                                                 var productInfo = check[0]
                                                 console.log('Product Info: ', productInfo)
-                                                sql.query("select mw_amount from minwage where left(mw_date, 4)>='" + offerInfo.date.substr(0, 4) + "' and left(mw_date, 4)<='" + od.getDateNow().substr(0, 4) + "' order by mw_date desc;", function(check){
+                                                sql.query("select mw_amount from minwage where left(mw_date, 4)>='" + offerInfo.Date.substr(0, 4) + "' and left(mw_date, 4)<='" + od.getDateNow().substr(0, 4) + "' order by mw_date desc;", function(check){
                                                     prices.mwNew = check[0].mw_amount
                                                     prices.mwOld = check[check.length - 1].mw_amount
                                                     console.log('Prices: ', prices)
@@ -186,41 +186,41 @@ module.exports = {
 
                                                         var dolInf = data.cell32/data.cell12
                 
-                                                        if(offerInfo.type == 'TL'){
+                                                        if(offerInfo.Currency == 'TL'){
                                                             var ce = effect.inf + (effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur) * dolInf + effect.wms
                                                             console.log('Katsayı: ' + ce)
 
-                                                            data.cell21 = parseFloat(offerInfo.price.toFixed(2))
-                                                            data.cell22 = parseFloat((offerInfo.price / data.cell12).toFixed(2))
-                                                            data.cell23 = parseFloat((offerInfo.price / data.cell13).toFixed(2))
+                                                            data.cell21 = parseFloat(offerInfo.Price.toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.Price / data.cell12).toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.Price / data.cell13).toFixed(2))
                                                             
-                                                            data.cell41 = parseFloat((offerInfo.price * ce).toFixed(2))
-                                                            data.cell42 = parseFloat((offerInfo.price * ce / data.cell32).toFixed(2))
-                                                            data.cell43 = parseFloat((offerInfo.price * ce / data.cell33).toFixed(2))
+                                                            data.cell41 = parseFloat((offerInfo.Price * ce).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.Price * ce / data.cell32).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.Price * ce / data.cell33).toFixed(2))
                                                         }
-                                                        else if(offerInfo.type == '$'){
+                                                        else if(offerInfo.Currency == '$'){
                                                             var ce = effect.inf/dolInf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
                                                             console.log('Katsayı: ' + ce)
 
-                                                            data.cell21 = parseFloat((offerInfo.price * data.cell12).toFixed(2))
-                                                            data.cell22 = parseFloat(offerInfo.price.toFixed(2))
-                                                            data.cell23 = parseFloat((offerInfo.price / (data.cell12/data.cell13)).toFixed(2))
+                                                            data.cell21 = parseFloat((offerInfo.Price * data.cell12).toFixed(2))
+                                                            data.cell22 = parseFloat(offerInfo.Price.toFixed(2))
+                                                            data.cell23 = parseFloat((offerInfo.Price / (data.cell12/data.cell13)).toFixed(2))
                                             
-                                                            data.cell41 = parseFloat((offerInfo.price * ce * data.cell32).toFixed(2))
-                                                            data.cell42 = parseFloat((offerInfo.price * ce).toFixed(2))
-                                                            data.cell43 = parseFloat((offerInfo.price * ce / (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell41 = parseFloat((offerInfo.Price * ce * data.cell32).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.Price * ce).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.Price * ce / (data.cell33/data.cell32)).toFixed(2))
                                                         }
                                                         else{
                                                             var ce = effect.inf/dolInf + effect.steel + effect.cup + effect.lead + effect.zinc + effect.cur + effect.wms/dolInf
                                                             console.log('Katsayı: ' + ce)
 
-                                                            data.cell21 = parseFloat((offerInfo.price * data.cell13).toFixed(2))
-                                                            data.cell22 = parseFloat((offerInfo.price / (data.cell13/data.cell12)).toFixed(2))
-                                                            data.cell23 = parseFloat(offerInfo.price.toFixed(2))
+                                                            data.cell21 = parseFloat((offerInfo.Price * data.cell13).toFixed(2))
+                                                            data.cell22 = parseFloat((offerInfo.Price / (data.cell13/data.cell12)).toFixed(2))
+                                                            data.cell23 = parseFloat(offerInfo.Price.toFixed(2))
                                             
-                                                            data.cell41 = parseFloat((offerInfo.price * ce * data.cell33).toFixed(2))
-                                                            data.cell42 = parseFloat((offerInfo.price * ce * (data.cell33/data.cell32)).toFixed(2))
-                                                            data.cell43 = parseFloat((offerInfo.price * ce).toFixed(2))
+                                                            data.cell41 = parseFloat((offerInfo.Price * ce * data.cell33).toFixed(2))
+                                                            data.cell42 = parseFloat((offerInfo.Price * ce * (data.cell33/data.cell32)).toFixed(2))
+                                                            data.cell43 = parseFloat((offerInfo.Price * ce).toFixed(2))
                                                         }
                                                         console.log('Data: ', data)
 

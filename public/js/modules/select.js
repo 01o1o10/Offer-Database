@@ -51,6 +51,13 @@ module.exports = {
         }
     },
 
+    updateOption: function(className){
+        var selects = $('.' + className)
+        for(var i = 0; i < selects.length; i++){
+            selects[i].sumo.reload()
+        }
+    },
+
     setingSelectProduct: function(sel, categories){
         var options = sel.childNodes
         for(var i=options.length; i>=1; i--)
@@ -78,14 +85,15 @@ module.exports = {
 }
 
 function setOptions(className, options, ph, keys){
-    $('.' + className).off()
-    $('.' + className).innerHTML = ''
+    var sel = $('.' + className)
+    sel.off()
+    sel.innerHTML = ''
     for(var i in options){
         if(className != 'select-user-category' && className != 'select-user'){
             select[className.substr(7, 20) + 'Id'][options[i][keys[1]]] = options[i][keys[0]]
-            select[className.substr(7, 20) + 'Name'][options[i]['id' + keys[0]]] = options[i][keys[1]]
+            select[className.substr(7, 20) + 'Name']['id' + options[i][keys[0]]] = options[i][keys[1]]
         }
-        $('.' + className).append('<option value="' + options[i][keys[0]] + '">' + options[i][keys[1]] + '</option>')
+        sel.append('<option value="' + options[i][keys[0]] + '">' + options[i][keys[1]] + '</option>')
     }
-    $('.' + className).SumoSelect({search: true, placeholder: ph});
+    sel.SumoSelect({search: true, placeholder: ph});
 }

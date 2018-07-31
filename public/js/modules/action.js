@@ -5,11 +5,11 @@ module.exports = {
             "(case " + 
             "when op_table='products' then (select c_name from categories where c_id=col2) " + 
             "when op_table='offers' then (select p_name from products where p_id=col2) " + 
-            "else col2 end), " + 
-            "(case when op_table='offers' then (select pj_name from projects where pj_id=col3) else col3 end), " + 
-            "(case when op_table='offers' then (select s_name from suppliers where s_id=col4) end), " + 
-            "(case when op_table='offers' then concat(col5, ' ', col6) end), " + 
-            "(case when op_table='offers' then substr(col7, 4, 12) end) " + 
+            "else col2 end) as col2, " + 
+            "(case when op_table='offers' then (select pj_name from projects where pj_id=col3) else col3 end) as col3, " + 
+            "(case when op_table='offers' then (select s_name from suppliers where s_id=col4) end) as col4, " + 
+            "(case when op_table='offers' then concat(col5, ' ', col6) end) as col5, " + 
+            "(case when op_table='offers' then substr(col7, 4, 12) end) as col6 " + 
             "from operations where op_date>='" + filter.date1 + "' and op_date<='" + filter.date2 + "'"
 
         if(filter.tables.length == 1){

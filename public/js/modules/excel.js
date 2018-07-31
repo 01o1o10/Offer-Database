@@ -3,6 +3,7 @@ const ex = require('xlsx')
 module.exports = {
 
     fileName: '',
+    unimportedRows: [],
 
     import: function(fileName){
         var workbook = ex.readFile(fileName);
@@ -23,7 +24,21 @@ module.exports = {
                     excel.ws2ImportProductDb(data2, 0, function(){
                         $('#import-excel-progress').css('width', '0')
                         excel.ws2ImportOfferDb(data1, 0, function(){
-                            ui.setAlertModal('Data imported to DB from excel!', true)
+                            if(excel.unimportedRows.length != 0){
+                                console.log(excel.unimportedRows)
+                                var ws = ex.utils.json_to_sheet(excel.unimportedRows)
+                        
+                                /* add to workbook */
+                                var wb = ex.utils.book_new()
+                                ex.utils.book_append_sheet(wb, ws, "Errors")
+                                
+                                /* generate an XLSX file */
+                                ex.writeFile(wb, fileName.substr(0, fileName.length - 5) + '_errors.xlsx')
+                                ui.setAlertModal('Data imported to DB from excel! Unimported data reported in import directory as ' + fileName.substr(0, fileName.length - 5) + '_errors.xlsx', true)
+                            }
+                            else {
+                                ui.setAlertModal('Data imported to DB from excel!', true)
+                            }
                         })
                     })
                 })
@@ -47,12 +62,14 @@ module.exports = {
                         excel.ws3ImportSupplierDb(data, ++i, cb)
                     }
                     else{
+                        excel.unimportedRows.push({row: (i+1), error: 'Supplier can not import to db'})
                         //console.log('Supplier can not import to db')
                         excel.ws3ImportSupplierDb(data, ++i, cb)
                     }
                 })
             }
             else{
+                excel.unimportedRows.push({row: (i+1), error: 'Supplier is already exist!'})
                 //console.log('Supplier is already exist!')
                 excel.ws3ImportSupplierDb(data, ++i, cb)
             }
@@ -79,12 +96,14 @@ module.exports = {
                         excel.ws3ImportProjectDb(data, ++i, cb)
                     }
                     else{
-                        //console.log('Supplier can not import to db!')
+                        excel.unimportedRows.push({row: (i+1), error: 'Project can not import to db!'})
+                        //console.log('Project can not import to db!')
                         excel.ws3ImportProjectDb(data, ++i, cb)
                     }
                 })
             }
             else{
+                excel.unimportedRows.push({row: (i+1), error: 'Project is already exist!'})
                 //console.log('Project is already exist!')
                 excel.ws3ImportProjectDb(data, ++i, cb)
             }
@@ -110,12 +129,14 @@ module.exports = {
                         excel.ws3ImportCategoryDb(data, ++i, cb)
                     }
                     else{
+                        excel.unimportedRows.push({row: (i+1), error: 'Category can not import to db!'})
                         //console.log('Category can not import to db!')
                         excel.ws3ImportCategoryDb(data, ++i, cb)
                     }
                 })
             }
             else{
+                excel.unimportedRows.push({row: (i+1), error: 'Category is already exist!'})
                 //console.log('Category is already exist!')
                 excel.ws3ImportCategoryDb(data, ++i, cb)
             }
@@ -143,17 +164,20 @@ module.exports = {
                         excel.ws2ImportProductDb(data, ++i, cb)
                     }
                     else{
+                        excel.unimportedRows.push({row: (i+1), error: 'Project can not import to db!'})
                         //console.log('Project can not import to db!')
                         excel.ws2ImportProductDb(data, ++i, cb)
                     }
                 })
             }
             else{
-                //console.log('Project saved succesfully!')
+                excel.unimportedRows.push({row: (i+1), error: 'Project is already exist!'})
+                //console.log('Project is already exist!')
                 excel.ws2ImportProductDb(data, ++i, cb)
             }
         }
         else{
+            //console.log('Project saved succesfully!')
             cb()
         }
     },
@@ -173,6 +197,18 @@ module.exports = {
                         excel.ws2ImportOfferDb(data, ++i, cb)
                     }
                     else{
+                        if(!select.productId[data[i][0]]){
+                            excel.unimportedRows.push({row: (i+1), error: 'Offer insert product is undefined!'})
+                        }
+                        else if(!select.projectId[data[i][2]]){
+                            excel.unimportedRows.push({row: (i+1), error: 'Offer insert project is undefined!'})
+                        }
+                        else if(!select.supplierId[data[i][3]]){
+                            excel.unimportedRows.push({row: (i+1), error: 'SOffer insert supplier is undefined!'})
+                        }
+                        else {
+                            excel.unimportedRows.push({row: (i+1), error: 'Offer insert unknown error!'})
+                        }
                         //console.log('Offer can not import to db!')
                         excel.ws2ImportOfferDb(data, ++i, cb)
                     }

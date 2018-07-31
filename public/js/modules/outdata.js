@@ -8,9 +8,10 @@ module.exports = {
     },
 
     dayAgo: function(date, dif){
+        //console.log(date)
         var year = parseInt(date.substr(0, 4))
-        var month = parseInt(date.substr(5, 7))
-        var day = parseInt(date.substr(8, 10))
+        var month = parseInt(date.substr(5, 2))
+        var day = parseInt(date.substr(8, 2))
         if(dif > 0 && dif < 26){
             if(day > dif + 1){
                 day -= dif

@@ -45,7 +45,7 @@ module.exports = {
             })
         }
         else{
-            ui.setAlertModal(idArray.length - del.errorCount + ' records deleted, ' + del.errorCount + ' records could not be deleted. May be in use.!', true)
+            ui.setAlertModal(idArray.length - del.errorCount + ' records deleted, ' + del.errorCount + ' could not. May be in use.!', true)
         }
     },
 }

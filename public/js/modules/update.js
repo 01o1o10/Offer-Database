@@ -12,9 +12,6 @@ module.exports = {
             else if(!data.product || !data.inf || !data.steel || !data.cup || !data.lead || !data.zinc || !data.wms || !data.extra){
                 ui.alert('update-product-failed', 'Fields can not be empty!', false)
             }
-            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms) || !$.isNumeric(data.extra)){
-                ui.alert('update-product-failed', 'Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!', false)
-            }
             else if((parseFloat(data.inf) + parseFloat(data.steel) + parseFloat(data.cup) + parseFloat(data.lead) + parseFloat(data.zinc) + parseFloat(data.wms) + parseFloat(data.extra)) != 1){
                 ui.alert('update-product-failed', 'Total effects value must be equal to 1!', false)
             }
@@ -26,12 +23,12 @@ module.exports = {
                     sqlStatement = "update products set c_id=" + data.category + ", p_name='" + data.product + "', inf_effect=" + data.inf + ", steel_effect=" + data.steel + ", cup_effect=" + data.cup + ", lead_effect=" + data.lead + ", zinc_effect=" + data.zinc + ", wms_effect=" + data.wms + ", extra_effect=" + data.extra + " where p_id=" + data.id + ";"
                     console.log(sqlStatement)
                     sql.query(sqlStatement, function(check){
-                        select.productId[data.product] = ui.updateId
-                        delete select.productId[check[0].p_name]
-                        select.productName[ui.updateId] = data.product
-                        $('.select product input[value=' + ui.updateId + ']').text(data.product)
-                        $('.select-product').sumo.reload()
+                        $('.select-product input[value=' + ui.updateId + ']').text(data.product)
                         ui.alert('update-product-succes', 'Product updated succesfully!', true)
+                        filter.filterProducts(ui.readFilterProductModal())
+                        select.productName[ui.updateId] = data.product
+                        $('.select-product option[value=' + ui.updateId + ']').text(data.product)
+                        select.updateOption('select-product')
                     })
                 })
             }
@@ -51,6 +48,10 @@ module.exports = {
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     ui.alert('update-category-succes', 'Category udated succesfully!', true)
+                    filter.filterCategories()
+                    select.categoryName[ui.updateId] = data.category
+                    $('.select-category option[value=' + ui.updateId + ']').text(data.category)
+                    select.updateOption('select-category')
                 })
             })
         }
@@ -69,6 +70,10 @@ module.exports = {
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     ui.alert('update-project-succes', 'Project udated succesfully!', true)
+                    filter.filterProjects()
+                    select.projectName[ui.updateId] = data.project
+                    $('.select-project option[value=' + ui.updateId + ']').text(data.project)
+                    select.updateOption('select-project')
                 })
             })
         }
@@ -87,6 +92,10 @@ module.exports = {
                 console.log(sqlStatement)
                 sql.query(sqlStatement, function(check){
                     ui.alert('update-supplier-succes', 'Supplier udated succesfully!', true)
+                    filter.filterSuppliers()
+                    select.supplierName[ui.updateId] = data.supplier
+                    $('.select-supplier option[value=' + ui.updateId + ']').text(data.supplier)
+                    select.updateOption('select-supplier')
                 })
             })
         }
@@ -100,21 +109,17 @@ module.exports = {
             ui.alert('update-offer-failed', 'Any field can not be empty!', false)
         }
         else {
-            if(!$.isNumeric(data.price)){
-                ui.alert('update-offer-failed', 'Price must be numeric!', false)
-            }
-            else {
-                sql.query("select * from offers where o_id=" + data.id + ";", function(check){
-                    var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9) values('update', 'offers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', " + check[0].o_id  + ",'" + check[0].pd_id + "', '" + check[0].pj_id + "', '" + check[0].s_id + "', '" + check[0].price + "', '" + check[0].date + "', '" + check[0].exchange + "', '" + check[0].usd + "', '" + check[0].eur + "');"
-                    console.log(sqlStatement)
-                    sql.query(sqlStatement, function(check){})
-                    sqlStatement = "update offers set pd_id=" + data.product + ", pj_id=" + data.project + ", s_id=" + data.supplier + ", price=" + data.price + ", date='" + data.date + "', exchange='" + data.exchange + "', usd=" + data.usd + ", eur=" + data.eur + " where o_id=" + data.id + ";"
-                    console.log(sqlStatement)
-                    sql.query(sqlStatement, function(check){
-                        ui.alert('update-offer-succes', 'Offer saved succesfully!', true)
-                    })
+            sql.query("select * from offers where o_id=" + data.id + ";", function(check){
+                var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9) values('update', 'offers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', " + check[0].o_id  + ",'" + check[0].pd_id + "', '" + check[0].pj_id + "', '" + check[0].s_id + "', '" + check[0].price + "', '" + check[0].date + "', '" + check[0].exchange + "', '" + check[0].usd + "', '" + check[0].eur + "');"
+                console.log(sqlStatement)
+                sql.query(sqlStatement, function(check){})
+                sqlStatement = "update offers set pd_id=" + data.product + ", pj_id=" + data.project + ", s_id=" + data.supplier + ", price=" + data.price + ", date='" + data.date + "', exchange='" + data.exchange + "', usd=" + data.usd + ", eur=" + data.eur + " where o_id=" + data.id + ";"
+                console.log(sqlStatement)
+                sql.query(sqlStatement, function(check){
+                    ui.alert('update-offer-succes', 'Offer saved succesfully!', true)
+                    filter.filterOffers(ui.readFilterOfferModal())
                 })
-            }
+            })
         }
     }
 }

@@ -26,16 +26,7 @@ module.exports = {
                     ui.alert('add-product-failed', 'Fields can not be empty!', false)
                 }
             }
-            else if(!$.isNumeric(data.inf) || !$.isNumeric(data.steel) || !$.isNumeric(data.cup) || !$.isNumeric(data.lead) || !$.isNumeric(data.zinc) || !$.isNumeric(data.wms) || !$.isNumeric(data.extra)){
-                if(cb){
-                    cb('Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!')
-                }
-                else{
-                    ui.alert('add-product-failed', 'Inflation, Steel, Cuprum, Lead and Workmanship fields must be numeric!', false)
-                }
-            }
             else if((parseFloat(data.inf) + parseFloat(data.steel) + parseFloat(data.cup) + parseFloat(data.lead) + parseFloat(data.zinc) + parseFloat(data.wms) + parseFloat(data.extra)) != 1){
-                //console.log((parseFloat(data.inf) + parseFloat(data.steel) + parseFloat(data.cup) + parseFloat(data.lead) + parseFloat(data.zinc) + parseFloat(data.wms) + parseFloat(data.extra)))
                 if(cb){
                     cb('Total effects value must be equal to 1!')
                 }
@@ -209,31 +200,21 @@ module.exports = {
             }
         }
         else {
-            if(!$.isNumeric(data.price)){
-                if(cb){
-                    cb()
-                }
-                else{
-                    ui.alert('add-offer-failed', 'Price must be numeric!', false)
-                }
-            }
-            else {
-                var sqlStatement = "insert into offers(pd_id, pj_id, s_id, price, date, exchange, usd, eur) values(" + data.product + ", " + data.project + ", " + data.supplier + ", " + data.price + ", '" + data.date + "', '" + data.exchange + "', " + data.usd + ", " + data.eur + ");"
+            var sqlStatement = "insert into offers(pd_id, pj_id, s_id, price, date, exchange, usd, eur) values(" + data.product + ", " + data.project + ", " + data.supplier + ", " + data.price + ", '" + data.date + "', '" + data.exchange + "', " + data.usd + ", " + data.eur + ");"
+            console.log(sqlStatement)
+            sql.query(sqlStatement, function(check){
+                var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9) values('add', 'offers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', " + check.insertId  + ",'" + data.product + "', '" + data.project + "', '" + data.supplier + "', '" + data.price + "', '" + data.exchange + "', '" + data.date + "', '" + data.usd + "', '" + data.eur + "');"
                 console.log(sqlStatement)
-                sql.query(sqlStatement, function(check){
-                    var sqlStatement = "insert into operations(op, op_table, op_user, op_date, col1, col2, col3, col4, col5, col6, col7, col8, col9) values('add', 'offers', '" + user.userInfo.u_name + "', '" + od.getDateNow() + "', " + check.insertId  + ",'" + data.product + "', '" + data.project + "', '" + data.supplier + "', '" + data.price + "', '" + data.exchange + "', '" + data.date + "', '" + data.usd + "', '" + data.eur + "');"
-                    console.log(sqlStatement)
-                    sql.query(sqlStatement, function(check){})
-                    if(check){
-                        if(cb){
-                            cb(check.insertId)
-                        }
-                        else{
-                            ui.alert('add-offer-succes', 'Offer saved succesfully!', true)
-                        }
+                sql.query(sqlStatement, function(check){})
+                if(check){
+                    if(cb){
+                        cb(check.insertId)
                     }
-                })
-            }
+                    else{
+                        ui.alert('add-offer-succes', 'Offer saved succesfully!', true)
+                    }
+                }
+            })
         }
     },
 
