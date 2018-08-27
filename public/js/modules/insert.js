@@ -218,17 +218,31 @@ module.exports = {
         }
     },
 
-    addPrice: function(price, tableInfo){
+    addPrice: function(price, col){
         //add metal prices to db
         if(!price){
-            ui.setAlertModal('Price can not get for' + tableInfo.tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
+            ui.setAlertModal('Price can not get for ' + col + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
         }
         else if(!$.isNumeric(price)){
-            ui.setAlertModal('Price must be numeric for' + tableInfo.tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
+            ui.setAlertModal('Price must be numeric for ' + col + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
         }
         else {
-            var sqlStatement = "insert into " + tableInfo.tableName + "(" + tableInfo.cols[0] + ", " + tableInfo.cols[1] + ") values('" + od.getDateNow() + "', " + price + ");"
-            sql.query(sqlStatement, function(check){})
+            sql.query("select * from metal_prices where date='" + od.getDateNow() + "';", function(check){
+                if(check.length == 0){
+                    var sqlStatement = "insert into metal_prices(date, " + col + ") values('" + od.getDateNow() + "', " + price + ");"
+                    console.log(sqlStatement)
+                    sql.query(sqlStatement, function(check){
+                        console.log(check)
+                    })
+                }
+                else{
+                    var sqlStatement = "update metal_prices set " + col + "=" + price + " where date='" + od.getDateNow() + "';"
+                    console.log(sqlStatement)
+                    sql.query(sqlStatement, function(check){
+                        console.log(check)
+                    })
+                }
+            })
         }
     }
 }

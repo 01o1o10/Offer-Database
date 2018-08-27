@@ -25,8 +25,12 @@ const action = require('./public/js/modules/action')
 $(document).ready(function(){
     /////     OPERATIONS
     start()
-    $('#filter-action-type').SumoSelect({placeholder: 'Select action type...'});
-    $('#filter-action-data').SumoSelect({placeholder: 'Select effected data...'});
+    //od.setMetalPrices('CU', 'copper')
+    //od.setMetalPrices('PB', 'leadp')
+    //od.setMetalPrices('ZI', 'zinc')
+    //od.insertSteelPrices() //https://www.investing.com/commodities/steel-rebar-historical-data
+    $('#filter-action-type').SumoSelect({placeholder: 'Select action type...'})
+    $('#filter-action-data').SumoSelect({placeholder: 'Select effected data...'})
 
 
     
@@ -488,7 +492,7 @@ $(document).ready(function(){
     })
 
     
-    
+
 
 
 
@@ -512,7 +516,7 @@ $(document).ready(function(){
         od.setInflationTableToDb()
         od.setMwCurrentAmount()
         od.getMetalPrices('https://www.lme.com/Metals/Ferrous/Steel-Rebar#tabIndex=0', 'steel')
-        od.getMetalPrices('https://www.lme.com/en-GB/Metals/Non-ferrous/Copper#tabIndex=0', 'coppor')
+        od.getMetalPrices('https://www.lme.com/en-GB/Metals/Non-ferrous/Copper#tabIndex=0', 'copper')
         od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Lead#tabIndex=0', 'leadp')
         od.getMetalPrices('https://www.lme.com/Metals/Non-ferrous/Zinc#tabIndex=0', 'zinc')
     }

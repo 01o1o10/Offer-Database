@@ -135,7 +135,7 @@ module.exports = {
         //console.log(url)
         request(url, function (error, response, body) {
             if(error) throw error;
-            var dollarRate = JSON.parse(body);
+            var dollarRate = JSON.parse(body)
             cb(dollarRate[0].selling)
         });
     },
@@ -176,12 +176,13 @@ module.exports = {
 
     
     /////     METAL EXCHANGE FUNCTIONS
-    getMetalPrices: function(url, tableName){
-        sql.query("select * from " + tableName + " where date='" + this.getDateNow() + "';", function(data){
+    getMetalPrices: function(url, col){
+        sql.query("select " + col + " from metal_prices where date='" + this.getDateNow() + "';", function(data){
+            console.log(data)
             if(data.length == 0){
                 request(url, function (error, response, body) {
                     if(error){
-                        ui.setAlertModal('Price can not get for' + tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
+                        ui.setAlertModal('Price can not get for col!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
                         throw error
                     }
                     else{
@@ -191,13 +192,76 @@ module.exports = {
                         if(table){
                             var cells = table.rows[1].cells
                             var price = cells[cells.length-1].textContent
-                            insert.addPrice(price, {tableName: tableName, cols: ['date', 'price']})
+                            insert.addPrice(price, col)
                         }
                         else{
                             ui.setAlertModal('Price can not get for' + tableName + '!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
                         }
                     }
                 });
+            }
+        })
+    },
+
+    deleteNulls: function(){
+        sql.query("select date from metal_prices where copper is null or steel is null or leadp is null or zinc is null order by date desc", function(check){
+            for(var i in check){
+                sql.query("delete from metal_prices where date='" + check[i].date + ";", function(check){
+                    console.log('deleted: ' + i + ". index")
+                })
+            }
+        })
+    },
+
+    setMetalPrices: function(code, metal){
+        var url = 'https://www.quandl.com/api/v3/datasets/LME/PR_' + code + '?start_date=2010-01-01&end_date=2018-08-05&api_key=DsrViFcryyTfVWUDvyCD'
+        request(url, function (error, response, body) {
+            if(error) throw error
+            var div = document.createElement('DIV')
+            div.innerHTML = body
+            var data = JSON.parse(div.getElementsByTagName('code')[0].textContent).dataset.data
+            console.log(data)
+            od.insertMetalPrices(metal, data, 0)
+        });
+    },
+
+    insertMetalPrices: function(metal, data, i){
+        if(i < data.length){
+            var sqlStatement = "insert into metal_prices(date, " + metal + ") values('" + data[i][0] + "', " + data[i][1] + ");"
+            console.log(sqlStatement)
+            sql.query(sqlStatement, function(check){
+                if(check.insertId){
+                    od.insertMetalPrices(metal, data, ++i)
+                }
+                else {
+                    var sqlStatement = "update metal_prices set " + metal + "=" + data[i][1] + " where date='" + data[i][0] + "';"
+                    console.log(sqlStatement)
+                    sql.query(sqlStatement, function(check){
+                        od.insertMetalPrices(metal, data, ++i)
+                    })
+                }
+            })
+        }
+    },
+
+    insertSteelPrices: function(){
+        var fs = require('fs')
+        fs.readFile('./aaa.txt', 'utf-8', function(err, data){
+            var div = document.createElement('DIV')
+            div.innerHTML = data
+            var rows = div.getElementsByTagName('table')[0].rows
+            var data = []
+            console.log(rows)
+            for(var i = 1; i < rows.length; i++){
+                data[i-1] = []
+                data[i-1].push(od.editDate(rows[i-1].cells[0].textContent.replace(',', '')))
+                data[i-1].push(rows[i-1].cells[2].textContent)
+                console.log(data[i-1])
+                
+                if(i == rows.length - 1){
+                    console.log(data)
+                    od.insertMetalPrices('steel', data, 0)
+                }
             }
         })
     },
