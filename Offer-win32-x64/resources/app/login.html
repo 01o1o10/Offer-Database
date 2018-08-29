@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offer Database Login</title>
+</head>
+<body>
+
+    <form action="/action_page.php">
+      <div class="imgcontainer">
+        <img src="public/images/login.png" alt="Avatar" class="avatar">
+      </div>
+    
+      <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input id="uname" type="text" placeholder="Enter Username" name="uname" required>
+    
+        <label for="psw"><b>Password</b></label>
+        <input id="password" type="password" placeholder="Enter Password" name="psw" required>
+                                
+        <div id="login-succes" class="alert alert-success" style="display: none;"></div>
+        <div id="login-failed" class="alert alert-danger" style="display: none;"></div>
+            
+        <button id="login-submit" type="button">Login</button>
+        <label>
+          <input type="checkbox" checked="checked" name="remember"> Remember me
+        </label>
+      </div>
+    </form>
+
+    <!--CSS Files-->
+    <link rel="stylesheet" type="text/css" href="./public/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./public/css/login.css">
+
+    <!--JS Files-->
+    <script type="application/javascript">
+        window.$ = window.jQuery = require('./public/js/jquery/jquery.min.js');
+    </script>
+    <script type="application/javascript" src="./public/js/modules/login.js"></script>
+    <script type="application/javascript" src="./public/js/bootstrap/popper.min.js"></script>
+    <script type="application/javascript" src="./public/js/bootstrap/bootstrap.min.js"></script>
+
+</body>
+</html>

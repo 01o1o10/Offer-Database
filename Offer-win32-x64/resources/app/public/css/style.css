@@ -1,0 +1,254 @@
+/****** HTML *****/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('./../images/bg.jpg') ;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+    margin: 10px;
+    padding: 30px;
+    border-radius: 20px;
+    background-color: white;
+    opacity: 0.3;
+}
+
+img {
+    margin: 3px;
+    padding: 0;
+    display: block;
+}
+
+h1 {
+    font-size: 5vw;
+    color: black;
+}
+
+.kur *{
+    display: inline-block;
+    color: black;
+    font-size: 4vw;
+    margin: 0;
+    padding: 0;
+}
+
+#alert-modal {
+    z-index: 9999999999;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***** Navbar *****/
+.navbar {
+    display: block;
+    margin: auto;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    background-color: black;
+}
+
+.nav-item {
+    margin: 0;
+    padding: 0;
+}
+
+.dropdown {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+.dropbtn {
+    background-color: #000000;
+    color: white;
+    padding: 16px;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.user-button {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-content {
+    width: 100%;
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/****** FİLTER *****/
+
+.filtre {
+    width: 97%;
+    height: auto;
+    padding: 30px;
+    display: block;
+    margin: 0px auto;
+    background-color: #003366;
+    border-radius: 15px;
+}
+
+.filtre-sonucu {
+    display: block;
+    margin: auto;
+    width: 97%;
+    height: auto;
+}
+
+.th {
+    margin: 10px auto;
+    height: auto;
+    width: 98%;
+    padding: 10px;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    font-size: 25px;
+    text-decoration: bold;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    margin: 0;
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+    font-size: 25px;
+    text-decoration: bold;
+    z-index: 90;
+  }
+
+.sticky + #result-body {
+    padding-top: 102px;
+}
+
+.tr {
+    background-color: white;
+    width: 96%;
+    height: auto;
+    margin: 5px auto;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    font-size: 20px;
+    text-decoration: bold;
+}
+
+.td {
+    overflow: hidden;
+    max-height: 30px;
+}
+
+.filter-edit-icon, .filter-delete-icon {
+    margin-left: 20px;
+}
+
+.filter-edit-icon:hover, .filter-delete-icon:hover, .result-checkbox:hover, #head-checkbox:hover {
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***** Other Values ******/
+
+.price {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    overflow: inherit;
+}
+
+.dropdown-content-price {
+    display: none;
+    position: absolute;
+    width: auto;
+    opacity: 1;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 90;
+}
+
+.show {display: block;}
+
+td {
+    overflow: hidden;
+}

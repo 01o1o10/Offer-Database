@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offer Database</title>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="row">
+            <div class="col-sm-6"><h1>Offer Database</h1></div>
+            <div class="col-sm-6 doviz">
+                <div class="row">
+                    <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-dollar"></i><p id="dolar"></p></div>
+                    <div class="kur col-sm-6" style="margin-top: 1%;"><i class="fa fa-euro"></i><p id="euro"></p></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="row">
+            <div class="col-sm-3 nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn user-button">
+                        <img src="./public/images/user.png" style=" display: inline; height: 49px; width: 49px;">
+                        <b><p id="fullname" style="font-size: 20px;; color: white; display: inline;"></p></b>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#user-change-password-modal">Change Password</a>
+                        <a href="#" data-toggle="modal" data-target="#user-authorities-modal" id="user-authorities-button">List Authorities</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn">Add</button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#add-offer-modal">Offer</a>
+                        <a href="#" data-toggle="modal" data-target="#add-product-modal">Product</a>
+                        <a href="#" data-toggle="modal" data-target="#add-category-modal">Category</a>
+                        <a href="#" data-toggle="modal" data-target="#add-project-modal">Project</a>
+                        <a href="#" data-toggle="modal" data-target="#add-supplier-modal">Supplier</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn">Filter</button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#filter-offer-modal">Offers</a>
+                        <a href="#" data-toggle="modal" data-target="#filter-product-modal">Products</a>
+                        <a id="filter-category-submit">Categories</a>
+                        <a id="filter-project-submit">Projects</a>
+                        <a id="filter-supplier-submit">Suppliers</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn">Actions</button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#filter-action-modal">Filter Actions</a>
+                        <a id="cancel-actions-submit">Cancel Actions</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn">User</button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#add-user-modal">Add User</a>
+                        <a href="#" data-toggle="modal" data-target="#filter-user-modal">Filter Users</a>
+                        <a href="#" data-toggle="modal" data-target="#add-user-category-modal">Add Users Category</a>
+                        <a id="filter-user-category-submit">Filter Users Category</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col nav-item">
+                <div class="dropdown">
+                    <button class="dropbtn">Excel</button>
+                    <div class="dropdown-content">
+                        <a href="#" data-toggle="modal" data-target="#export-excel-modal">Export Excel</a>
+                        <a href="#" data-toggle="modal" data-target="#import-excel-modal">Import Excel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    
+    <!-- Filter Results -->
+    <div class="filter-results">
+        <div class="row th" id="result-header">
+            
+        </div>
+        <div class="row" id="result-body">
+
+        </div>
+    </div>
+
+
+
+
+
+
+    
+
+  <!-- Alert Modal -->
+  <button style="display: none" id="alert-modal-submit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#alert-modal"></button>
+  <div class="modal fade" id="alert-modal">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Info</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+                <div id="alert-modal-suc" class="alert alert-success" style="display: none;"></div>
+                <div id="alert-modal-fail" class="alert alert-danger" style="display: none;"></div>
+                <!-- Modal body -->
+
+                <div id="alert-modal-succes" class="alert alert-success" style="display: none;"><strong>Succes!</strong> </div>
+                <div id="alert-modal-failed" class="alert alert-danger" style="display: none;"><strong>Failed!</strong> </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" id="alert-modal-close" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!-- Add Offer Modal -->
+    <div class="modal" id="add-offer-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Offer</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <label for="add-offer-product">Product: </label>
+                                <select id="add-offer-product" class="select-product" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                    <label for="add-offer-project">Project: </label>
+                                <select id="add-offer-project" class="select-project" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                    <label for="add-offer-supplier">Supplier: </label>
+                                <select id="add-offer-supplier" class="select-supplier" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="input-group mt-3 mb-3">
+                                <select class="form-control col-sm-3" id="add-offer-exchange">
+                                    <option value="TL">₺</option>
+                                    <option value="$">$</option>
+                                    <option value="€">€</option>
+                                </select>
+                                <input id="add-offer-price" type="number" class="form-control col-sm-9" placeholder="Price">
+                            </div>
+                            <div class="form-group">
+                                <div class="row" id="add-offer-date">
+                                    <div class="col">
+                                        <p style="margin: 8px 0px; color: black;">Date: </p>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="2015">2015</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                            <option value="2031">2031</option>
+                                            <option value="2032">2032</option>
+                                            <option value="2033">2033</option>
+                                            <option value="2034">2034</option>
+                                            <option value="2035">2035</option>
+                                            <option value="2036">2036</option>
+                                            <option value="2037">2037</option>
+                                            <option value="2038">2038</option>
+                                            <option value="2039">2039</option>
+                                            <option value="2040">2040</option>
+                                            <option value="2041">2041</option>
+                                            <option value="2042">2042</option>
+                                            <option value="2043">2043</option>
+                                            <option value="2044">2044</option>
+                                            <option value="2045">2045</option>
+                                            <option value="2046">2046</option>
+                                            <option value="2047">2047</option>
+                                            <option value="2048">2048</option>
+                                            <option value="2049">2049</option>
+                                            <option value="2050">2050</option>
+                                            <option value="2051">2051</option>
+                                            <option value="2052">2052</option>
+                                            <option value="2053">2053</option>
+                                            <option value="2054">2054</option>
+                                            <option value="2055">2055</option>
+                                            <option value="2056">2056</option>
+                                            <option value="2057">2057</option>
+                                            <option value="2058">2058</option>
+                                            <option value="2059">2059</option>
+                                            <option value="2060">2060</option>
+                                        </select>
+                                    </div>
+                                    <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="01" selected>01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                    <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="01" selected>01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+                                            <option value="31">31</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="add-offer-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-offer-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-offer-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Product Modal -->
+    <div class="modal" id="add-product-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Product</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <label for="add-product-category">Category: </label>
+                                <select id="add-product-category" class="select-category custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-name" placeholder="Product name...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-inf" placeholder="Inflation effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-steel" placeholder="Steel effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-cup" placeholder="Cuprum effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-lead" placeholder="Lead effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-zinc" placeholder="Zinc effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-wms" placeholder="Workmanship effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-product-extra" placeholder="Extra effect...">
+                            </div>
+
+                            <div id="add-product-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-product-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-product-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div class="modal" id="add-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="add-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-category-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal" id="add-project-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Project</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-project-name" placeholder="Project name...">
+                            </div>
+                            
+                            <div id="add-project-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-project-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-project-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Supplier Modal -->
+    <div class="modal" id="add-supplier-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Supplier</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-supplier-name" placeholder="Supplier name...">
+                            </div>
+                            
+                            <div id="add-supplier-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-supplier-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-supplier-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Update Offer Modal -->
+  <button style="display: none" id="update-offer-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-offer-modal"></button>
+    <div class="modal" id="update-offer-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update Offer</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <select id="update-offer-product" class="select-product" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <select id="update-offer-project" class="select-project" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <select id="update-offer-supplier" class="select-supplier" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="input-group mt-3 mb-3">
+                                <select class="form-control col-sm-3" id="update-offer-exchange">
+                                    <option value="TL">₺</option>
+                                    <option value="$">$</option>
+                                    <option value="€">€</option>
+                                </select>
+                                <input id="update-offer-price" type="text" class="form-control col-sm-9" placeholder="Price">
+                            </div>
+                            <div class="form-group">
+                                <div class="row" id="update-offer-date">
+                                    <div class="col">
+                                        <p style="margin: 8px 0px; color: black;">Date: </p>
+                                    </div>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="2015">2015</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2025">2025</option>
+                                            <option value="2026">2026</option>
+                                            <option value="2027">2027</option>
+                                            <option value="2028">2028</option>
+                                            <option value="2029">2029</option>
+                                            <option value="2030">2030</option>
+                                            <option value="2031">2031</option>
+                                            <option value="2032">2032</option>
+                                            <option value="2033">2033</option>
+                                            <option value="2034">2034</option>
+                                            <option value="2035">2035</option>
+                                            <option value="2036">2036</option>
+                                            <option value="2037">2037</option>
+                                            <option value="2038">2038</option>
+                                            <option value="2039">2039</option>
+                                            <option value="2040">2040</option>
+                                            <option value="2041">2041</option>
+                                            <option value="2042">2042</option>
+                                            <option value="2043">2043</option>
+                                            <option value="2044">2044</option>
+                                            <option value="2045">2045</option>
+                                            <option value="2046">2046</option>
+                                            <option value="2047">2047</option>
+                                            <option value="2048">2048</option>
+                                            <option value="2049">2049</option>
+                                            <option value="2050">2050</option>
+                                            <option value="2051">2051</option>
+                                            <option value="2052">2052</option>
+                                            <option value="2053">2053</option>
+                                            <option value="2054">2054</option>
+                                            <option value="2055">2055</option>
+                                            <option value="2056">2056</option>
+                                            <option value="2057">2057</option>
+                                            <option value="2058">2058</option>
+                                            <option value="2059">2059</option>
+                                            <option value="2060">2060</option>
+                                        </select>
+                                    </div>
+                                    <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="01" selected>01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                    <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                    <div class="col">
+                                        <select class="form-control">
+                                            <option value="01" selected>01</option>
+                                            <option value="02">02</option>
+                                            <option value="03">03</option>
+                                            <option value="04">04</option>
+                                            <option value="05">05</option>
+                                            <option value="06">06</option>
+                                            <option value="07">07</option>
+                                            <option value="08">08</option>
+                                            <option value="09">09</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+                                            <option value="31">31</option>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="update-offer-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-offer-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-offer-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Product Modal -->
+  <button style="display: none" id="update-product-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-product-modal"></button>
+    <div class="modal" id="update-product-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update Product</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <select id="update-product-category" class="select-category custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-product-name" placeholder="Product name...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-inf" placeholder="Inflation effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-steel" placeholder="Steel effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-cup" placeholder="Cuprum effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-lead" placeholder="Lead effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-zinc" placeholder="Zinc effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-wms" placeholder="Workmanship effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="update-product-extra" placeholder="Extra effect...">
+                            </div>
+
+                            <div id="update-product-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-product-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-product-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Category Modal -->
+  <button style="display: none" id="update-category-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-category-modal"></button>
+    <div class="modal" id="update-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="update-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-category-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Project Modal -->
+  <button style="display: none" id="update-project-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-project-modal"></button>
+    <div class="modal" id="update-project-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update Project</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-project-name" placeholder="Project name...">
+                            </div>
+                            
+                            <div id="update-project-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-project-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-project-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Supplier Modal -->
+  <button style="display: none" id="update-supplier-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-supplier-modal"></button>
+    <div class="modal" id="update-supplier-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update Supplier</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-supplier-name" placeholder="Supplier name...">
+                            </div>
+                            
+                            <div id="update-supplier-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-supplier-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-supplier-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- Filter Offer Modal -->
+    <div class="modal" id="filter-offer-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4>Filter Offer</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <form>
+                                <div class="form-group">
+                                    <select multiple id="filter-offer-category" class="select-category" class="custom-select-md form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <select multiple id="filter-offer-product" class="select-product" class="custom-select-md form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <select multiple id="filter-offer-project" class="select-project" class="custom-select-md form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <select multiple id="filter-offer-supplier" class="select-supplier" class="custom-select-md form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <select id="filter-offer-sort" class="custom-select-md form-control">
+                                                <option value="sort" selected>Order By</option>
+                                                <option value="pd.p_name">Product</option>
+                                                <option value="pj.p_name">Project</option>
+                                                <option value="s.s_name">Supplier</option>
+                                                <option value="o.date">Date</option>
+                                                <option value="o.price">Price</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select id="filter-offer-select-asc-desc" class="custom-select-md form-control">
+                                                <option value="ASC" selected>ASC</option>
+                                                <option value="DESC">DESC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <select class="form-control" id="filter-offer-exchange">
+                                                <option value="all" selected>₺$€</option>
+                                                <option value="TL">₺</option>
+                                                <option value="$">$</option>
+                                                <option value="€">€</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input id="filter-offer-min-price" type="text" class="form-control" placeholder="Fiyat">
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <input id="filter-offer-max-price" type="text" class="form-control" placeholder="Fiyat">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row" id="filter-offer-date1">
+                                            <div class="col">
+                                                <p style="margin: 8px 0px; color: black;"><b>From: </b></p>
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-control">
+                                                    <option value="2015" selected>2015</option>
+                                                    <option value="2016">2016</option>
+                                                    <option value="2017">2017</option>
+                                                    <option value="2018">2018</option>
+                                                    <option value="2019">2019</option>
+                                                    <option value="2020">2020</option>
+                                                    <option value="2021">2021</option>
+                                                    <option value="2022">2022</option>
+                                                    <option value="2023">2023</option>
+                                                    <option value="2024">2024</option>
+                                                    <option value="2025">2025</option>
+                                                    <option value="2026">2026</option>
+                                                    <option value="2027">2027</option>
+                                                    <option value="2028">2028</option>
+                                                    <option value="2029">2029</option>
+                                                    <option value="2030">2030</option>
+                                                    <option value="2031">2031</option>
+                                                    <option value="2032">2032</option>
+                                                    <option value="2033">2033</option>
+                                                    <option value="2034">2034</option>
+                                                    <option value="2035">2035</option>
+                                                    <option value="2036">2036</option>
+                                                    <option value="2037">2037</option>
+                                                    <option value="2038">2038</option>
+                                                    <option value="2039">2039</option>
+                                                    <option value="2040">2040</option>
+                                                    <option value="2041">2041</option>
+                                                    <option value="2042">2042</option>
+                                                    <option value="2043">2043</option>
+                                                    <option value="2044">2044</option>
+                                                    <option value="2045">2045</option>
+                                                    <option value="2046">2046</option>
+                                                    <option value="2047">2047</option>
+                                                    <option value="2048">2048</option>
+                                                    <option value="2049">2049</option>
+                                                    <option value="2050">2050</option>
+                                                    <option value="2051">2051</option>
+                                                    <option value="2052">2052</option>
+                                                    <option value="2053">2053</option>
+                                                    <option value="2054">2054</option>
+                                                    <option value="2055">2055</option>
+                                                    <option value="2056">2056</option>
+                                                    <option value="2057">2057</option>
+                                                    <option value="2058">2058</option>
+                                                    <option value="2059">2059</option>
+                                                    <option value="2060">2060</option>
+                                                </select>
+                                            </div>
+                                            <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                            <div class="col">
+                                                <select class="form-control">
+                                                    <option value="01" selected>01</option>
+                                                    <option value="02">02</option>
+                                                    <option value="03">03</option>
+                                                    <option value="04">04</option>
+                                                    <option value="05">05</option>
+                                                    <option value="06">06</option>
+                                                    <option value="07">07</option>
+                                                    <option value="08">08</option>
+                                                    <option value="09">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                            </div>
+                                            <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                            <div class="col">
+                                                <select class="form-control">
+                                                    <option value="01" selected>01</option>
+                                                    <option value="02">02</option>
+                                                    <option value="03">03</option>
+                                                    <option value="04">04</option>
+                                                    <option value="05">05</option>
+                                                    <option value="06">06</option>
+                                                    <option value="07">07</option>
+                                                    <option value="08">08</option>
+                                                    <option value="09">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                    <option value="13">13</option>
+                                                    <option value="14">14</option>
+                                                    <option value="15">15</option>
+                                                    <option value="16">16</option>
+                                                    <option value="17">17</option>
+                                                    <option value="18">18</option>
+                                                    <option value="19">19</option>
+                                                    <option value="20">20</option>
+                                                    <option value="21">21</option>
+                                                    <option value="22">22</option>
+                                                    <option value="23">23</option>
+                                                    <option value="24">24</option>
+                                                    <option value="25">25</option>
+                                                    <option value="26">26</option>
+                                                    <option value="27">27</option>
+                                                    <option value="28">28</option>
+                                                    <option value="29">29</option>
+                                                    <option value="30">30</option>
+                                                    <option value="31">31</option>
+                                                    
+                                                </select>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row" id="filter-offer-date2">
+                                        <div class="col">
+                                            <p style="margin: 8px 0px; color: black;"><b>Until: </b></p>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="2015">2015</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020" selected>2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+                                                <option value="2029">2029</option>
+                                                <option value="2030">2030</option>
+                                                <option value="2031">2031</option>
+                                                <option value="2032">2032</option>
+                                                <option value="2033">2033</option>
+                                                <option value="2034">2034</option>
+                                                <option value="2035">2035</option>
+                                                <option value="2036">2036</option>
+                                                <option value="2037">2037</option>
+                                                <option value="2038">2038</option>
+                                                <option value="2039">2039</option>
+                                                <option value="2040">2040</option>
+                                                <option value="2041">2041</option>
+                                                <option value="2042">2042</option>
+                                                <option value="2043">2043</option>
+                                                <option value="2044">2044</option>
+                                                <option value="2045">2045</option>
+                                                <option value="2046">2046</option>
+                                                <option value="2047">2047</option>
+                                                <option value="2048">2048</option>
+                                                <option value="2049">2049</option>
+                                                <option value="2050">2050</option>
+                                                <option value="2051">2051</option>
+                                                <option value="2052">2052</option>
+                                                <option value="2053">2053</option>
+                                                <option value="2054">2054</option>
+                                                <option value="2055">2055</option>
+                                                <option value="2056">2056</option>
+                                                <option value="2057">2057</option>
+                                                <option value="2058">2058</option>
+                                                <option value="2059">2059</option>
+                                                <option value="2060">2060</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01" selected>01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01" selected>01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row modal-footer">
+                                    <div class="col">
+                                        <button type="button" id="filter-offer-min-prices" class="btn btn-primary">Max Prices</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" id="filter-offer-max-prices" class="btn btn-primary">Min Prices</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary" id="filter-offer-submit">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Filter Product Modal -->
+    <div class="modal" id="filter-product-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Filter Product</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <select multiple id="filter-product-category" class="select-category" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="filter-product-submit">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Action Modal -->
+    <div class="modal" id="filter-action-modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+    
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4>Filter Actions</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+    
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="container">
+                            <form>
+                                <div class="form-group">
+                                    <select multiple id="filter-action-type" class="custom-select-md form-control">
+                                        <option value="add">Add</option>
+                                        <option value="delete">Delete</option>
+                                        <option value="update">Update</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <select multiple id="filter-action-user" class="select-user" class="custom-select-md form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <select multiple id="filter-action-data" class="custom-select-md form-control">
+                                        <option value="products">Products</option>
+                                        <option value="categories">Categories</option>
+                                        <option value="projects">Projects</option>
+                                        <option value="suppliers">Suppliers</option>
+                                        <option value="offers">Offers</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col">
+                                            <select id="filter-action-sort" class="custom-select-md form-control">
+                                                <option value="op">Action Type</option>
+                                                <option value="op_table">Action Data</option>
+                                                <option value="op_user">User</option>
+                                                <option value="op_date" selected>Date</option>
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <select id="filter-action-select-asc-desc" class="custom-select-md form-control">
+                                                <option value="ASC">Ascending</option>
+                                                <option value="DESC" selected>Descending</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row" id="filter-action-date1">
+                                        <div class="col">
+                                            <p style="margin: 8px 0px; color: black;"><b>From: </b></p>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="2018" selected>2018</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+                                                <option value="2029">2029</option>
+                                                <option value="2030">2030</option>
+                                                <option value="2031">2031</option>
+                                                <option value="2032">2032</option>
+                                                <option value="2033">2033</option>
+                                                <option value="2034">2034</option>
+                                                <option value="2035">2035</option>
+                                                <option value="2036">2036</option>
+                                                <option value="2037">2037</option>
+                                                <option value="2038">2038</option>
+                                                <option value="2039">2039</option>
+                                                <option value="2040">2040</option>
+                                                <option value="2041">2041</option>
+                                                <option value="2042">2042</option>
+                                                <option value="2043">2043</option>
+                                                <option value="2044">2044</option>
+                                                <option value="2045">2045</option>
+                                                <option value="2046">2046</option>
+                                                <option value="2047">2047</option>
+                                                <option value="2048">2048</option>
+                                                <option value="2049">2049</option>
+                                                <option value="2050">2050</option>
+                                                <option value="2051">2051</option>
+                                                <option value="2052">2052</option>
+                                                <option value="2053">2053</option>
+                                                <option value="2054">2054</option>
+                                                <option value="2055">2055</option>
+                                                <option value="2056">2056</option>
+                                                <option value="2057">2057</option>
+                                                <option value="2058">2058</option>
+                                                <option value="2059">2059</option>
+                                                <option value="2060">2060</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01">01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07" selected>07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01" selected>01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19" selected>19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row" id="filter-action-date2">
+                                        <div class="col">
+                                            <p style="margin: 8px 0px; color: black;"><b>Until: </b></p>
+                                        </div>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="2000">2000</option>
+                                                <option value="2001">2001</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2003">2003</option>
+                                                <option value="2004">2004</option>
+                                                <option value="2005">2005</option>
+                                                <option value="2006">2006</option>
+                                                <option value="2007">2007</option>
+                                                <option value="2008">2008</option>
+                                                <option value="2009">2009</option>
+                                                <option value="2010">2010</option>
+                                                <option value="2011">2011</option>
+                                                <option value="2012">2012</option>
+                                                <option value="2013">2013</option>
+                                                <option value="2014">2014</option>
+                                                <option value="2015">2015</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020" selected>2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <option value="2023">2023</option>
+                                                <option value="2024">2024</option>
+                                                <option value="2025">2025</option>
+                                                <option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+                                                <option value="2029">2029</option>
+                                                <option value="2030">2030</option>
+                                                <option value="2031">2031</option>
+                                                <option value="2032">2032</option>
+                                                <option value="2033">2033</option>
+                                                <option value="2034">2034</option>
+                                                <option value="2035">2035</option>
+                                                <option value="2036">2036</option>
+                                                <option value="2037">2037</option>
+                                                <option value="2038">2038</option>
+                                                <option value="2039">2039</option>
+                                                <option value="2040">2040</option>
+                                                <option value="2041">2041</option>
+                                                <option value="2042">2042</option>
+                                                <option value="2043">2043</option>
+                                                <option value="2044">2044</option>
+                                                <option value="2045">2045</option>
+                                                <option value="2046">2046</option>
+                                                <option value="2047">2047</option>
+                                                <option value="2048">2048</option>
+                                                <option value="2049">2049</option>
+                                                <option value="2050">2050</option>
+                                                <option value="2051">2051</option>
+                                                <option value="2052">2052</option>
+                                                <option value="2053">2053</option>
+                                                <option value="2054">2054</option>
+                                                <option value="2055">2055</option>
+                                                <option value="2056">2056</option>
+                                                <option value="2057">2057</option>
+                                                <option value="2058">2058</option>
+                                                <option value="2059">2059</option>
+                                                <option value="2060">2060</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01" selected>01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                            </select>
+                                        </div>
+                                        <p style="margin: 8px 0px; color: black;"><b>-</b></p>
+                                        <div class="col">
+                                            <select class="form-control">
+                                                <option value="01" selected>01</option>
+                                                <option value="02">02</option>
+                                                <option value="03">03</option>
+                                                <option value="04">04</option>
+                                                <option value="05">05</option>
+                                                <option value="06">06</option>
+                                                <option value="07">07</option>
+                                                <option value="08">08</option>
+                                                <option value="09">09</option>
+                                                <option value="10">10</option>
+                                                <option value="11">11</option>
+                                                <option value="12">12</option>
+                                                <option value="13">13</option>
+                                                <option value="14">14</option>
+                                                <option value="15">15</option>
+                                                <option value="16">16</option>
+                                                <option value="17">17</option>
+                                                <option value="18">18</option>
+                                                <option value="19">19</option>
+                                                <option value="20">20</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row modal-footer">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary" id="filter-action-submit"  style="float: right;">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+
+
+    
+    <!-- Export Excel Modal -->
+    <div class="modal" id="export-excel-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Export Excel</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="file" class="form-control" id="export-excel-file-name">
+                            </div>
+                            <br>
+                            <div class="progress">
+                                <div id="export-excel-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <br>
+
+                            <div id="export-excel-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="export-excel-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="export-excel-submit">Export</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Excel Modal -->
+    <div class="modal" id="import-excel-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4>Import Excel</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="container">
+                <form>
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="import-excel-file-name">
+                    </div>
+                    <br>
+                    <div class="progress">
+                        <div id="import-excel-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <br>
+                                
+                    <div id="import-excel-succes" class="alert alert-success" style="display: none;"></div>
+                    <div id="import-excel-failed" class="alert alert-danger" style="display: none;"></div>
+
+                    <div class="form-group" style="float: right; margin: 10px;">
+                        <button type="button" class="btn btn-primary" id="import-excel-submit">Import</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    
+    <!-- Add User Modal -->
+    <div class="modal" id="add-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4>Add User</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="container">
+                <form id="add-user">
+                    <div class="form-group">
+                        <label for="add-user-category">Category: </label>
+                        <select id="add-user-category" class="select-user-category custom-select-md form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user-firstname">Firstname</label>
+                        <input type="text" class="form-control" id="add-user-firstname">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user-lastname">Lastname</label>
+                        <input type="text" class="form-control" id="add-user-lastname">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user-username">Username</label>
+                        <input type="text" class="form-control" id="add-user-username">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user-password">Password</label>
+                        <input type="password" class="form-control" id="add-user-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="add-user-vpassword">Verify Password</label>
+                        <input type="password" class="form-control" id="add-user-vpassword">
+                    </div>
+  
+                    </br>
+                    <label>Add Permissions</label>
+                    <div >
+                      <input type="checkbox" id="add-product-perm">
+                      <label >Add Product</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="add-category-perm">
+                      <label >Add Category</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="add-project-perm">
+                      <label >Add Project</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="add-supplier-perm">
+                      <label >Add Supplier</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="add-offer-perm">
+                      <label >Add Offer</label>
+                    </div>
+  
+                    </br>
+                    <label>Filter Permissions</label>
+                    <div >
+                      <input type="checkbox" id="filter-product-perm">
+                      <label >Filter Product</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="filter-product-perm">
+                      <label >Filter Category</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="filter-product-perm">
+                      <label >Filter Project</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="filter-product-perm">
+                      <label >Filter Supplier</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="filter-product-perm">
+                      <label >Filter Offer</label>
+                    </div>
+  
+                    <div >
+                      <input type="checkbox" id="filter-offer-max-prices-perm">
+                      <label >Filter Max Prices</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="filter-offer-min-prices-perm">
+                      <label >Filter Min Prices</label>
+                    </div>
+  
+                    </br>
+                    <label>Delete Permissions</label>
+                    <div >
+                      <input type="checkbox" id="delete-product-perm">
+                      <label >Delete Product</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="delete-product-perm">
+                      <label >Delete Category</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="delete-product-perm">
+                      <label >Delete Project</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="delete-product-perm">
+                      <label >Delete Supplier</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="delete-product-perm">
+                      <label >Delete Offer</label>
+                    </div>
+  
+                    </br>
+                    <label>Update Permissions</label>
+                    <div >
+                      <input type="checkbox" id="update-product-perm">
+                      <label >Update Product</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="update-product-perm">
+                      <label >Update Category</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="update-product-perm">
+                      <label >Update Project</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="update-product-perm">
+                      <label >Update Supplier</label>
+                    </div>
+                    <div >
+                      <input type="checkbox" id="update-product-perm">
+                      <label >Update Offer</label>
+                    </div>
+  
+                    </br>
+                    <label>Excel Permissions</label>
+                    <div >
+                        <input type="checkbox" id="export-excel-perm">
+                        <label >Export Excel</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="import-excel-perm">
+                        <label >Import Excel</label>
+                    </div>
+  
+                    </br>
+                    <label>Price Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Show Price Details</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Set Minimum Wage</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Set Steel Price</label>
+                    </div>
+  
+                    </br>
+                    <label>User Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Add User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Filter User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Delete User</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Update User</label>
+                    </div>
+  
+                    </br>
+                    <label>User Category Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Add User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-minimum-wage-perm">
+                        <label >Filter User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Delete User Category</label>
+                    </div>
+                    <div >
+                        <input type="checkbox" id="set-steel-price-perm">
+                        <label >Update User Category</label>
+                    </div>
+  
+                    </br>
+                    <label>Action Permissions</label>
+                    <div >
+                        <input type="checkbox" id="show-price-details-excel-perm">
+                        <label >Other User's Actions</label>
+                    </div>
+                                
+                    <div id="add-user-succes" class="alert alert-success" style="display: none;"></div>
+                    <div id="add-user-failed" class="alert alert-danger" style="display: none;"></div>
+  
+                    <div class="form-group" style="float: right; margin: 10px;">
+                        <button type="button" class="btn btn-primary" id="add-user-submit">Add</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter User Modal -->
+    <div class="modal" id="filter-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Filter Users</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <select multiple id="filter-user-category" class="select-user-category" class="custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="filter-user-submit">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <button style="display: none" id="update-user-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-user-modal"></button>
+    <div class="modal" id="update-user-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="update-user">
+                            <div class="form-group">
+                                <select id="update-user-category" class="select-user-category custom-select-md form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-user-firstname" placeholder="Product name...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-user-lastname" placeholder="Inflation effect...">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-user-username" placeholder="Steel effect...">
+                            </div>
+
+                            </br>
+                            <label>Add Permissions</label>
+                            <div >
+                                <input type="checkbox" id="add-product-perm">
+                                <label >Add Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-category-perm">
+                                <label >Add Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-project-perm">
+                                <label >Add Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-supplier-perm">
+                                <label >Add Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-offer-perm">
+                                <label >Add Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Filter Permissions</label>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Offer</label>
+                            </div>
+        
+                            <div >
+                                <input type="checkbox" id="filter-offer-max-prices-perm">
+                                <label >Filter Max Prices</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-offer-min-prices-perm">
+                                <label >Filter Min Prices</label>
+                            </div>
+        
+                            </br>
+                            <label>Delete Permissions</label>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Update Permissions</label>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Excel Permissions</label>
+                            <div >
+                                <input type="checkbox" id="export-excel-perm">
+                                <label >Export Excel</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="import-excel-perm">
+                                <label >Import Excel</label>
+                            </div>
+        
+                            </br>
+                            <label>Price Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Show Price Details</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Set Minimum Wage</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Set Steel Price</label>
+                            </div>
+    
+                            </br>
+                            <label>User Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User</label>
+                            </div>
+        
+                            </br>
+                            <label>User Category Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User Category</label>
+                            </div>
+  
+                            </br>
+                            <label>Action Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Other User's Actions</label>
+                            </div>
+
+                            <div id="update-user-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-user-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-user-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Authorities Modal -->
+    <div class="modal" id="user-authorities-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>User Authorities</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="user-authorities-form">
+                            <label>Add Permissions</label>
+                            <div >
+                                <input type="checkbox" id="add-product-perm">
+                                <label >Add Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-category-perm">
+                                <label >Add Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-project-perm">
+                                <label >Add Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-supplier-perm">
+                                <label >Add Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="add-offer-perm">
+                                <label >Add Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Filter Permissions</label>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-product-perm">
+                                <label >Filter Offer</label>
+                            </div>
+        
+                            <div >
+                                <input type="checkbox" id="filter-offer-max-prices-perm">
+                                <label >Filter Max Prices</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="filter-offer-min-prices-perm">
+                                <label >Filter Min Prices</label>
+                            </div>
+        
+                            </br>
+                            <label>Delete Permissions</label>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="delete-product-perm">
+                                <label >Delete Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Update Permissions</label>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Product</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Project</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Supplier</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="update-product-perm">
+                                <label >Update Offer</label>
+                            </div>
+        
+                            </br>
+                            <label>Excel Permissions</label>
+                            <div >
+                                <input type="checkbox" id="export-excel-perm">
+                                <label >Export Excel</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="import-excel-perm">
+                                <label >Import Excel</label>
+                            </div>
+        
+                            </br>
+                            <label>Price Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Show Price Details</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Set Minimum Wage</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Set Steel Price</label>
+                            </div>
+    
+                            </br>
+                            <label>User Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User</label>
+                            </div>
+        
+                            </br>
+                            <label>User Category Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Add User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-minimum-wage-perm">
+                                <label >Filter User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Delete User Category</label>
+                            </div>
+                            <div >
+                                <input type="checkbox" id="set-steel-price-perm">
+                                <label >Update User Category</label>
+                            </div>
+  
+                            </br>
+                            <label>Action Permissions</label>
+                            <div >
+                                <input type="checkbox" id="show-price-details-excel-perm">
+                                <label >Other User's Actions</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Change Password Modal -->
+    <div class="modal" id="user-change-password-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-oldpass" placeholder="Old password...">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-newpass" placeholder="New password...">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="user-change-password-newpasscheck" placeholder="Verify new password...">
+                            </div>
+                            
+                            <div id="user-change-password-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="user-change-password-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="user-change-password-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- Add User Category Modal -->
+    <div class="modal" id="add-user-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-user-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="add-user-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-user-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-user-category-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Category Modal -->
+    <button style="display: none" id="update-user-category-modal-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#update-user-category-modal"></button>
+    <div class="modal" id="update-user-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Update User Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="update-user-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="update-user-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="update-user-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="update-user-category-submit">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- Add User Category Modal -->
+    <div class="modal" id="add-user-category-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4>Add Category</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="container">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="add-user-category-name" placeholder="Category name...">
+                            </div>
+                            
+                            <div id="add-user-category-succes" class="alert alert-success" style="display: none;"></div>
+                            <div id="add-user-category-failed" class="alert alert-danger" style="display: none;"></div>
+
+                            <div class="form-group" style="float: right; margin: 10px;">
+                                <button type="button" class="btn btn-primary" id="add-user-category-submit">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!--CSS Files-->
+    <link rel="stylesheet" type="text/css" href="./public/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./public/sumoselect/sumoselect.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./public/css/style.css">
+
+    <!--JS Files-->
+    <script type="application/javascript">
+        window.$ = window.jQuery = require('./public/js/jquery/jquery.min.js');
+    </script>
+    <script type="application/javascript" src="./public/js/controller.js"></script>
+    <script type="application/javascript" src="./public/sumoselect/jquery.sumoselect.min.js"></script>
+    <script type="application/javascript" src="./public/js/bootstrap/popper.min.js"></script>
+    <script type="application/javascript" src="./public/js/bootstrap/bootstrap.min.js"></script>
+
+
+    <!-- Fixed top result head -->
+    <script>
+        window.onscroll = function() {myFunction()};
+        
+        var header = document.getElementById("result-header");
+        var sticky = header.offsetTop;
+        
+        function myFunction() {
+            if (window.pageYOffset > sticky) {
+                header.classList.add("sticky");
+            } else {
+                header.classList.remove("sticky");
+            }
+        }
+    </script>
+
+</body>
+</html>

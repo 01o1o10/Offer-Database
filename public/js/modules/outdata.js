@@ -178,8 +178,7 @@ module.exports = {
     /////     METAL EXCHANGE FUNCTIONS
     getMetalPrices: function(url, col){
         sql.query("select " + col + " from metal_prices where date='" + this.getDateNow() + "';", function(data){
-            console.log(data)
-            if(data.length == 0){
+            if(data.length == 0 || data[0][col] == null){
                 request(url, function (error, response, body) {
                     if(error){
                         ui.setAlertModal('Price can not get for col!</br>Please contact with <strong>Ilyas Mammadov</strong></br>Tel: +90 506 110 7443</br>E-mail: ilyas.mammadov.96@gmail.com' , false)
